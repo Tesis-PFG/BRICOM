@@ -16,7 +16,11 @@ class Ui_MainWindow(object):
         self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
         self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal")
         self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial")
+        self.QtSagittalOrthoViewer.setFixedSize(200, 200)
+        self.QtAxialOrthoViewer.setFixedSize(200, 200)
+        self.QtCoronalOrthoViewer.setFixedSize(200, 200)
         self.QtSegmentationViewer = QtSegmentationViewer(self.vtkBaseClass, label="3D")
+        self.QtSegmentationViewer.setFixedSize(200, 200)
         self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
         self.ViewersConnection.add_orthogonal_viewer(self.QtSagittalOrthoViewer.get_viewer())
         self.ViewersConnection.add_orthogonal_viewer(self.QtCoronalOrthoViewer.get_viewer())
@@ -294,6 +298,7 @@ class Ui_MainWindow(object):
         self.four_grid_images_btn.setIcon(icon16)
         self.four_grid_images_btn.setIconSize(QtCore.QSize(45, 45))
         self.four_grid_images_btn.setObjectName("four_grid_images_btn")
+        self.four_grid_images_btn.clicked.connect(self.display_four_images)
         self.gridLayout_7.addWidget(self.four_grid_images_btn, 1, 1, 1, 1)
         self.one_image_btn = QtWidgets.QPushButton(self.gridLayoutWidget_7)
         icon17 = QtGui.QIcon()
@@ -355,15 +360,14 @@ class Ui_MainWindow(object):
         self.label_14.setObjectName("label_14")
         self.verticalLayout.addWidget(self.frame_22)
         self.horizontalLayout.addWidget(self.frame_2)
+        self.main_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         self.frame_3 = QtWidgets.QWidget(self.centralwidget)
         self.frame_3.setMinimumSize(QtCore.QSize(1100, 0))
         self.frame_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.frame_3.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
-        self.frame_3.setStyleSheet("background-color: rgb(0, 0, 0);")
         self.frame_3.setObjectName("frame_3")
-        self.central_layout = QtWidgets.QHBoxLayout()
-        self.gridLayout = QtWidgets.QGridLayout(self.frame_3)
-        self.gridLayout.setObjectName("gridLayout")
+        self.central_layout = QtWidgets.QHBoxLayout(self.frame_3)
+        self.frame_3.setLayout(self.central_layout)
         self.mainLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.mainLayout.addWidget(self.frame_3, 0, 0, 1, 1)
         self.horizontalLayout.addWidget(self.frame_3)
@@ -380,14 +384,26 @@ class Ui_MainWindow(object):
         self.label_14.setText(_translate("MainWindow", "Disposición"))
 
     def display_one_image(self):
+        # Eliminar cualquier layout existente en frame_3
+        if self.frame_3.layout():
+            self.frame_3.layout().deleteLater()
+
+        # Crear un nuevo QtOrthoViewer
         self.vtkBaseClass = VtkBase()
-        single_viewer = QtOrthoViewer(self.vtkBaseClass,SLICE_ORIENTATION_YZ, "Sagital")
+        single_viewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
+
+        # Conectar el viewer a VtkBase
+        self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
+        self.ViewersConnection.add_orthogonal_viewer(single_viewer.get_viewer())
+
+        # Crear un layout y agregar el viewer
         layout = QVBoxLayout()
         layout.addWidget(single_viewer)
-        central_widget = QWidget()
-        central_widget.setLayout(layout)
-        self.central_layout.addWidget(central_widget)
-        self.frame_3.setLayout(self.central_layout)
+        self.frame_3.setLayout(layout)
+
+        # Mostrar el viewer y el frame_3
+        single_viewer.show()
+        self.frame_3.show()
 
     def display_two_images(self):
         pass
@@ -396,8 +412,30 @@ class Ui_MainWindow(object):
         pass
 
     def display_four_images(self):
-        pass
+        if (not hasattr(self, 'QtSagittalOrthoViewer') or
+                not hasattr(self, 'QtAxialOrthoViewer') or
+                not hasattr(self, 'QtCoronalOrthoViewer') or
+                not hasattr(self, 'QtSegmentationViewer')):
+            print("Uno o más visualizadores no están inicializados.")
+            return
 
+        # Crear y configurar los splitters verticales
+        left_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        left_splitter.addWidget(self.QtSagittalOrthoViewer)
+        left_splitter.addWidget(self.QtAxialOrthoViewer)
+
+        right_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        right_splitter.addWidget(self.QtCoronalOrthoViewer)
+        right_splitter.addWidget(self.QtSegmentationViewer)
+
+        # Crear el splitter principal
+        main_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
+        main_splitter.addWidget(left_splitter)
+        main_splitter.addWidget(right_splitter)
+
+        # Agregar el splitter principal al layout horizontal
+        self.central_layout.addWidget(main_splitter)
+        self.frame_3.show()
 
 
 if __name__ == "__main__":
