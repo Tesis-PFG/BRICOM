@@ -5,7 +5,6 @@ from VtkBase import VtkBase
 from ViewersConnection import ViewersConnection
 
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -381,7 +380,8 @@ class Ui_MainWindow(object):
         self.label_14.setText(_translate("MainWindow", "Disposición"))
 
     def display_one_image(self):
-        single_viewer = QtOrthoViewer()
+        self.vtkBaseClass = VtkBase()
+        single_viewer = QtOrthoViewer(self.vtkBaseClass,SLICE_ORIENTATION_YZ, "Sagital")
         layout = QVBoxLayout()
         layout.addWidget(single_viewer)
         central_widget = QWidget()
