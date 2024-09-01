@@ -8,19 +8,19 @@ from ViewersConnection import ViewersConnection
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1440, 600)
+        MainWindow.resize(1920, 1080)
         MainWindow.setMinimumSize(QtCore.QSize(800, 600))
-        MainWindow.setMaximumSize(QtCore.QSize(1920, 1080))
+        MainWindow.setMaximumSize(QtCore.QSize(1920, 900))
         MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.vtkBaseClass = VtkBase()
         self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
         self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal")
         self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial")
-        self.QtSagittalOrthoViewer.setFixedSize(200, 200)
-        self.QtAxialOrthoViewer.setFixedSize(200, 200)
-        self.QtCoronalOrthoViewer.setFixedSize(200, 200)
+        self.QtSagittalOrthoViewer.setFixedSize(500, 500)
+        self.QtAxialOrthoViewer.setFixedSize(500, 500)
+        self.QtCoronalOrthoViewer.setFixedSize(500, 500)
         self.QtSegmentationViewer = QtSegmentationViewer(self.vtkBaseClass, label="3D")
-        self.QtSegmentationViewer.setFixedSize(200, 200)
+        self.QtSegmentationViewer.setFixedSize(500, 500)
         self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
         self.ViewersConnection.add_orthogonal_viewer(self.QtSagittalOrthoViewer.get_viewer())
         self.ViewersConnection.add_orthogonal_viewer(self.QtCoronalOrthoViewer.get_viewer())
@@ -384,26 +384,14 @@ class Ui_MainWindow(object):
         self.label_14.setText(_translate("MainWindow", "Disposición"))
 
     def display_one_image(self):
-        # Eliminar cualquier layout existente en frame_3
-        if self.frame_3.layout():
-            self.frame_3.layout().deleteLater()
+        # Clear the frame_3 before adding the viewer
+        for i in reversed(range(self.frame_3.layout().count())):
+            widget = self.frame_3.layout().itemAt(i).widget()
+            if widget is not None:
+                widget.deleteLater()
 
-        # Crear un nuevo QtOrthoViewer
-        self.vtkBaseClass = VtkBase()
-        single_viewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
-
-        # Conectar el viewer a VtkBase
-        self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
-        self.ViewersConnection.add_orthogonal_viewer(single_viewer.get_viewer())
-
-        # Crear un layout y agregar el viewer
-        layout = QVBoxLayout()
-        layout.addWidget(single_viewer)
-        self.frame_3.setLayout(layout)
-
-        # Mostrar el viewer y el frame_3
-        single_viewer.show()
-        self.frame_3.show()
+        # Example: Display the Sagittal Ortho Viewer
+        self.frame_3.layout().addWidget(self.QtSagittalOrthoViewer)
 
     def display_two_images(self):
         pass
