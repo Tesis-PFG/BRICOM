@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1440</width>
-    <height>600</height>
+    <width>933</width>
+    <height>736</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -63,10 +63,7 @@
        <string notr="true">background-color:rgb(90, 99, 156)</string>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
@@ -87,24 +84,31 @@
        <item>
         <widget class="QFrame" name="frame_9">
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QFrame" name="frame_10">
-         <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+
+border-radius: 25px;
+}
+
+QPushButton:checked{
+background-color:#E2BBE9;
+
+}
+
+</string>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="mainButton_DB">
             <property name="minimumSize">
              <size>
               <width>50</width>
@@ -133,10 +137,16 @@
               <height>50</height>
              </size>
             </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_27">
+           <widget class="QPushButton" name="mainButton_visualizacion">
             <property name="minimumSize">
              <size>
               <width>50</width>
@@ -149,27 +159,32 @@
               <height>50</height>
              </size>
             </property>
-            <property name="styleSheet">
-             <string notr="true">background-color:#E2BBE9;
-border-radius: 25px;</string>
-            </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>Assets/display_purple.png</normaloff>Assets/display_purple.png</iconset>
+             <iconset resource="resources.qrc">
+              <normaloff>:/icons/Assets/display_white.png</normaloff>:/icons/Assets/display_white.png</iconset>
             </property>
             <property name="iconSize">
              <size>
-              <width>50</width>
+              <width>4000</width>
               <height>50</height>
              </size>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_26">
+           <widget class="QPushButton" name="mainButton_anadirArchivo">
             <property name="minimumSize">
              <size>
               <width>50</width>
@@ -198,6 +213,12 @@ border-radius: 25px;</string>
               <height>50</height>
              </size>
             </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
          </layout>
@@ -206,10 +227,7 @@ border-radius: 25px;</string>
        <item>
         <widget class="QFrame" name="frame_11">
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
         </widget>
        </item>
@@ -228,10 +246,7 @@ border-radius: 25px;</string>
        <string notr="true">background-color: rgb(255, 255, 255)</string>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="topMargin">
@@ -256,19 +271,35 @@ border-radius: 25px;</string>
 border-radius: 30px;</string>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
         </widget>
        </item>
        <item>
+        <spacer name="verticalSpacer_2">
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>5</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QFrame" name="frame_12">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>190</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>225</height>
+           <height>190</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -277,10 +308,7 @@ border-radius: 30px;</string>
 </string>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <widget class="QFrame" name="frame_13">
           <property name="geometry">
@@ -308,10 +336,7 @@ border-radius: 30px;</string>
 border-radius: 15px;</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::Shape::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Shadow::Raised</enum>
+           <enum>QFrame::NoFrame</enum>
           </property>
           <widget class="QWidget" name="gridLayoutWidget">
            <property name="geometry">
@@ -339,7 +364,7 @@ border-radius: 15px;</string>
              <number>0</number>
             </property>
             <item row="0" column="2">
-             <widget class="QPushButton" name="pushButton_12">
+             <widget class="QPushButton" name="toolButton_filtros">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/colorfilter.png</normaloff>Assets/colorfilter.png</iconset>
@@ -353,10 +378,10 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton_8">
+             <widget class="QPushButton" name="toolButton_regla">
               <property name="icon">
-               <iconset>
-                <normaloff>Assets/ruler.png</normaloff>Assets/ruler.png</iconset>
+               <iconset resource="resources.qrc">
+                <normaloff>:/icons/Assets/ruler.png</normaloff>:/icons/Assets/ruler.png</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -367,7 +392,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QPushButton" name="pushButton_11">
+             <widget class="QPushButton" name="toolButton_areaCircular">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/Ellipse.png</normaloff>Assets/Ellipse.png</iconset>
@@ -381,7 +406,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="1" column="3">
-             <widget class="QPushButton" name="pushButton_13">
+             <widget class="QPushButton" name="toolButton_flechas">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/Arrow 1.png</normaloff>Assets/Arrow 1.png</iconset>
@@ -395,7 +420,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QPushButton" name="pushButton_7">
+             <widget class="QPushButton" name="toolButton_dibujoLibre">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/freeDraw.png</normaloff>Assets/freeDraw.png</iconset>
@@ -409,7 +434,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QPushButton" name="pushButton_10">
+             <widget class="QPushButton" name="toolButton_angulos">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/Angle.png</normaloff>Assets/Angle.png</iconset>
@@ -423,7 +448,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QPushButton" name="pushButton_15">
+             <widget class="QPushButton" name="toolButton_descargaImagen">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/gallery-import.png</normaloff>Assets/gallery-import.png</iconset>
@@ -437,7 +462,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QPushButton" name="pushButton_14">
+             <widget class="QPushButton" name="toolButton_borrador">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/eraser.png</normaloff>Assets/eraser.png</iconset>
@@ -451,7 +476,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QPushButton" name="pushButton_6">
+             <widget class="QPushButton" name="toolButton_areaRectangular">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/Rectangle 20.png</normaloff>Assets/Rectangle 20.png</iconset>
@@ -465,7 +490,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="3">
-             <widget class="QPushButton" name="pushButton_9">
+             <widget class="QPushButton" name="toolButton_escritura">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/A.png</normaloff>Assets/A.png</iconset>
@@ -500,10 +525,10 @@ border-radius: 15px;</string>
            <string>Herramientas</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::TextFormat::AutoText</enum>
+           <enum>Qt::PlainText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </widget>
@@ -513,7 +538,7 @@ border-radius: 15px;</string>
          <property name="minimumSize">
           <size>
            <width>250</width>
-           <height>0</height>
+           <height>100</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -528,10 +553,7 @@ border-radius: 15px;</string>
 </string>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <widget class="QFrame" name="frame_16">
           <property name="geometry">
@@ -559,10 +581,7 @@ border-radius: 15px;</string>
 border-radius: 15px;</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::Shape::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Shadow::Raised</enum>
+           <enum>QFrame::NoFrame</enum>
           </property>
           <widget class="QWidget" name="gridLayoutWidget_3">
            <property name="geometry">
@@ -590,7 +609,7 @@ border-radius: 15px;</string>
              <number>0</number>
             </property>
             <item row="0" column="2">
-             <widget class="QPushButton" name="pushButton_16">
+             <widget class="QPushButton" name="functionButton_brillo">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/brightness.png</normaloff>Assets/brightness.png</iconset>
@@ -604,7 +623,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QPushButton" name="pushButton_28">
+             <widget class="QPushButton" name="functionButton_rotacion">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/refresh-circle.png</normaloff>Assets/refresh-circle.png</iconset>
@@ -618,7 +637,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton_17">
+             <widget class="QPushButton" name="functionButton_desplazamiento">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/displacement.png</normaloff>Assets/displacement.png</iconset>
@@ -653,16 +672,22 @@ border-radius: 15px;</string>
            <string>Funciones</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::TextFormat::AutoText</enum>
+           <enum>Qt::PlainText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </widget>
        </item>
        <item>
         <widget class="QFrame" name="frame_22">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>160</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -675,10 +700,7 @@ border-radius: 15px;</string>
 </string>
          </property>
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::NoFrame</enum>
          </property>
          <widget class="QFrame" name="frame_23">
           <property name="geometry">
@@ -706,10 +728,7 @@ border-radius: 15px;</string>
 border-radius: 15px;</string>
           </property>
           <property name="frameShape">
-           <enum>QFrame::Shape::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Shadow::Raised</enum>
+           <enum>QFrame::NoFrame</enum>
           </property>
           <widget class="QWidget" name="gridLayoutWidget_7">
            <property name="geometry">
@@ -737,7 +756,7 @@ border-radius: 15px;</string>
              <number>0</number>
             </property>
             <item row="1" column="1">
-             <widget class="QPushButton" name="pushButton_49">
+             <widget class="QPushButton" name="dispositionButton_2x2">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/2x2 grid.png</normaloff>Assets/2x2 grid.png</iconset>
@@ -751,7 +770,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton_42">
+             <widget class="QPushButton" name="dispositionButton_1x1">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/Rectangle 24.png</normaloff>Assets/Rectangle 24.png</iconset>
@@ -765,7 +784,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="3">
-             <widget class="QPushButton" name="pushButton_46">
+             <widget class="QPushButton" name="dispositionButton_2x1">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/2x1grid.png</normaloff>Assets/2x1grid.png</iconset>
@@ -779,7 +798,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="2">
-             <widget class="QPushButton" name="pushButton_44">
+             <widget class="QPushButton" name="dispositionButton_1x3">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/1x3grid.png</normaloff>Assets/1x3grid.png</iconset>
@@ -793,7 +812,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QPushButton" name="pushButton_47">
+             <widget class="QPushButton" name="dispositionButton_1x2">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/1x2grid.png</normaloff>Assets/1x2grid.png</iconset>
@@ -807,7 +826,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QPushButton" name="pushButton_48">
+             <widget class="QPushButton" name="dispositionButton_1u2d">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/1up_2downgrid.png</normaloff>Assets/1up_2downgrid.png</iconset>
@@ -821,7 +840,7 @@ border-radius: 15px;</string>
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="dispositionButton_1l2r">
               <property name="icon">
                <iconset>
                 <normaloff>Assets/1+2grid.png</normaloff>Assets/1+2grid.png</iconset>
@@ -856,48 +875,226 @@ border-radius: 15px;</string>
            <string>Disposición</string>
           </property>
           <property name="textFormat">
-           <enum>Qt::TextFormat::AutoText</enum>
+           <enum>Qt::PlainText</enum>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="frame_3">
-      <property name="minimumSize">
-       <size>
-        <width>1100</width>
-        <height>0</height>
-       </size>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>2</number>
       </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>ArrowCursor</cursorShape>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(0, 0, 0)</string>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
+      <widget class="QWidget" name="pantallaVisualizacion">
+       <property name="styleSheet">
+        <string notr="true">
+background-color: rgb(0, 0, 0);</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="pantallaBaseDeDatos">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="pantallaAnadirArchivo">
+       <property name="styleSheet">
+        <string notr="true">
+background-color: rgb(0, 255, 255);</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <spacer name="verticalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Carga de Archivos</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QFrame" name="frame_24">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>500</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: #E8C9ED;
+border-radius: 15px;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QFrame" name="frame_25">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>500</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #FFFFFF;
+border-radius: 15px;</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
   </widget>
  </widget>
- <resources/>
- <connections/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>mainButton_visualizacion</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_2</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>283</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>326</x>
+     <y>579</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mainButton_visualizacion</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_2</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>13</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>217</x>
+     <y>562</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
