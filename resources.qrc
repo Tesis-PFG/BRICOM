@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>Assets/icon_documentUpload.png</file>
     <file>Assets/1+2grid.png</file>
     <file>Assets/1up_2downgrid.png</file>
     <file>Assets/1x2grid.png</file>
@@ -31,5 +32,19 @@
     <file>Assets/refresh-circle.png</file>
     <file>Assets/ruler.png</file>
     <file>Assets/settings.png</file>
+  </qresource>
+  <qresource prefix="fonts">
+    <file>Assets/Fonts/Roboto/Roboto-Black.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-BlackItalic.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-Bold.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-BoldItalic.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-Italic.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-Light.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-LightItalic.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-Medium.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-MediumItalic.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-Regular.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-Thin.ttf</file>
+    <file>Assets/Fonts/Roboto/Roboto-ThinItalic.ttf</file>
   </qresource>
 </RCC>
