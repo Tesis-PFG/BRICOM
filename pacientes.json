@@ -1,0 +1,72 @@
+[
+    {
+        "Nombre": "Carlos Martínez",
+        "ID_Paciente": "100001",
+        "Sexo": "Masculino",
+        "Fecha_nacimiento": "1985-03-22",
+        "Modalidades": "TAC-IRM"
+    },
+    {
+        "Nombre": "Ana Gómez",
+        "ID_Paciente": "100002",
+        "Sexo": "Femenino",
+        "Fecha_nacimiento": "1992-07-14",
+        "Modalidades": "IRM"
+    },
+    {
+        "Nombre": "Luis Ramírez",
+        "ID_Paciente": "100003",
+        "Sexo": "Masculino",
+        "Fecha_nacimiento": "1978-11-30",
+        "Modalidades": "IRM"
+    },
+    {
+        "Nombre": "María Fernández",
+        "ID_Paciente": "100004",
+        "Sexo": "Femenino",
+        "Fecha_nacimiento": "2000-01-12",
+        "Modalidades": "TAC-IRM"
+    },
+    {
+        "Nombre": "Pedro González",
+        "ID_Paciente": "100005",
+        "Sexo": "Masculino",
+        "Fecha_nacimiento": "1967-05-04",
+        "Modalidades": "TAC-IRM"
+    },
+    {
+        "Nombre": "Laura Torres",
+        "ID_Paciente": "100006",
+        "Sexo": "Femenino",
+        "Fecha_nacimiento": "1989-09-18",
+        "Modalidades": "TAC"
+    },
+    {
+        "Nombre": "Jorge Díaz",
+        "ID_Paciente": "100007",
+        "Sexo": "Masculino",
+        "Fecha_nacimiento": "1995-12-08",
+        "Modalidades": "IRM"
+    },
+    {
+        "Nombre": "Claudia Castro",
+        "ID_Paciente": "100008",
+        "Sexo": "Femenino",
+        "Fecha_nacimiento": "1972-04-23",
+        "Modalidades": "TAC-IRM"
+    },
+    {
+        "Nombre": "Andrés López",
+        "ID_Paciente": "100009",
+        "Sexo": "Masculino",
+        "Fecha_nacimiento": "1981-10-15",
+        "Modalidades": "IRM"
+    },
+    {
+        "Nombre": "Isabel Rojas",
+        "ID_Paciente": "100010",
+        "Sexo": "Femenino",
+        "Fecha_nacimiento": "1997-06-20",
+        "Modalidades": "TAC"
+    }
+]

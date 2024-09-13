@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icons">
+    <file>Assets/subMenu_tools.png</file>
+    <file>Assets/subMenu_patient.png</file>
     <file>Assets/icon_documentUpload.png</file>
     <file>Assets/1+2grid.png</file>
     <file>Assets/1up_2downgrid.png</file>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1065</width>
-    <height>700</height>
+    <width>968</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -121,6 +121,9 @@ background-color:#E2BBE9;
               <height>50</height>
              </size>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="styleSheet">
              <string notr="true">border:0px;</string>
             </property>
@@ -138,6 +141,9 @@ background-color:#E2BBE9;
              </size>
             </property>
             <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
              <bool>true</bool>
             </property>
             <property name="autoExclusive">
@@ -159,6 +165,9 @@ background-color:#E2BBE9;
               <height>50</height>
              </size>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -176,7 +185,7 @@ background-color:#E2BBE9;
              <bool>true</bool>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="autoExclusive">
              <bool>true</bool>
@@ -196,6 +205,9 @@ background-color:#E2BBE9;
               <width>50</width>
               <height>50</height>
              </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
             </property>
             <property name="styleSheet">
              <string notr="true">border:0px;</string>
@@ -235,9 +247,9 @@ background-color:#E2BBE9;
      </widget>
     </item>
     <item>
-     <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="QStackedWidget" name="stackedWidgetPrincipal">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pantallaVisualizacion">
        <property name="styleSheet">
@@ -272,14 +284,23 @@ background-color: rgb(0, 0, 0);</string>
            <enum>QFrame::NoFrame</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
            <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
             <widget class="QFrame" name="frame_17">
              <property name="minimumSize">
               <size>
-               <width>250</width>
+               <width>272</width>
                <height>70</height>
               </size>
              </property>
@@ -291,11 +312,91 @@ background-color: rgb(0, 0, 0);</string>
              </property>
              <property name="styleSheet">
               <string notr="true">background-color: #5A639C;
-border-radius: 30px;</string>
+border-radius: 30px;
+
+
+</string>
              </property>
              <property name="frameShape">
               <enum>QFrame::NoFrame</enum>
              </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QPushButton" name="subMenu_patient">
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton:checked{
+background-color:#E2BBE9;
+border-radius: 20px
+}
+</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>Assets/subMenu_patient.png</normaloff>Assets/subMenu_patient.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+                <property name="autoExclusive">
+                 <bool>true</bool>
+                </property>
+                <property name="autoRepeatInterval">
+                 <number>103</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="subMenu_tools">
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton:checked{
+background-color:#E2BBE9;
+border-radius: 20px
+}
+</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>Assets/subMenu_tools.png</normaloff>Assets/subMenu_tools.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="shortcut">
+                 <string>Esc</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="autoExclusive">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
            <item>
@@ -315,612 +416,918 @@ border-radius: 30px;</string>
             </spacer>
            </item>
            <item>
-            <widget class="QFrame" name="frame_12">
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>190</height>
-              </size>
+            <widget class="QStackedWidget" name="stackedWidget_submenuVisualizacion">
+             <property name="currentIndex">
+              <number>1</number>
              </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>190</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #FFFFFF;
+             <widget class="QWidget" name="submenuPatient">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <item>
+                <widget class="QFrame" name="frame_15">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>190</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>240</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #FFFFFF;
 
 </string>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <widget class="QFrame" name="frame_13">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>20</y>
-                <width>250</width>
-                <height>161</height>
-               </rect>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>250</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>250</width>
-                <height>200</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: #E8C9ED;
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <widget class="QFrame" name="frame_18">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>20</y>
+                    <width>250</width>
+                    <height>200</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: #E8C9ED;
 border-radius: 15px;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
-              </property>
-              <widget class="QWidget" name="gridLayoutWidget">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>10</y>
-                 <width>251</width>
-                 <height>154</height>
-                </rect>
-               </property>
-               <layout class="QGridLayout" name="gridLayout">
-                <property name="leftMargin">
-                 <number>5</number>
-                </property>
-                <property name="topMargin">
-                 <number>5</number>
-                </property>
-                <property name="rightMargin">
-                 <number>5</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>5</number>
-                </property>
-                <property name="horizontalSpacing">
-                 <number>0</number>
-                </property>
-                <item row="0" column="2">
-                 <widget class="QPushButton" name="toolButton_filtros">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/colorfilter.png</normaloff>Assets/colorfilter.png</iconset>
                   </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
                   </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_9">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QTableWidget" name="patientInfo_table">
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <property name="horizontalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <column>
+                      <property name="text">
+                       <string>Campo</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Valor</string>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QPushButton" name="toolButton_regla">
-                  <property name="icon">
-                   <iconset resource="resources.qrc">
-                    <normaloff>:/icons/Assets/ruler.png</normaloff>:/icons/Assets/ruler.png</iconset>
+                 <widget class="QLabel" name="label_9">
+                  <property name="geometry">
+                   <rect>
+                    <x>40</x>
+                    <y>0</y>
+                    <width>171</width>
+                    <height>31</height>
+                   </rect>
                   </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QPushButton" name="toolButton_areaCircular">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/Ellipse.png</normaloff>Assets/Ellipse.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="3">
-                 <widget class="QPushButton" name="toolButton_flechas">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/Arrow 1.png</normaloff>Assets/Arrow 1.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>35</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QPushButton" name="toolButton_dibujoLibre">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/freeDraw.png</normaloff>Assets/freeDraw.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QPushButton" name="toolButton_angulos">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/Angle.png</normaloff>Assets/Angle.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QPushButton" name="toolButton_descargaImagen">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/gallery-import.png</normaloff>Assets/gallery-import.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QPushButton" name="toolButton_borrador">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/eraser.png</normaloff>Assets/eraser.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QPushButton" name="toolButton_areaRectangular">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/Rectangle 20.png</normaloff>Assets/Rectangle 20.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QPushButton" name="toolButton_escritura">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/A.png</normaloff>Assets/A.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>35</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-             <widget class="QLabel" name="label_8">
-              <property name="geometry">
-               <rect>
-                <x>40</x>
-                <y>0</y>
-                <width>171</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
+                  <property name="styleSheet">
+                   <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
 background-color: rgb(119, 118, 179);
 color:#FFFFFF;
 border-radius: 15px;</string>
-              </property>
-              <property name="text">
-               <string>Herramientas</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="frame_14">
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #FFFFFF;
+                  </property>
+                  <property name="text">
+                   <string>Paciente</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::PlainText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_19">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>190</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>240</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #FFFFFF;
 
 </string>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <widget class="QFrame" name="frame_16">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>20</y>
-                <width>250</width>
-                <height>71</height>
-               </rect>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>250</width>
-                <height>200</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: #E8C9ED;
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <widget class="QFrame" name="frame_20">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>20</y>
+                    <width>250</width>
+                    <height>200</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: #E8C9ED;
 border-radius: 15px;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
-              </property>
-              <widget class="QWidget" name="gridLayoutWidget_3">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>10</y>
-                 <width>251</width>
-                 <height>61</height>
-                </rect>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_3">
-                <property name="leftMargin">
-                 <number>5</number>
-                </property>
-                <property name="topMargin">
-                 <number>5</number>
-                </property>
-                <property name="rightMargin">
-                 <number>5</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>5</number>
-                </property>
-                <property name="horizontalSpacing">
-                 <number>0</number>
-                </property>
-                <item row="0" column="2">
-                 <widget class="QPushButton" name="functionButton_brillo">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/brightness.png</normaloff>Assets/brightness.png</iconset>
                   </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
                   </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_10">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QTableWidget" name="studytInfo_table">
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <property name="horizontalScrollBarPolicy">
+                      <enum>Qt::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <column>
+                      <property name="text">
+                       <string>Campo</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Valor</string>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QPushButton" name="functionButton_rotacion">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/refresh-circle.png</normaloff>Assets/refresh-circle.png</iconset>
+                 <widget class="QLabel" name="label_11">
+                  <property name="geometry">
+                   <rect>
+                    <x>40</x>
+                    <y>0</y>
+                    <width>171</width>
+                    <height>31</height>
+                   </rect>
                   </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>50</width>
-                    <height>50</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QPushButton" name="functionButton_desplazamiento">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/displacement.png</normaloff>Assets/displacement.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>50</width>
-                    <height>50</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-             <widget class="QLabel" name="label_10">
-              <property name="geometry">
-               <rect>
-                <x>40</x>
-                <y>0</y>
-                <width>171</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
+                  <property name="styleSheet">
+                   <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
 background-color: rgb(119, 118, 179);
 color:#FFFFFF;
 border-radius: 15px;</string>
-              </property>
-              <property name="text">
-               <string>Funciones</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
+                  </property>
+                  <property name="text">
+                   <string>Estudio</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::PlainText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_8">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Expanding</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </widget>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="frame_22">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>160</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>225</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #FFFFFF;
+             <widget class="QWidget" name="submenuTools">
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QFrame" name="frame_12">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>190</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>190</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #FFFFFF;
 
 </string>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <widget class="QFrame" name="frame_23">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>20</y>
-                <width>250</width>
-                <height>131</height>
-               </rect>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>250</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>250</width>
-                <height>200</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: #E8C9ED;
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <widget class="QFrame" name="frame_13">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>20</y>
+                    <width>250</width>
+                    <height>161</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: #E8C9ED;
 border-radius: 15px;</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::NoFrame</enum>
-              </property>
-              <widget class="QWidget" name="gridLayoutWidget_7">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>10</y>
-                 <width>251</width>
-                 <height>121</height>
-                </rect>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_7">
-                <property name="leftMargin">
-                 <number>5</number>
-                </property>
-                <property name="topMargin">
-                 <number>5</number>
-                </property>
-                <property name="rightMargin">
-                 <number>5</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>5</number>
-                </property>
-                <property name="horizontalSpacing">
-                 <number>0</number>
-                </property>
-                <item row="1" column="1">
-                 <widget class="QPushButton" name="dispositionButton_2x2">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/2x2 grid.png</normaloff>Assets/2x2 grid.png</iconset>
                   </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
                   </property>
+                  <widget class="QWidget" name="gridLayoutWidget">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>10</y>
+                     <width>251</width>
+                     <height>154</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout">
+                    <property name="leftMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="2">
+                     <widget class="QPushButton" name="toolButton_filtros">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/colorfilter.png</normaloff>Assets/colorfilter.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QPushButton" name="toolButton_regla">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="resources.qrc">
+                        <normaloff>:/icons/Assets/ruler.png</normaloff>:/icons/Assets/ruler.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QPushButton" name="toolButton_areaCircular">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/Ellipse.png</normaloff>Assets/Ellipse.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>45</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QPushButton" name="toolButton_flechas">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/Arrow 1.png</normaloff>Assets/Arrow 1.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>35</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QPushButton" name="toolButton_dibujoLibre">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/freeDraw.png</normaloff>Assets/freeDraw.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QPushButton" name="toolButton_angulos">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/Angle.png</normaloff>Assets/Angle.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QPushButton" name="toolButton_descargaImagen">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/gallery-import.png</normaloff>Assets/gallery-import.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>45</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QPushButton" name="toolButton_borrador">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/eraser.png</normaloff>Assets/eraser.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>45</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QPushButton" name="toolButton_areaRectangular">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/Rectangle 20.png</normaloff>Assets/Rectangle 20.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QPushButton" name="toolButton_escritura">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/A.png</normaloff>Assets/A.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>35</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
                  </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QPushButton" name="dispositionButton_1x1">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/Rectangle 24.png</normaloff>Assets/Rectangle 24.png</iconset>
+                 <widget class="QLabel" name="label_8">
+                  <property name="geometry">
+                   <rect>
+                    <x>40</x>
+                    <y>0</y>
+                    <width>171</width>
+                    <height>31</height>
+                   </rect>
                   </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QPushButton" name="dispositionButton_2x1">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/2x1grid.png</normaloff>Assets/2x1grid.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>35</width>
-                    <height>35</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QPushButton" name="dispositionButton_1x3">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/1x3grid.png</normaloff>Assets/1x3grid.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QPushButton" name="dispositionButton_1x2">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/1x2grid.png</normaloff>Assets/1x2grid.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QPushButton" name="dispositionButton_1u2d">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/1up_2downgrid.png</normaloff>Assets/1up_2downgrid.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QPushButton" name="dispositionButton_1l2r">
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>Assets/1+2grid.png</normaloff>Assets/1+2grid.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>45</width>
-                    <height>45</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </widget>
-             <widget class="QLabel" name="label_14">
-              <property name="geometry">
-               <rect>
-                <x>40</x>
-                <y>0</y>
-                <width>171</width>
-                <height>31</height>
-               </rect>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
+                  <property name="styleSheet">
+                   <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
 background-color: rgb(119, 118, 179);
 color:#FFFFFF;
 border-radius: 15px;</string>
-              </property>
-              <property name="text">
-               <string>Disposición</string>
-              </property>
-              <property name="textFormat">
-               <enum>Qt::PlainText</enum>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
+                  </property>
+                  <property name="text">
+                   <string>Herramientas</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::PlainText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_14">
+                 <property name="minimumSize">
+                  <size>
+                   <width>250</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #FFFFFF;
+
+</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <widget class="QFrame" name="frame_16">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>20</y>
+                    <width>250</width>
+                    <height>71</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: #E8C9ED;
+border-radius: 15px;</string>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <widget class="QWidget" name="gridLayoutWidget_3">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>10</y>
+                     <width>251</width>
+                     <height>61</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_3">
+                    <property name="leftMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>0</number>
+                    </property>
+                    <item row="0" column="2">
+                     <widget class="QPushButton" name="functionButton_brillo">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/brightness.png</normaloff>Assets/brightness.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QPushButton" name="functionButton_rotacion">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/refresh-circle.png</normaloff>Assets/refresh-circle.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>50</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QPushButton" name="functionButton_desplazamiento">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/displacement.png</normaloff>Assets/displacement.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>50</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                 <widget class="QLabel" name="label_10">
+                  <property name="geometry">
+                   <rect>
+                    <x>40</x>
+                    <y>0</y>
+                    <width>171</width>
+                    <height>31</height>
+                   </rect>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
+background-color: rgb(119, 118, 179);
+color:#FFFFFF;
+border-radius: 15px;</string>
+                  </property>
+                  <property name="text">
+                   <string>Funciones</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::PlainText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_22">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>160</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>225</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: #FFFFFF;
+
+</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <widget class="QFrame" name="frame_23">
+                  <property name="geometry">
+                   <rect>
+                    <x>0</x>
+                    <y>20</y>
+                    <width>250</width>
+                    <height>131</height>
+                   </rect>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>250</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>250</width>
+                    <height>200</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-color: #E8C9ED;
+border-radius: 15px;</string>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <widget class="QWidget" name="gridLayoutWidget_7">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>10</y>
+                     <width>251</width>
+                     <height>121</height>
+                    </rect>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_7">
+                    <property name="leftMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>5</number>
+                    </property>
+                    <property name="horizontalSpacing">
+                     <number>0</number>
+                    </property>
+                    <item row="1" column="1">
+                     <widget class="QPushButton" name="dispositionButton_2x2">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/2x2 grid.png</normaloff>Assets/2x2 grid.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>45</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QPushButton" name="dispositionButton_1x1">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/Rectangle 24.png</normaloff>Assets/Rectangle 24.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>45</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="3">
+                     <widget class="QPushButton" name="dispositionButton_2x1">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/2x1grid.png</normaloff>Assets/2x1grid.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>35</width>
+                        <height>35</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QPushButton" name="dispositionButton_1x3">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/1x3grid.png</normaloff>Assets/1x3grid.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QPushButton" name="dispositionButton_1x2">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/1x2grid.png</normaloff>Assets/1x2grid.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QPushButton" name="dispositionButton_1u2d">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/1up_2downgrid.png</normaloff>Assets/1up_2downgrid.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>45</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QPushButton" name="dispositionButton_1l2r">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/1+2grid.png</normaloff>Assets/1+2grid.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>45</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                 <widget class="QLabel" name="label_14">
+                  <property name="geometry">
+                   <rect>
+                    <x>40</x>
+                    <y>0</y>
+                    <width>171</width>
+                    <height>31</height>
+                   </rect>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">font: 87 16pt &quot;Roboto&quot; &quot;bold&quot;;
+background-color: rgb(119, 118, 179);
+color:#FFFFFF;
+border-radius: 15px;</string>
+                  </property>
+                  <property name="text">
+                   <string>Disposición</string>
+                  </property>
+                  <property name="textFormat">
+                   <enum>Qt::PlainText</enum>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </widget>
             </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
            </item>
           </layout>
          </widget>
@@ -941,6 +1348,232 @@ border-radius: 15px;</string>
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 255, 255);</string>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="maximumSize">
+             <size>
+              <width>70</width>
+              <height>70</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>Assets/filter_5A639C.png</normaloff>Assets/filter_5A639C.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>50</width>
+              <height>50</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>70</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>36</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#5a639c;&quot;&gt;Base de Datos&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="database_table">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="cursor" stdset="0">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QTableWidget {
+    font-family: 'Roboto', sans-serif;
+
+    border-radius: 10px;
+    gridline-color: #D9D9D9;
+    border: none;
+}
+
+QHeaderView::section {
+    background-color: #5A639C;
+    color: white;
+    font-weight: bold;
+	font-size: 20px;
+    padding: 5px;
+    border: none;
+    text-align: center;
+}
+
+QTableWidget::item {
+    color: black;
+    font-weight: regular;
+    background-color: #D9D9D9;
+	font-size: 16px;
+    padding: 5px;
+    text-align: center;
+    border: none;
+}
+
+QTableWidget::item:selected {
+    background-color: #B0B0B0;
+}
+
+/* Centrar verticalmente el contenido de las celdas */
+QTableWidget::item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Asegurar que el texto se centre horizontalmente */
+QTableWidget {
+    qproperty-textElideMode: ElideNone;
+    qproperty-showGrid: false;
+}
+
+/* Estilo para el viewport del QTableWidget */
+QTableWidget QTableCornerButton::section {
+    background-color: #5A639C;
+    border: none;
+}
+
+QScrollBar:horizontal,
+QScrollBar:vertical {
+    background-color: #D9D9D9;
+    border-radius: 5px;
+    margin: 0px;
+}
+
+QScrollBar::handle:horizontal,
+QScrollBar::handle:vertical {
+    background-color: #5A639C;
+    border-radius: 5px;
+    min-height: 2px;
+    min-width: 2px;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal,
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    border: none;
+    background: none;
+    width: 0px;
+    height: 0px;
+}
+
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QScrollBar::handle:vertical {
+    max-height: 10px;
+    min-height: 8px;
+}</string>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="showGrid">
+           <bool>false</bool>
+          </property>
+          <column>
+           <property name="text">
+            <string>Nombre</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>ID - Paciente</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sexo</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Fecha de nacimiento</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Modalidades</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="pantallaAnadirArchivo">
        <property name="styleSheet">
@@ -1357,6 +1990,9 @@ border-radius: 15px;</string>
                 <bold>true</bold>
                </font>
               </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="styleSheet">
                <string notr="true">background-color: rgb(90, 99, 156);
 color:#ffffff;
@@ -1364,48 +2000,6 @@ border-radius:15px;</string>
               </property>
               <property name="text">
                <string>Seleccionar carpeta</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>10</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="archivoButton_carpeta_2">
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <family>Roboto</family>
-                <pointsize>12</pointsize>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: rgb(90, 99, 156);
-color:#ffffff;
-border-radius:15px;</string>
-              </property>
-              <property name="text">
-               <string>Seleccionar archivo</string>
               </property>
              </widget>
             </item>

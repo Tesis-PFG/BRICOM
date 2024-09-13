@@ -6,7 +6,7 @@ Comandos:
 
 
 Comandos Generación Código:
-- pyside6-uic .\ventana1.ui > generatedApp.py  #Genera la interfaz
-    ->Importante modificar el UTF generado de 16 a 8
-
-- pyside6-rcc .\resources.qrc -o .\resources_rc.py  #Genera los recursos
+- pyuic5 -x .\ventana1.ui -o generatedInterface.py  #Genera la interfaz en python (autogenerado)
+- pyuic5 -x .\dialog.ui -o generatedDialog.py  #Genera el diálogo de verificación de archivo en python (autogenerado)
+- pyrcc5 -o .\resources_rc.py .\resources.qrc #Genera los recursos
+- python main.py #Corre la interfaz con la lógica integrada
