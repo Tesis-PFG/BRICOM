@@ -249,7 +249,7 @@ background-color:#E2BBE9;
     <item>
      <widget class="QStackedWidget" name="stackedWidgetPrincipal">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pantallaVisualizacion">
        <property name="styleSheet">
@@ -1444,7 +1444,7 @@ border-radius: 15px;</string>
            </sizepolicy>
           </property>
           <property name="cursor" stdset="0">
-           <cursorShape>PointingHandCursor</cursorShape>
+           <cursorShape>ArrowCursor</cursorShape>
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
@@ -1563,12 +1563,21 @@ QScrollBar::handle:vertical {
           </column>
           <column>
            <property name="text">
-            <string>Fecha de nacimiento</string>
+            <string>Fecha Nac.</string>
            </property>
           </column>
           <column>
            <property name="text">
             <string>Modalidades</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>Assets/trash.png</normaloff>Assets/trash.png</iconset>
            </property>
           </column>
          </widget>
