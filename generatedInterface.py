@@ -4,6 +4,8 @@ from app.interface.QtOrthoViewer import *
 from app.interface.QtSegmentationViewer import *
 from app.interface.VtkBase import *
 from app.interface.ViewersConnection import *
+#Metodo para crear el registro de las imagenes 
+from app.interface.mat_3d import registro
 
 
 class Ui_MainWindow(object):
@@ -922,6 +924,8 @@ class Ui_MainWindow(object):
                 self.frame_3.layout().update()
                 self.frame_3.update()
 
+                self.open_data()
+
         def display_two_images_vertical(self):
                 # Limpiar el layout de frame_3
                 self.clear_layout()
@@ -939,6 +943,8 @@ class Ui_MainWindow(object):
                 self.frame_3.layout().addWidget(vertical_splitter)
                 self.frame_3.layout().update()
 
+                self.open_data()
+
         def display_two_images_horizontal(self):
                 # Limpiar el layout de frame_3
                 self.clear_layout()
@@ -955,6 +961,8 @@ class Ui_MainWindow(object):
                 # Agregar el splitter al layout de frame_3
                 self.frame_3.layout().addWidget(horizontal_splitter)
                 self.frame_3.layout().update()
+
+                self.open_data()
 
         def display_three_images_horizontal(self):
                 # Limpiar el layout de frame_3
@@ -974,6 +982,8 @@ class Ui_MainWindow(object):
                 # Agregar el splitter al layout de frame_3
                 self.frame_3.layout().addWidget(horizontal_splitter)
                 self.frame_3.layout().update()
+
+                self.open_data()
 
         def display_three_images_t(self):
                 # Limpiar el layout de frame_3
@@ -998,6 +1008,8 @@ class Ui_MainWindow(object):
                 self.frame_3.layout().addWidget(horizontal_splitter)
                 self.frame_3.layout().update()
 
+                self.open_data()
+
         def display_three_images_inverted_t(self):
                 # Limpiar el layout de frame_3
                 self.clear_layout()
@@ -1020,6 +1032,8 @@ class Ui_MainWindow(object):
                 # Agregar el splitter al layout de frame_3
                 self.frame_3.layout().addWidget(horizontal_splitter)
                 self.frame_3.layout().update()
+
+                self.open_data()
 
         def display_four_images(self):
                 # Limpiar el layout de frame_3
@@ -1048,10 +1062,48 @@ class Ui_MainWindow(object):
                 # Agregar el splitter al layout de frame_3
                 self.frame_3.layout().addWidget(main_splitter)
                 self.frame_3.layout().update()
+
+                self.open_data()
+
+        # Abrir lo datos
+        def open_data(self):
+                #TODO: cambiar a la nueva ruta (buscar en la base de datos local)
+                #file_dialog = QFileDialog()
+                #file_paths = file_dialog.getExistingDirectory(self, "Select Folder")
+                #file_paths_2 = file_dialog.getExistingDirectory(self, "Select Folder 2")
+
+                # El método registro es de la clase mat_3d
+                # Orden de paths:
+                # path_tac, path_rm
+                
+                """Los siguientes file_paths son quemados, tener en cuenta el TODO"""
+                file_paths = './Data/reg/CT/_Head_10_3'
+                file_paths_2 = './Data/reg/RM/T1_3D_TFE_AXI_501'
+                registro(file_paths, file_paths_2)
+                myFile = './Data/raw/patient.mhd'
+                try:
+                        self.load_data(myFile)
+                        self.render_data()
+                except Exception as e:
+                        print(e)
+                        QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imagenes \n {e}")                    
+
+        # Load the data
+        def load_data(self, filename):
+                self.vtkBaseClass.connect_on_data(filename)
+                self.QtAxialOrthoViewer.connect_on_data(filename)
+                self.QtCoronalOrthoViewer.connect_on_data(filename)
+                self.QtSagittalOrthoViewer.connect_on_data(filename)
+                self.QtSegmentationViewer.connect_on_data(filename)
+                self.ViewersConnection.connect_on_data()
+
+        # Render the data   
+        def render_data(self):
+                self.QtAxialOrthoViewer.render()
+                self.QtCoronalOrthoViewer.render()
+                self.QtSagittalOrthoViewer.render()
+                self.QtSegmentationViewer.render()
 import resources_rc
-
-
-
 
 
 if __name__ == "__main__":

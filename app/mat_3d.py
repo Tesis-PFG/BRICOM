@@ -3,9 +3,9 @@ import SimpleITK as sitk
 import numpy as np
 
 
-PATH_TC = './INVESTIGACION/Lieidy Orozco/CT Orozco_Pantano_Leidy_Johanna/Craneo - 879111/_Head_1000_5'
+PATH_TC = './Data/reg/CT/_Head_10_3'
 
-PATH_RM = './INVESTIGACION/Lieidy Orozco/Orozco_Pantano_Leidy_Johanna/Resonancia_Nuclear_Magnetica_De_Cerebro - RPID001/T1_3D_TFE_AXI_501'
+PATH_RM = './Data/reg/RM/T1_3D_TFE_AXI_501'
 # Leer las imágenes DICOM de CT y MR usando VTK
 ct_reader = vtk.vtkDICOMImageReader()
 ct_reader.SetDirectoryName(PATH_TC)

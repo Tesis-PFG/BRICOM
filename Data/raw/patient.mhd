@@ -11,6 +11,7 @@ ElementSpacing = 1 1 1
 ITK_FileNotes = VTK9.3.1
 ITK_original_direction = 1 0 0 0 1 0 0 0 1
 ITK_original_spacing = 1 1 1
+ITK_sform_corrected = NO
 bitpix = 32
 cal_max = 0
 cal_min = 0
