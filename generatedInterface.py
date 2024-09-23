@@ -11,9 +11,12 @@ from app.interface.mat_3d import registro
 class Ui_MainWindow(object):
         def setupUi(self, MainWindow):
                 MainWindow.setObjectName("MainWindow")
-                MainWindow.resize(968, 600)
-                MainWindow.setMinimumSize(QtCore.QSize(800, 600))
-                MainWindow.setMaximumSize(QtCore.QSize(1920, 1080))
+                # Tomar el tamaño del monitor
+                screen_geometry = QGuiApplication.primaryScreen().geometry()
+                MainWindow.resize(screen_geometry.width(), screen_geometry.height())
+                MainWindow.setMinimumSize(screen_geometry.width(), screen_geometry.height())
+                MainWindow.setMaximumSize(screen_geometry.width(), screen_geometry.height())
+                MainWindow.showMaximized()  # dejar la ventana en tamaño completo siempre
                 MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
 
                 #Definición de Orthoviewers a utiizar
