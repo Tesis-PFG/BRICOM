@@ -908,14 +908,16 @@ class Ui_MainWindow(object):
                 self.archivoButton_carpeta.setText(_translate("MainWindow", "Seleccionar carpeta"))
 
         def clear_layout(self):
-                for i in reversed(range(self.frame_3.layout().count())):
-                        widget = self.frame_3.layout().itemAt(i).widget()
-                        if widget is not None:
-                                widget.deleteLater()
+                if self.frame_3.layout() is not None:
+                        while self.frame_3.layout().count():
+                                child = self.frame_3.layout().takeAt(0)
+                                if child.widget() and type(child.widget())== 'QSplitter':
+                                        self.frame_3.layout().removeWidget(child.widget())
+
 
         def display_one_image(self):
                 # Limpiar el layout de frame_3
-                # self.clear_layout()
+                self.clear_layout()
 
                 # Establecer tamaños para los visores
                 self.QtSagittalOrthoViewer.setFixedSize(800, 500)
@@ -934,7 +936,7 @@ class Ui_MainWindow(object):
 
         def display_two_images_vertical(self):
                 # Limpiar el layout de frame_3
-                # self.clear_layout()
+                self.clear_layout()
 
                 # Establecer tamaños para los visores
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
@@ -955,7 +957,7 @@ class Ui_MainWindow(object):
 
         def display_two_images_horizontal(self):
                 # Limpiar el layout de frame_3
-                # self.clear_layout()
+                self.clear_layout()
 
                 # Establecer tamaños para los visores
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
@@ -976,7 +978,7 @@ class Ui_MainWindow(object):
 
         def display_three_images_horizontal(self):
                 # Limpiar el layout de frame_3
-                # self.clear_layout()
+                self.clear_layout()
 
                 # Establecer tamaños para los visores
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
@@ -998,7 +1000,7 @@ class Ui_MainWindow(object):
 
         def display_three_images_t(self):
                 # Limpiar el layout de frame_3
-                # self.clear_layout()
+                self.clear_layout()
 
                 # Establecer tamaños para los visores
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
@@ -1024,7 +1026,7 @@ class Ui_MainWindow(object):
 
         def display_three_images_inverted_t(self):
                 # Limpiar el layout de frame_3
-                # self.clear_layout()
+                self.clear_layout()
 
                 # Establecer tamaños para los visores
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
@@ -1050,7 +1052,7 @@ class Ui_MainWindow(object):
 
         def display_four_images(self):
                 # Limpiar el layout de frame_3
-                # self.clear_layout()
+                self.clear_layout()
 
                 # Establecer tamaños para los visores
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
