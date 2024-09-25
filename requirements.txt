@@ -2,3 +2,4 @@ vtk
 PyQt5
 itk
 SimpleITK
+pydicom
