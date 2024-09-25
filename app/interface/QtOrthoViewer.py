@@ -32,46 +32,64 @@ class QtOrthoViewer(QtViewer):
         # Connect signals and slots
         self.connect()
 
-    # Initialize the UI
+        # Initialize the UI
     def _init_UI(self):
         super()._init_UI()
         
         # PyQt Stuff
         ## Slider
+        color_light = "#E2BBE9" 
+        color_dark = "#5A639C"  
         self.slider = QSlider(Qt.Vertical)
         self.slider.setSingleStep(1)
         self.slider.setValue(0)
         self.slider.setEnabled(False)
         self.viewer.commandSliceSelect.sliders[self.orientation] = self.slider
+
+        self.slider.setStyleSheet("""
+            QSlider::groove:vertical {
+                background: #ffffff;
+                width: 10px;
+                border-radius: 4px;
+            }
+            QSlider::handle:vertical {
+                background: #5A639C;
+                border: 1px solid #5c5c5c;
+                height: 25px;  
+                margin: -5px 0; 
+                border-radius: 100px; 
+            }
+        """)
         
-        ## Buttons
         self.buttonsLayout = QHBoxLayout()
         
         self.prevBtn = QPushButton()
         self.prevBtn.setIcon(QIcon("./app/assets/decrease.svg"))
-        self.prevBtn.setStyleSheet("font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px; background: black")
+        self.prevBtn.setStyleSheet(f"font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px; background: {color_light}")
         self.prevBtn.setDisabled(True)
         
         self.playBtn = QPushButton()
         self.playBtn.setIcon(QIcon("./app/assets/play.ico"))
-        self.playBtn.setStyleSheet("font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px;")
+        self.playBtn.setStyleSheet(f"font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px; background: {color_dark}")
         self.playBtn.setDisabled(True)
         
         self.nextBtn = QPushButton()
         self.nextBtn.setIcon(QIcon("./app/assets/increase.svg"))
-        self.nextBtn.setStyleSheet("font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px; background: black")
+        self.nextBtn.setStyleSheet(f"font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px; background: {color_light}")
         self.nextBtn.setDisabled(True)
         
-        self.buttonsLayout.addSpacerItem(QSpacerItem(80, 10))
-        self.buttonsLayout.addWidget(self.prevBtn,4)
-        self.buttonsLayout.addWidget(self.playBtn,5)
-        self.buttonsLayout.addWidget(self.nextBtn,4)
-        self.buttonsLayout.addSpacerItem(QSpacerItem(80, 10))
+        self.buttonsLayout.setSpacing(10)
+        
+        self.buttonsLayout.addSpacerItem(QSpacerItem(40, 10))  # bajado a 40
+        self.buttonsLayout.addWidget(self.prevBtn, 4)
+        self.buttonsLayout.addWidget(self.playBtn, 5)
+        self.buttonsLayout.addWidget(self.nextBtn, 4)
+        self.buttonsLayout.addSpacerItem(QSpacerItem(40, 10))  # bajado a 40
         
         # Set up the layouts
         self.topLayout.addWidget(self.slider)
         self.mainLayout.addLayout(self.buttonsLayout)
-    
+
     # Connect signals and slots        
     def connect(self):
         # Connect slider signals to slice update slots
@@ -100,6 +118,7 @@ class QtOrthoViewer(QtViewer):
         self.slider.setMinimum(self.viewer.min_slice)
         self.slider.setMaximum(self.viewer.max_slice)
         self.slider.setValue((self.slider.maximum() + self.slider.minimum())//2)
+
     
     # Next/Previous button function
     def next_prev_btn(self, slice_index):

@@ -2,6 +2,8 @@
 from vtk import *
 from app.interface.CommandSliceSelect import *
 
+#TODO: El "problema" del tamaño de las imagenes renderizadas puede estar en esta clase
+
 class VtkBase():
     
     # Constructor
