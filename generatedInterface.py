@@ -878,11 +878,10 @@ class Ui_MainWindow(object):
                 self.stackedWidgetPrincipal.addWidget(self.pantallaAnadirArchivo)
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
                 MainWindow.setCentralWidget(self.centralwidget)
-
-        self.retranslateUi(MainWindow)
-        self.stackedWidgetPrincipal.setCurrentIndex(1)
-        self.stackedWidget_submenuVisualizacion.setCurrentIndex(1)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+                self.retranslateUi(MainWindow)
+                self.stackedWidgetPrincipal.setCurrentIndex(1)
+                self.stackedWidget_submenuVisualizacion.setCurrentIndex(1)
+                QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
