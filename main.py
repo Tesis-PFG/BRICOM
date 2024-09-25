@@ -211,10 +211,13 @@ class MyApp(Ui_MainWindow):
             with open(ruta_metadata, 'w') as f:
                 json.dump(metadata, f, indent=4)
 
+        def abrir_dialogo_tags():
+            self.abri_dialogo_tags()
+
         #Variables Iniciales
         carpeta_base = "local_database"
-        tags_requeridos_paciente = ["PatientName", "PatientID", "PatientBirthDate", "PatientSex", "PatientAge"] 
-        tags_requeridos_estudio=["StudyID", "Modality", "StudyDate", "StudyTime", "InstitutionName"]
+        tags_requeridos_paciente = ["PatientName", "PatientID", "PatientBirthDate", "PatientSex", "PatientAge","PatientWeight"] 
+        tags_requeridos_estudio=["StudyID", "Modality", "StudyDate", "StudyTime", "InstitutionName","StudyDescription"]
 
         #Dialogo para búsqueda de archivo
         carpeta_origen = QFileDialog.getExistingDirectory(None, 'Seleccionar carpeta con archivos DICOM')
@@ -228,7 +231,11 @@ class MyApp(Ui_MainWindow):
         if not os.path.exists(carpeta_base):
             os.makedirs(carpeta_base)
 
-        #Arreglo de archivos DICOM dentro de la carpeta escogida
+        abrir_dialogo_tags()
+        
+         
+
+       #Arreglo de archivos DICOM dentro de la carpeta escogida
         dicom_files = [f for f in os.listdir(carpeta_origen) if f.endswith('.dcm')]
 
         #El arreglo de archivos DICOM está vacío, ya que la carpeta no tenía nada
@@ -245,16 +252,17 @@ class MyApp(Ui_MainWindow):
             patient_id = str(dicom_data.PatientID)
             modality = str(dicom_data.Modality)
 
+            # Extraer tags del primer archivo
+            metadata_paciente = extraer_tags(dicom_data, tags_requeridos_paciente)
+            metadata_estudio = extraer_tags(dicom_data, tags_requeridos_estudio)
+
+            """
             carpeta_paciente = crear_carpeta_paciente(carpeta_base, patient_id)
             carpeta_modalidad = crear_carpeta_modalidad(carpeta_paciente, modality)
 
             # Copiar todos los archivos DICOM
             rutas_origen = [os.path.join(carpeta_origen, f) for f in dicom_files]
             copiar_archivos_dicom(rutas_origen, carpeta_modalidad)
-
-            # Extraer tags del primer archivo
-            metadata_paciente = extraer_tags(dicom_data, tags_requeridos_paciente)
-            metadata_estudio = extraer_tags(dicom_data, tags_requeridos_estudio)
 
             print(metadata_estudio)
             print(metadata_paciente)
@@ -264,11 +272,26 @@ class MyApp(Ui_MainWindow):
 
             # Mostrar mensaje de éxito
             QtWidgets.QMessageBox.information(None, 'Éxito', f"Procesados {len(dicom_files)} archivos DICOM. Guardados en: {carpeta_modalidad}")
+            """
         except Exception as e:
             # Mostrar mensaje de error
             QtWidgets.QMessageBox.critical(None, 'Error', f"Ocurrió un error al procesar los archivos: {str(e)}")
 
         print("Procesamiento completado.")
+        
+
+    #Función encargada de abrir dialogo
+    def abri_dialogo_tags(self, tags_json):
+        dialog = QtWidgets.QDialog()
+        ui = Ui_Dialog()
+        ui.setupUi(dialog)
+        
+        # If you need to pass any data to the dialog or connect any signals, do it here
+        # For example:
+        # ui.someButton.clicked.connect(self.someFunction)
+        
+        dialog.exec_()  # This will open the dialog and wait for it to be closed
+    
 
 #Inicialización de la aplicación y la ventana
 app = QtWidgets.QApplication(sys.argv)

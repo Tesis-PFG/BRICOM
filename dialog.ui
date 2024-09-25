@@ -88,7 +88,7 @@ border-top-right-radius:20px;</string>
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="anonymizeButton_uploadTags">
         <property name="maximumSize">
          <size>
           <width>80</width>
@@ -125,7 +125,7 @@ background-color:#E2BBE9;
       <number>0</number>
      </property>
      <item>
-      <widget class="QTableWidget" name="cargarArchivo_table">
+      <widget class="QTableWidget" name="uploadTags_table">
        <property name="styleSheet">
         <string notr="true">QTableWidget {
     font-family: 'Roboto', sans-serif;
@@ -236,7 +236,7 @@ border-bottom-right-radius:20px;</string>
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="cancelButton_uploadTags">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -262,7 +262,7 @@ border-radius:15px;</string>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="acceptButton_uploadTags">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -312,7 +312,7 @@ border-radius:15px;</string>
            <number>10</number>
           </property>
           <item>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="numImagenes">
             <property name="font">
              <font>
               <family>Roboto</family>
