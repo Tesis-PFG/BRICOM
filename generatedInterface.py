@@ -953,6 +953,7 @@ class Ui_MainWindow(object):
                 self.clear_layout()
 
                 # Establecer tamaños para los visores
+                self.dcm_viewer.setFixedSize(0,0)
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
                 self.QtAxialOrthoViewer.setFixedSize(300, 300)
                 self.QtCoronalOrthoViewer.setFixedSize(0, 0)
@@ -974,6 +975,7 @@ class Ui_MainWindow(object):
                 self.clear_layout()
 
                 # Establecer tamaños para los visores
+                self.dcm_viewer.setFixedSize(0,0)
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
                 self.QtAxialOrthoViewer.setFixedSize(300, 300)
                 self.QtCoronalOrthoViewer.setFixedSize(0, 0)
@@ -995,6 +997,7 @@ class Ui_MainWindow(object):
                 self.clear_layout()
 
                 # Establecer tamaños para los visores
+                self.dcm_viewer.setFixedSize(0,0)
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
                 self.QtAxialOrthoViewer.setFixedSize(300, 300)
                 self.QtCoronalOrthoViewer.setFixedSize(300, 300)
@@ -1017,6 +1020,7 @@ class Ui_MainWindow(object):
                 self.clear_layout()
 
                 # Establecer tamaños para los visores
+                self.dcm_viewer.setFixedSize(0,0)
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
                 self.QtAxialOrthoViewer.setFixedSize(300, 300)
                 self.QtCoronalOrthoViewer.setFixedSize(300, 300)
@@ -1043,6 +1047,7 @@ class Ui_MainWindow(object):
                 self.clear_layout()
 
                 # Establecer tamaños para los visores
+                self.dcm_viewer.setFixedSize(0,0)
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
                 self.QtAxialOrthoViewer.setFixedSize(300, 300)
                 self.QtCoronalOrthoViewer.setFixedSize(300, 300)
@@ -1069,6 +1074,7 @@ class Ui_MainWindow(object):
                 self.clear_layout()
 
                 # Establecer tamaños para los visores
+                self.dcm_viewer.setFixedSize(0,0)
                 self.QtSagittalOrthoViewer.setFixedSize(300, 300)
                 self.QtAxialOrthoViewer.setFixedSize(300, 300)
                 self.QtCoronalOrthoViewer.setFixedSize(300, 300)
