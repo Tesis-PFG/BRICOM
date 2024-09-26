@@ -81,7 +81,7 @@ class DicomViewer(QWidget):
         dicom_data = pydicom.dcmread(self.dicom_files[slice_index])
         pixel_array = dicom_data.pixel_array
         
-        print("forma del array de pixeles:", pixel_array.shape)  
+        # print("forma del array de pixeles:", pixel_array.shape)  
 
         vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
         vtk_image = vtk.vtkImageData()
