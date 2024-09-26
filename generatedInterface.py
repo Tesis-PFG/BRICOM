@@ -15,6 +15,7 @@ from app.interface.VtkBase import *
 from app.interface.ViewersConnection import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
+from Dicom_vis.DicomViewer import *
 
 
 class Ui_MainWindow(object):
@@ -43,6 +44,8 @@ class Ui_MainWindow(object):
                 self.ViewersConnection.add_orthogonal_viewer(self.QtCoronalOrthoViewer.get_viewer())
                 self.ViewersConnection.add_orthogonal_viewer(self.QtAxialOrthoViewer.get_viewer())
                 self.ViewersConnection.add_segmentation_viewer(self.QtSegmentationViewer.get_viewer())
+                # Prueba para el visualizador de dicom
+                self.dcm_viewer = DicomViewer('./Data/reg/CT/_Head_10_3','TAC')
 
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
                 self.centralwidget.setObjectName("centralwidget")
@@ -927,14 +930,17 @@ class Ui_MainWindow(object):
                 # Limpiar el layout de frame_3
                 self.clear_layout()
 
+                #Prueba visualizador Dicom
+                self.dcm_viewer.setFixedSize(800,500)
+
                 # Establecer tamaños para los visores
-                self.QtSagittalOrthoViewer.setFixedSize(800, 500)
+                self.QtSagittalOrthoViewer.setFixedSize(0, 0)
                 self.QtAxialOrthoViewer.setFixedSize(0, 0)
                 self.QtCoronalOrthoViewer.setFixedSize(0, 0)
                 self.QtSegmentationViewer.setFixedSize(0, 0)
 
                 # Agregar el visor deseado al layout
-                self.frame_3.layout().addWidget(self.QtSagittalOrthoViewer)
+                self.frame_3.layout().addWidget(self.dcm_viewer)
 
                 # Forzar el redibujado del layout
                 self.frame_3.layout().update()

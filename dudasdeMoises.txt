@@ -1,4 +1,0 @@
-1. No sé que hacer con tantos metadatos
-Sólo esto teniendo en cuenta esto
-        tags_requeridos_paciente = ["PatientName", "PatientID", "PatientBirthDate", "PatientSex", "PatientAge","PatientWeight"] 
-        tags_requeridos_estudio=["StudyID", "Modality", "StudyDate", "StudyTime", "InstitutionName","StudyDescription"]
