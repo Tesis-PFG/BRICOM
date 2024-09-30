@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\dialog.ui'
+# Form implementation generated from reading ui file '.\dialogoTagsSubida.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -79,7 +79,7 @@ class Ui_Dialog(object):
 "QTableWidget::item {\n"
 "    color: black;\n"
 "    font-weight: regular;\n"
-"    background-color: #D9D9D9;\n"
+"    background-color: #FFFFFF;\n"
 "    font-size: 16px;\n"
 "    padding: 5px;\n"
 "    text-align: center;\n"
@@ -138,6 +138,7 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.cancelButton_uploadTags.setFont(font)
+        self.cancelButton_uploadTags.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.cancelButton_uploadTags.setStyleSheet("background-color: rgb(90, 99, 156);\n"
 "color:#ffffff;\n"
 "border-radius:15px;")
@@ -151,6 +152,7 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.acceptButton_uploadTags.setFont(font)
+        self.acceptButton_uploadTags.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.acceptButton_uploadTags.setStyleSheet("background-color: rgb(90, 99, 156);\n"
 "color:#ffffff;\n"
 "border-radius:15px;")
