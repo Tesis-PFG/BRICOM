@@ -1,3 +1,5 @@
 env
 local_database
 pruebas
+Dicom_vis/__pycache__/
+app/__pycache__/
