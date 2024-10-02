@@ -1,5 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from actions import ViewerActions
 from app.interface.QtOrthoViewer import *
 from app.interface.QtSegmentationViewer import *
 from app.interface.VtkBase import *
@@ -7,6 +8,7 @@ from app.interface.ViewersConnection import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
 from Dicom_vis.DicomViewer import *
+
 
 
 class Ui_MainWindow(object):
@@ -22,11 +24,7 @@ class Ui_MainWindow(object):
                 self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
                 self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal")
                 self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial")
-                self.QtSagittalOrthoViewer.setFixedSize(500, 500)
-                self.QtAxialOrthoViewer.setFixedSize(500, 500)
-                self.QtCoronalOrthoViewer.setFixedSize(500, 500)
                 self.QtSegmentationViewer = QtSegmentationViewer(self.vtkBaseClass, label="3D")
-                self.QtSegmentationViewer.setFixedSize(500, 500)
                 self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
                 self.ViewersConnection.add_orthogonal_viewer(self.QtSagittalOrthoViewer.get_viewer())
                 self.ViewersConnection.add_orthogonal_viewer(self.QtCoronalOrthoViewer.get_viewer())
@@ -34,7 +32,8 @@ class Ui_MainWindow(object):
                 self.ViewersConnection.add_segmentation_viewer(self.QtSegmentationViewer.get_viewer())
                 # Prueba para el visualizador de dicom
                 self.dcm_viewer = DicomViewer('./Data/reg/CT/_Head_10_3','TAC')
-
+                viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
+                
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
                 self.centralwidget.setObjectName("centralwidget")
                 self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -534,7 +533,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1l2r.setIcon(icon24)
                 self.dispositionButton_1l2r.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1l2r.setObjectName("dispositionButton_1l2r")
-                self.dispositionButton_1l2r.clicked.connect(self.display_three_images_t)
+                self.dispositionButton_1l2r.clicked.connect(self.display_three_images_inverted_t)
                 self.gridLayout_7.addWidget(self.dispositionButton_1l2r, 1, 2, 1, 1)
                 self.label_14 = QtWidgets.QLabel(self.frame_22)
                 self.label_14.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -863,228 +862,30 @@ class Ui_MainWindow(object):
                 self.stackedWidgetPrincipal.addWidget(self.pantallaAnadirArchivo)
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
                 MainWindow.setCentralWidget(self.centralwidget)
-                
-        def clear_layout(self):
-                if self.frame_3.layout() is not None:
-                        while self.frame_3.layout().count():
-                                child = self.frame_3.layout().takeAt(0)
-                                if child.widget() and type(child.widget())== 'QSplitter':
-                                        self.frame_3.layout().removeWidget(child.widget())
-
+                 # Crear instancia de ViewerActions
+                self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, viewers, self.ViewersConnection, self.vtkBaseClass)       
 
         def display_one_image(self):
-                # Limpiar el layout de frame_3
-                self.clear_layout()
-
-                #Prueba visualizador Dicom
-                self.dcm_viewer.setFixedSize(800,500)
-
-                # Establecer tamaños para los visores
-                self.QtSagittalOrthoViewer.setFixedSize(0, 0)
-                self.QtAxialOrthoViewer.setFixedSize(0, 0)
-                self.QtCoronalOrthoViewer.setFixedSize(0, 0)
-                self.QtSegmentationViewer.setFixedSize(0, 0)
-
-                # Agregar el visor deseado al layout
-                self.frame_3.layout().addWidget(self.dcm_viewer)
-
-                # Forzar el redibujado del layout
-                self.frame_3.layout().update()
-                self.frame_3.update()
-
-                self.open_data()
+                self.viewer_actions.display_one_image()
 
         def display_two_images_vertical(self):
-                # Limpiar el layout de frame_3
-                self.clear_layout()
-
-                # Establecer tamaños para los visores
-                self.dcm_viewer.setFixedSize(0,0)
-                self.QtSagittalOrthoViewer.setFixedSize(300, 300)
-                self.QtAxialOrthoViewer.setFixedSize(300, 300)
-                self.QtCoronalOrthoViewer.setFixedSize(0, 0)
-                self.QtSegmentationViewer.setFixedSize(0, 0)
-
-                # Crear un splitter vertical
-                vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-                vertical_splitter.addWidget(self.QtSagittalOrthoViewer)
-                vertical_splitter.addWidget(self.QtAxialOrthoViewer)
-
-                # Agregar el splitter al layout de frame_3
-                self.frame_3.layout().addWidget(vertical_splitter)
-                self.frame_3.layout().update()
-
-                self.open_data()
+                self.viewer_actions.display_two_images_vertical()
 
         def display_two_images_horizontal(self):
-                # Limpiar el layout de frame_3
-                self.clear_layout()
-
-                # Establecer tamaños para los visores
-                self.dcm_viewer.setFixedSize(0,0)
-                self.QtSagittalOrthoViewer.setFixedSize(300, 300)
-                self.QtAxialOrthoViewer.setFixedSize(300, 300)
-                self.QtCoronalOrthoViewer.setFixedSize(0, 0)
-                self.QtSegmentationViewer.setFixedSize(0, 0)
-
-                # Crear un splitter horizontal
-                horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
-                horizontal_splitter.addWidget(self.QtSagittalOrthoViewer)
-                horizontal_splitter.addWidget(self.QtAxialOrthoViewer)
-
-                # Agregar el splitter al layout de frame_3
-                self.frame_3.layout().addWidget(horizontal_splitter)
-                self.frame_3.layout().update()
-
-                self.open_data()
+                self.viewer_actions.display_two_images_horizontal()
 
         def display_three_images_horizontal(self):
-                # Limpiar el layout de frame_3
-                self.clear_layout()
-
-                # Establecer tamaños para los visores
-                self.dcm_viewer.setFixedSize(0,0)
-                self.QtSagittalOrthoViewer.setFixedSize(300, 300)
-                self.QtAxialOrthoViewer.setFixedSize(300, 300)
-                self.QtCoronalOrthoViewer.setFixedSize(300, 300)
-                self.QtSegmentationViewer.setFixedSize(0, 0)
-
-                # Crear un splitter horizontal
-                horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
-                horizontal_splitter.addWidget(self.QtSagittalOrthoViewer)
-                horizontal_splitter.addWidget(self.QtAxialOrthoViewer)
-                horizontal_splitter.addWidget(self.QtCoronalOrthoViewer)
-
-                # Agregar el splitter al layout de frame_3
-                self.frame_3.layout().addWidget(horizontal_splitter)
-                self.frame_3.layout().update()
-
-                self.open_data()
+                self.viewer_actions.display_three_images_horizontal()
 
         def display_three_images_t(self):
-                # Limpiar el layout de frame_3
-                self.clear_layout()
-
-                # Establecer tamaños para los visores
-                self.dcm_viewer.setFixedSize(0,0)
-                self.QtSagittalOrthoViewer.setFixedSize(300, 300)
-                self.QtAxialOrthoViewer.setFixedSize(300, 300)
-                self.QtCoronalOrthoViewer.setFixedSize(300, 300)
-                self.QtSegmentationViewer.setFixedSize(0, 0)
-
-                # Crear un splitter vertical
-                vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-                vertical_splitter.addWidget(self.QtSagittalOrthoViewer)
-                vertical_splitter.addWidget(self.QtCoronalOrthoViewer)
-
-                # Crear un splitter horizontal
-                horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
-                horizontal_splitter.addWidget(vertical_splitter)
-                horizontal_splitter.addWidget(self.QtAxialOrthoViewer)
-
-                # Agregar el splitter al layout de frame_3
-                self.frame_3.layout().addWidget(horizontal_splitter)
-                self.frame_3.layout().update()
-
-                self.open_data()
+                self.viewer_actions.display_three_images_t()
 
         def display_three_images_inverted_t(self):
-                # Limpiar el layout de frame_3
-                self.clear_layout()
-
-                # Establecer tamaños para los visores
-                self.dcm_viewer.setFixedSize(0,0)
-                self.QtSagittalOrthoViewer.setFixedSize(300, 300)
-                self.QtAxialOrthoViewer.setFixedSize(300, 300)
-                self.QtCoronalOrthoViewer.setFixedSize(300, 300)
-                self.QtSegmentationViewer.setFixedSize(0, 0)
-
-                # Crear un splitter vertical
-                vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-                vertical_splitter.addWidget(self.QtSagittalOrthoViewer)
-                vertical_splitter.addWidget(self.QtCoronalOrthoViewer)
-
-                # Crear un splitter horizontal
-                horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
-                horizontal_splitter.addWidget(self.QtAxialOrthoViewer)
-                horizontal_splitter.addWidget(vertical_splitter)
-
-                # Agregar el splitter al layout de frame_3
-                self.frame_3.layout().addWidget(horizontal_splitter)
-                self.frame_3.layout().update()
-
-                self.open_data()
+                self.viewer_actions.display_three_images_inverted_t()
 
         def display_four_images(self):
-                # Limpiar el layout de frame_3
-                self.clear_layout()
+                self.viewer_actions.display_four_images()
 
-                # Establecer tamaños para los visores
-                self.dcm_viewer.setFixedSize(0,0)
-                self.QtSagittalOrthoViewer.setFixedSize(300, 300)
-                self.QtAxialOrthoViewer.setFixedSize(300, 300)
-                self.QtCoronalOrthoViewer.setFixedSize(300, 300)
-                self.QtSegmentationViewer.setFixedSize(300, 300)
-
-                # Crear splitters verticales
-                left_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-                left_splitter.addWidget(self.QtSagittalOrthoViewer)
-                left_splitter.addWidget(self.QtAxialOrthoViewer)
-
-                right_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-                right_splitter.addWidget(self.QtCoronalOrthoViewer)
-                right_splitter.addWidget(self.QtSegmentationViewer)
-
-                # Crear un splitter horizontal
-                main_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
-                main_splitter.addWidget(left_splitter)
-                main_splitter.addWidget(right_splitter)
-
-                # Agregar el splitter al layout de frame_3
-                self.frame_3.layout().addWidget(main_splitter)
-                self.frame_3.layout().update()
-
-                self.open_data()
-
-
-        # Abrir lo datos
-        def open_data(self):
-                #TODO: cambiar a la nueva ruta (buscar en la base de datos local)
-                #file_dialog = QFileDialog()
-                #file_paths = file_dialog.getExistingDirectory(self, "Select Folder")
-                #file_paths_2 = file_dialog.getExistingDirectory(self, "Select Folder 2")
-
-                # El método registro es de la clase mat_3d
-                # Orden de paths:
-                # path_tac, path_rm
-                
-                """Los siguientes file_paths son quemados, tener en cuenta el TODO"""
-                file_paths = './Data/reg/CT/_Head_10_3'
-                file_paths_2 = './Data/reg/RM/T1_3D_TFE_AXI_501'
-                registro(file_paths, file_paths_2)
-                myFile = './Data/raw/patient.mhd'
-                try:
-                        self.load_data(myFile)
-                        self.render_data()
-                except Exception as e:
-                        print(e)
-                        QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imagenes \n {e}")                    
-
-        # Load the data
-        def load_data(self, filename):
-                self.vtkBaseClass.connect_on_data(filename)
-                self.QtAxialOrthoViewer.connect_on_data(filename)
-                self.QtCoronalOrthoViewer.connect_on_data(filename)
-                self.QtSagittalOrthoViewer.connect_on_data(filename)
-                self.QtSegmentationViewer.connect_on_data(filename)
-                self.ViewersConnection.connect_on_data()
-
-        # Render the data   
-        def render_data(self):
-                self.QtAxialOrthoViewer.render()
-                self.QtCoronalOrthoViewer.render()
-                self.QtSagittalOrthoViewer.render()
-                self.QtSegmentationViewer.render()
 import resources_rc
 
 
