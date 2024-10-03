@@ -26,7 +26,7 @@ class ViewerActions:
 
     def display_one_image(self):
         self.clear_layout()
-        self.dcm_viewer.setFixedSize(800, 500)
+        self.dcm_viewer.setFixedSize(500, 500)
         self.QtSagittalOrthoViewer.setFixedSize(0, 0)
         self.QtAxialOrthoViewer.setFixedSize(0, 0)
         self.QtCoronalOrthoViewer.setFixedSize(0, 0)
