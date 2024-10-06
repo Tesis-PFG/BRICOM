@@ -10,16 +10,15 @@ from app.interface.mat_3d import registro
 from Dicom_vis.DicomViewer import *
 
 
-
 class Ui_MainWindow(object):
         def setupUi(self, MainWindow):
+
                 MainWindow.setObjectName("MainWindow")
-                MainWindow.resize(968, 600)
+                MainWindow.resize(869, 600)
                 MainWindow.setMinimumSize(QtCore.QSize(800, 600))
                 MainWindow.setMaximumSize(QtCore.QSize(1920, 1080))
                 MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-
-                #Definición de Orthoviewers a utiizar
+                #Definición de Orthoviewers a utilizar
                 self.vtkBaseClass = VtkBase()
                 self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
                 self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal")
@@ -33,7 +32,6 @@ class Ui_MainWindow(object):
                 # Prueba para el visualizador de dicom
                 self.dcm_viewer = DicomViewer('./Data/reg/CT/_Head_10_3','TAC')
                 viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
-                
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
                 self.centralwidget.setObjectName("centralwidget")
                 self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -56,16 +54,16 @@ class Ui_MainWindow(object):
                 self.verticalLayout_2.addWidget(self.frame_9)
                 self.frame_10 = QtWidgets.QFrame(self.frame)
                 self.frame_10.setStyleSheet("QPushButton{\n"
-        "\n"
-        "border-radius: 25px;\n"
-        "}\n"
-        "\n"
-        "QPushButton:checked{\n"
-        "background-color:#E2BBE9;\n"
-        "\n"
-        "}\n"
-        "\n"
-        "")
+                "\n"
+                "border-radius: 25px;\n"
+                "}\n"
+                "\n"
+                "QPushButton:checked{\n"
+                "background-color:#E2BBE9;\n"
+                "\n"
+                "}\n"
+                "\n"
+                "")
                 self.frame_10.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_10.setObjectName("frame_10")
                 self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_10)
@@ -123,7 +121,7 @@ class Ui_MainWindow(object):
                 self.stackedWidgetPrincipal.setObjectName("stackedWidgetPrincipal")
                 self.pantallaVisualizacion = QtWidgets.QWidget()
                 self.pantallaVisualizacion.setStyleSheet("\n"
-        "background-color: rgb(0, 0, 0);")
+                "background-color: rgb(0, 0, 0);")
                 self.pantallaVisualizacion.setObjectName("pantallaVisualizacion")
                 self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.pantallaVisualizacion)
                 self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -140,10 +138,10 @@ class Ui_MainWindow(object):
                 self.frame_17.setMinimumSize(QtCore.QSize(272, 70))
                 self.frame_17.setMaximumSize(QtCore.QSize(250, 70))
                 self.frame_17.setStyleSheet("background-color: #5A639C;\n"
-        "border-radius: 30px;\n"
-        "\n"
-        "\n"
-        "")
+                "border-radius: 30px;\n"
+                "\n"
+                "\n"
+                "")
                 self.frame_17.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_17.setObjectName("frame_17")
                 self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frame_17)
@@ -151,10 +149,10 @@ class Ui_MainWindow(object):
                 self.subMenu_patient = QtWidgets.QPushButton(self.frame_17)
                 self.subMenu_patient.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 self.subMenu_patient.setStyleSheet("QPushButton:checked{\n"
-        "background-color:#E2BBE9;\n"
-        "border-radius: 20px\n"
-        "}\n"
-        "")
+                "background-color:#E2BBE9;\n"
+                "border-radius: 20px\n"
+                "}\n"
+                "")
                 self.subMenu_patient.setText("")
                 icon3 = QtGui.QIcon()
                 icon3.addPixmap(QtGui.QPixmap(".\\Assets/subMenu_patient.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -169,10 +167,10 @@ class Ui_MainWindow(object):
                 self.subMenu_tools = QtWidgets.QPushButton(self.frame_17)
                 self.subMenu_tools.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 self.subMenu_tools.setStyleSheet("QPushButton:checked{\n"
-        "background-color:#E2BBE9;\n"
-        "border-radius: 20px\n"
-        "}\n"
-        "")
+                "background-color:#E2BBE9;\n"
+                "border-radius: 20px\n"
+                "}\n"
+                "")
                 self.subMenu_tools.setText("")
                 icon4 = QtGui.QIcon()
                 icon4.addPixmap(QtGui.QPixmap(".\\Assets/subMenu_tools.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -188,16 +186,18 @@ class Ui_MainWindow(object):
                 self.stackedWidget_submenuVisualizacion = QtWidgets.QStackedWidget(self.frame_2)
                 self.stackedWidget_submenuVisualizacion.setObjectName("stackedWidget_submenuVisualizacion")
                 self.submenuPatient = QtWidgets.QWidget()
+                self.submenuPatient.setEnabled(True)
+                self.submenuPatient.setLayoutDirection(QtCore.Qt.LeftToRight)
                 self.submenuPatient.setStyleSheet("")
                 self.submenuPatient.setObjectName("submenuPatient")
                 self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.submenuPatient)
                 self.verticalLayout_8.setObjectName("verticalLayout_8")
                 self.frame_15 = QtWidgets.QFrame(self.submenuPatient)
-                self.frame_15.setMinimumSize(QtCore.QSize(200, 190))
+                self.frame_15.setMinimumSize(QtCore.QSize(200, 250))
                 self.frame_15.setMaximumSize(QtCore.QSize(16777215, 240))
                 self.frame_15.setStyleSheet("background-color: #FFFFFF;\n"
-        "\n"
-        "")
+                "\n"
+                "")
                 self.frame_15.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_15.setObjectName("frame_15")
                 self.frame_18 = QtWidgets.QFrame(self.frame_15)
@@ -205,15 +205,25 @@ class Ui_MainWindow(object):
                 self.frame_18.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_18.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_18.setStyleSheet("background-color: #E8C9ED;\n"
-        "border-radius: 15px;")
+                "border-radius: 15px;")
                 self.frame_18.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_18.setObjectName("frame_18")
                 self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.frame_18)
-                self.verticalLayout_9.setContentsMargins(0, -1, 0, -1)
+                self.verticalLayout_9.setContentsMargins(0, 18, 0, -1)
                 self.verticalLayout_9.setObjectName("verticalLayout_9")
                 self.patientInfo_table = QtWidgets.QTableWidget(self.frame_18)
+                font = QtGui.QFont()
+                font.setFamily("Roboto")
+                self.patientInfo_table.setFont(font)
+                self.patientInfo_table.setStyleSheet("\n"
+                "QTableWidget::item {\n"
+                "    text-align: center;\n"
+                "\n"
+                "}")
                 self.patientInfo_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
                 self.patientInfo_table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+                self.patientInfo_table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+                self.patientInfo_table.setCornerButtonEnabled(False)
                 self.patientInfo_table.setObjectName("patientInfo_table")
                 self.patientInfo_table.setColumnCount(2)
                 self.patientInfo_table.setRowCount(0)
@@ -221,53 +231,64 @@ class Ui_MainWindow(object):
                 self.patientInfo_table.setHorizontalHeaderItem(0, item)
                 item = QtWidgets.QTableWidgetItem()
                 self.patientInfo_table.setHorizontalHeaderItem(1, item)
+                self.patientInfo_table.horizontalHeader().setVisible(False)
+                self.patientInfo_table.horizontalHeader().setStretchLastSection(True)
+                self.patientInfo_table.verticalHeader().setVisible(False)
+                self.patientInfo_table.verticalHeader().setStretchLastSection(True)
                 self.verticalLayout_9.addWidget(self.patientInfo_table)
                 self.label_9 = QtWidgets.QLabel(self.frame_15)
                 self.label_9.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_9.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-        "background-color: rgb(119, 118, 179);\n"
-        "color:#FFFFFF;\n"
-        "border-radius: 15px;")
+                "background-color: rgb(119, 118, 179);\n"
+                "color:#FFFFFF;\n"
+                "border-radius: 15px;")
                 self.label_9.setTextFormat(QtCore.Qt.PlainText)
                 self.label_9.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_9.setObjectName("label_9")
                 self.verticalLayout_8.addWidget(self.frame_15)
                 self.frame_19 = QtWidgets.QFrame(self.submenuPatient)
-                self.frame_19.setMinimumSize(QtCore.QSize(200, 190))
+                self.frame_19.setMinimumSize(QtCore.QSize(200, 250))
                 self.frame_19.setMaximumSize(QtCore.QSize(16777215, 240))
                 self.frame_19.setStyleSheet("background-color: #FFFFFF;\n"
-        "\n"
-        "")
+                "\n"
+                "")
                 self.frame_19.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_19.setObjectName("frame_19")
                 self.frame_20 = QtWidgets.QFrame(self.frame_19)
-                self.frame_20.setGeometry(QtCore.QRect(0, 20, 250, 200))
+                self.frame_20.setGeometry(QtCore.QRect(0, 20, 250, 300))
                 self.frame_20.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_20.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_20.setStyleSheet("background-color: #E8C9ED;\n"
-        "border-radius: 15px;")
+                "border-radius: 15px;")
                 self.frame_20.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_20.setObjectName("frame_20")
                 self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.frame_20)
                 self.verticalLayout_10.setContentsMargins(0, -1, 0, -1)
                 self.verticalLayout_10.setObjectName("verticalLayout_10")
-                self.studytInfo_table = QtWidgets.QTableWidget(self.frame_20)
-                self.studytInfo_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-                self.studytInfo_table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-                self.studytInfo_table.setObjectName("studytInfo_table")
-                self.studytInfo_table.setColumnCount(2)
-                self.studytInfo_table.setRowCount(0)
+                self.studyInfo_table = QtWidgets.QTableWidget(self.frame_20)
+                font = QtGui.QFont()
+                font.setFamily("Roboto")
+                self.studyInfo_table.setFont(font)
+                self.studyInfo_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+                self.studyInfo_table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+                self.studyInfo_table.setObjectName("studyInfo_table")
+                self.studyInfo_table.setColumnCount(2)
+                self.studyInfo_table.setRowCount(0)
                 item = QtWidgets.QTableWidgetItem()
-                self.studytInfo_table.setHorizontalHeaderItem(0, item)
+                self.studyInfo_table.setHorizontalHeaderItem(0, item)
                 item = QtWidgets.QTableWidgetItem()
-                self.studytInfo_table.setHorizontalHeaderItem(1, item)
-                self.verticalLayout_10.addWidget(self.studytInfo_table)
+                self.studyInfo_table.setHorizontalHeaderItem(1, item)
+                self.studyInfo_table.horizontalHeader().setVisible(False)
+                self.studyInfo_table.horizontalHeader().setStretchLastSection(True)
+                self.studyInfo_table.verticalHeader().setVisible(False)
+                self.studyInfo_table.verticalHeader().setStretchLastSection(True)
+                self.verticalLayout_10.addWidget(self.studyInfo_table)
                 self.label_11 = QtWidgets.QLabel(self.frame_19)
                 self.label_11.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_11.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-        "background-color: rgb(119, 118, 179);\n"
-        "color:#FFFFFF;\n"
-        "border-radius: 15px;")
+                "background-color: rgb(119, 118, 179);\n"
+                "color:#FFFFFF;\n"
+                "border-radius: 15px;")
                 self.label_11.setTextFormat(QtCore.Qt.PlainText)
                 self.label_11.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_11.setObjectName("label_11")
@@ -283,8 +304,8 @@ class Ui_MainWindow(object):
                 self.frame_12.setMinimumSize(QtCore.QSize(200, 190))
                 self.frame_12.setMaximumSize(QtCore.QSize(16777215, 190))
                 self.frame_12.setStyleSheet("background-color: #FFFFFF;\n"
-        "\n"
-        "")
+                "\n"
+                "")
                 self.frame_12.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_12.setObjectName("frame_12")
                 self.frame_13 = QtWidgets.QFrame(self.frame_12)
@@ -292,7 +313,7 @@ class Ui_MainWindow(object):
                 self.frame_13.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_13.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_13.setStyleSheet("background-color: #E8C9ED;\n"
-        "border-radius: 15px;")
+                "border-radius: 15px;")
                 self.frame_13.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_13.setObjectName("frame_13")
                 self.gridLayoutWidget = QtWidgets.QWidget(self.frame_13)
@@ -385,9 +406,9 @@ class Ui_MainWindow(object):
                 self.label_8 = QtWidgets.QLabel(self.frame_12)
                 self.label_8.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_8.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-        "background-color: rgb(119, 118, 179);\n"
-        "color:#FFFFFF;\n"
-        "border-radius: 15px;")
+                "background-color: rgb(119, 118, 179);\n"
+                "color:#FFFFFF;\n"
+                "border-radius: 15px;")
                 self.label_8.setTextFormat(QtCore.Qt.PlainText)
                 self.label_8.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_8.setObjectName("label_8")
@@ -396,8 +417,8 @@ class Ui_MainWindow(object):
                 self.frame_14.setMinimumSize(QtCore.QSize(250, 100))
                 self.frame_14.setMaximumSize(QtCore.QSize(16777215, 100))
                 self.frame_14.setStyleSheet("background-color: #FFFFFF;\n"
-        "\n"
-        "")
+                "\n"
+                "")
                 self.frame_14.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_14.setObjectName("frame_14")
                 self.frame_16 = QtWidgets.QFrame(self.frame_14)
@@ -405,7 +426,7 @@ class Ui_MainWindow(object):
                 self.frame_16.setMinimumSize(QtCore.QSize(0, 0))
                 self.frame_16.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_16.setStyleSheet("background-color: #E8C9ED;\n"
-        "border-radius: 15px;")
+                "border-radius: 15px;")
                 self.frame_16.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_16.setObjectName("frame_16")
                 self.gridLayoutWidget_3 = QtWidgets.QWidget(self.frame_16)
@@ -442,9 +463,9 @@ class Ui_MainWindow(object):
                 self.label_10 = QtWidgets.QLabel(self.frame_14)
                 self.label_10.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_10.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-        "background-color: rgb(119, 118, 179);\n"
-        "color:#FFFFFF;\n"
-        "border-radius: 15px;")
+                "background-color: rgb(119, 118, 179);\n"
+                "color:#FFFFFF;\n"
+                "border-radius: 15px;")
                 self.label_10.setTextFormat(QtCore.Qt.PlainText)
                 self.label_10.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_10.setObjectName("label_10")
@@ -453,8 +474,8 @@ class Ui_MainWindow(object):
                 self.frame_22.setMinimumSize(QtCore.QSize(0, 160))
                 self.frame_22.setMaximumSize(QtCore.QSize(16777215, 225))
                 self.frame_22.setStyleSheet("background-color: #FFFFFF;\n"
-        "\n"
-        "")
+                "\n"
+                "")
                 self.frame_22.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_22.setObjectName("frame_22")
                 self.frame_23 = QtWidgets.QFrame(self.frame_22)
@@ -462,7 +483,7 @@ class Ui_MainWindow(object):
                 self.frame_23.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_23.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_23.setStyleSheet("background-color: #E8C9ED;\n"
-        "border-radius: 15px;")
+                "border-radius: 15px;")
                 self.frame_23.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_23.setObjectName("frame_23")
                 self.gridLayoutWidget_7 = QtWidgets.QWidget(self.frame_23)
@@ -480,6 +501,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x2.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_2x2.setObjectName("dispositionButton_2x2")
                 self.dispositionButton_2x2.clicked.connect(self.display_four_images)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_2x2, 1, 1, 1, 1)
                 self.dispositionButton_1x1 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -489,6 +511,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x1.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1x1.setObjectName("dispositionButton_1x1")
                 self.dispositionButton_1x1.clicked.connect(self.display_one_image)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1x1, 0, 0, 1, 1)
                 self.dispositionButton_2x1 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_2x1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -498,6 +521,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x1.setIconSize(QtCore.QSize(35, 35))
                 self.dispositionButton_2x1.setObjectName("dispositionButton_2x1")
                 self.dispositionButton_2x1.clicked.connect(self.display_two_images_horizontal)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_2x1, 0, 3, 1, 1)
                 self.dispositionButton_1x3 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -507,6 +531,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x3.setIconSize(QtCore.QSize(40, 40))
                 self.dispositionButton_1x3.setObjectName("dispositionButton_1x3")
                 self.dispositionButton_1x3.clicked.connect(self.display_three_images_horizontal)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1x3, 0, 2, 1, 1)
                 self.dispositionButton_1x2 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -516,6 +541,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x2.setIconSize(QtCore.QSize(40, 40))
                 self.dispositionButton_1x2.setObjectName("dispositionButton_1x2")
                 self.dispositionButton_1x2.clicked.connect(self.display_two_images_vertical)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1x2, 0, 1, 1, 1)
                 self.dispositionButton_1u2d = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1u2d.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -525,6 +551,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1u2d.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1u2d.setObjectName("dispositionButton_1u2d")
                 self.dispositionButton_1u2d.clicked.connect(self.display_three_images_t)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1u2d, 1, 0, 1, 1)
                 self.dispositionButton_1l2r = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1l2r.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -534,13 +561,14 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1l2r.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1l2r.setObjectName("dispositionButton_1l2r")
                 self.dispositionButton_1l2r.clicked.connect(self.display_three_images_inverted_t)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1l2r, 1, 2, 1, 1)
                 self.label_14 = QtWidgets.QLabel(self.frame_22)
                 self.label_14.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_14.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-        "background-color: rgb(119, 118, 179);\n"
-        "color:#FFFFFF;\n"
-        "border-radius: 15px;")
+                "background-color: rgb(119, 118, 179);\n"
+                "color:#FFFFFF;\n"
+                "border-radius: 15px;")
                 self.label_14.setTextFormat(QtCore.Qt.PlainText)
                 self.label_14.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_14.setObjectName("label_14")
@@ -550,13 +578,10 @@ class Ui_MainWindow(object):
                 self.stackedWidget_submenuVisualizacion.addWidget(self.submenuTools)
                 self.verticalLayout.addWidget(self.stackedWidget_submenuVisualizacion)
                 self.horizontalLayout_5.addWidget(self.frame_2)
-                self.frame_3 = QtWidgets.QWidget(self.pantallaVisualizacion)
-                self.frame_3.setMinimumSize(QtCore.QSize(1100, 0))
-                self.frame_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
-                self.frame_3.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
+                self.frame_3 = QtWidgets.QFrame(self.pantallaVisualizacion)
+                self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+                self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
                 self.frame_3.setObjectName("frame_3")
-                self.central_layout = QtWidgets.QHBoxLayout(self.frame_3)
-                self.frame_3.setLayout(self.central_layout)
                 self.horizontalLayout_5.addWidget(self.frame_3)
                 self.stackedWidgetPrincipal.addWidget(self.pantallaVisualizacion)
                 self.pantallaBaseDeDatos = QtWidgets.QWidget()
@@ -566,17 +591,15 @@ class Ui_MainWindow(object):
                 self.verticalLayout_6.setObjectName("verticalLayout_6")
                 self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
                 self.horizontalLayout_7.setObjectName("horizontalLayout_7")
-                self.pushButton_2 = QtWidgets.QPushButton(self.pantallaBaseDeDatos)
-                self.pushButton_2.setMaximumSize(QtCore.QSize(70, 70))
-                self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                self.pushButton_2.setText("")
-                icon25 = QtGui.QIcon()
-                icon25.addPixmap(QtGui.QPixmap(".\\Assets/filter_5A639C.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.pushButton_2.setIcon(icon25)
-                self.pushButton_2.setIconSize(QtCore.QSize(50, 50))
-                self.pushButton_2.setObjectName("pushButton_2")
-                self.horizontalLayout_7.addWidget(self.pushButton_2)
-                spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+                self.filterLiner_db = QtWidgets.QLineEdit(self.pantallaBaseDeDatos)
+                self.filterLiner_db.setMaximumSize(QtCore.QSize(300, 16777215))
+                self.filterLiner_db.setStyleSheet("border: 1px solid #A0A0A0;\n"
+                "border-radius: 5px;\n"
+                "padding: 2px;\n"
+                "background-color: white;")
+                self.filterLiner_db.setObjectName("filterLiner_db")
+                self.horizontalLayout_7.addWidget(self.filterLiner_db)
+                spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
                 self.horizontalLayout_7.addItem(spacerItem3)
                 self.label_3 = QtWidgets.QLabel(self.pantallaBaseDeDatos)
                 self.label_3.setMinimumSize(QtCore.QSize(0, 70))
@@ -589,7 +612,7 @@ class Ui_MainWindow(object):
                 self.label_3.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_3.setObjectName("label_3")
                 self.horizontalLayout_7.addWidget(self.label_3)
-                spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+                spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
                 self.horizontalLayout_7.addItem(spacerItem4)
                 self.verticalLayout_6.addLayout(self.horizontalLayout_7)
                 self.database_table = QtWidgets.QTableWidget(self.pantallaBaseDeDatos)
@@ -601,94 +624,95 @@ class Ui_MainWindow(object):
                 self.database_table.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
                 self.database_table.setAutoFillBackground(False)
                 self.database_table.setStyleSheet("QTableWidget {\n"
-        "    font-family: \'Roboto\', sans-serif;\n"
-        "\n"
-        "    border-radius: 10px;\n"
-        "    gridline-color: #D9D9D9;\n"
-        "    border: none;\n"
-        "}\n"
-        "\n"
-        "QHeaderView::section {\n"
-        "    background-color: #5A639C;\n"
-        "    color: white;\n"
-        "    font-weight: bold;\n"
-        "    font-size: 20px;\n"
-        "    padding: 5px;\n"
-        "    border: none;\n"
-        "    text-align: center;\n"
-        "}\n"
-        "\n"
-        "QTableWidget::item {\n"
-        "    color: black;\n"
-        "    font-weight: regular;\n"
-        "    background-color: #D9D9D9;\n"
-        "    font-size: 16px;\n"
-        "    padding: 5px;\n"
-        "    text-align: center;\n"
-        "    border: none;\n"
-        "}\n"
-        "\n"
-        "QTableWidget::item:selected {\n"
-        "    background-color: #B0B0B0;\n"
-        "}\n"
-        "\n"
-        "/* Centrar verticalmente el contenido de las celdas */\n"
-        "QTableWidget::item {\n"
-        "    padding-top: 5px;\n"
-        "    padding-bottom: 5px;\n"
-        "}\n"
-        "\n"
-        "/* Asegurar que el texto se centre horizontalmente */\n"
-        "QTableWidget {\n"
-        "    qproperty-textElideMode: ElideNone;\n"
-        "    qproperty-showGrid: false;\n"
-        "}\n"
-        "\n"
-        "/* Estilo para el viewport del QTableWidget */\n"
-        "QTableWidget QTableCornerButton::section {\n"
-        "    background-color: #5A639C;\n"
-        "    border: none;\n"
-        "}\n"
-        "\n"
-        "QScrollBar:horizontal,\n"
-        "QScrollBar:vertical {\n"
-        "    background-color: #D9D9D9;\n"
-        "    border-radius: 5px;\n"
-        "    margin: 0px;\n"
-        "}\n"
-        "\n"
-        "QScrollBar::handle:horizontal,\n"
-        "QScrollBar::handle:vertical {\n"
-        "    background-color: #5A639C;\n"
-        "    border-radius: 5px;\n"
-        "    min-height: 2px;\n"
-        "    min-width: 2px;\n"
-        "}\n"
-        "\n"
-        "QScrollBar::add-line:horizontal,\n"
-        "QScrollBar::sub-line:horizontal,\n"
-        "QScrollBar::add-line:vertical,\n"
-        "QScrollBar::sub-line:vertical {\n"
-        "    border: none;\n"
-        "    background: none;\n"
-        "    width: 0px;\n"
-        "    height: 0px;\n"
-        "}\n"
-        "\n"
-        "QScrollBar::add-page:horizontal,\n"
-        "QScrollBar::sub-page:horizontal,\n"
-        "QScrollBar::add-page:vertical,\n"
-        "QScrollBar::sub-page:vertical {\n"
-        "    background: none;\n"
-        "}\n"
-        "\n"
-        "QScrollBar::handle:vertical {\n"
-        "    max-height: 10px;\n"
-        "    min-height: 8px;\n"
-        "}")
+                "    font-family: \'Roboto\', sans-serif;\n"
+                "\n"
+                "    border-radius: 10px;\n"
+                "    gridline-color: #D9D9D9;\n"
+                "    border: none;\n"
+                "}\n"
+                "\n"
+                "QHeaderView::section {\n"
+                "    background-color: #5A639C;\n"
+                "    color: white;\n"
+                "    font-weight: bold;\n"
+                "    font-size: 20px;\n"
+                "    padding: 5px;\n"
+                "    border: none;\n"
+                "    text-align: center;\n"
+                "}\n"
+                "\n"
+                "QTableWidget::item {\n"
+                "    color: black;\n"
+                "    font-weight: regular;\n"
+                "    background-color: #D9D9D9;\n"
+                "    font-size: 16px;\n"
+                "    padding: 5px;\n"
+                "    text-align: center;\n"
+                "    border: none;\n"
+                "}\n"
+                "\n"
+                "QTableWidget::item:selected {\n"
+                "    background-color: #B0B0B0;\n"
+                "}\n"
+                "\n"
+                "/* Centrar verticalmente el contenido de las celdas */\n"
+                "QTableWidget::item {\n"
+                "    padding-top: 5px;\n"
+                "    padding-bottom: 5px;\n"
+                "}\n"
+                "\n"
+                "/* Asegurar que el texto se centre horizontalmente */\n"
+                "QTableWidget {\n"
+                "    qproperty-textElideMode: ElideNone;\n"
+                "    qproperty-showGrid: false;\n"
+                "}\n"
+                "\n"
+                "/* Estilo para el viewport del QTableWidget */\n"
+                "QTableWidget QTableCornerButton::section {\n"
+                "    background-color: #5A639C;\n"
+                "    border: none;\n"
+                "}\n"
+                "\n"
+                "QScrollBar:horizontal,\n"
+                "QScrollBar:vertical {\n"
+                "    background-color: #D9D9D9;\n"
+                "    border-radius: 5px;\n"
+                "    margin: 0px;\n"
+                "}\n"
+                "\n"
+                "QScrollBar::handle:horizontal,\n"
+                "QScrollBar::handle:vertical {\n"
+                "    background-color: #5A639C;\n"
+                "    border-radius: 5px;\n"
+                "    min-height: 2px;\n"
+                "    min-width: 2px;\n"
+                "}\n"
+                "\n"
+                "QScrollBar::add-line:horizontal,\n"
+                "QScrollBar::sub-line:horizontal,\n"
+                "QScrollBar::add-line:vertical,\n"
+                "QScrollBar::sub-line:vertical {\n"
+                "    border: none;\n"
+                "    background: none;\n"
+                "    width: 0px;\n"
+                "    height: 0px;\n"
+                "}\n"
+                "\n"
+                "QScrollBar::add-page:horizontal,\n"
+                "QScrollBar::sub-page:horizontal,\n"
+                "QScrollBar::add-page:vertical,\n"
+                "QScrollBar::sub-page:vertical {\n"
+                "    background: none;\n"
+                "}\n"
+                "\n"
+                "QScrollBar::handle:vertical {\n"
+                "    max-height: 10px;\n"
+                "    min-height: 8px;\n"
+                "}")
                 self.database_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
                 self.database_table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
                 self.database_table.setShowGrid(False)
+                self.database_table.setCornerButtonEnabled(False)
                 self.database_table.setObjectName("database_table")
                 self.database_table.setColumnCount(6)
                 self.database_table.setRowCount(0)
@@ -703,15 +727,15 @@ class Ui_MainWindow(object):
                 item = QtWidgets.QTableWidgetItem()
                 self.database_table.setHorizontalHeaderItem(4, item)
                 item = QtWidgets.QTableWidgetItem()
-                icon26 = QtGui.QIcon()
-                icon26.addPixmap(QtGui.QPixmap(".\\Assets/trash.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                item.setIcon(icon26)
+                icon25 = QtGui.QIcon()
+                icon25.addPixmap(QtGui.QPixmap(".\\Assets/trash.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                item.setIcon(icon25)
                 self.database_table.setHorizontalHeaderItem(5, item)
                 self.verticalLayout_6.addWidget(self.database_table)
                 self.stackedWidgetPrincipal.addWidget(self.pantallaBaseDeDatos)
                 self.pantallaAnadirArchivo = QtWidgets.QWidget()
                 self.pantallaAnadirArchivo.setStyleSheet("\n"
-        "background-color: rgb(255, 255, 255);")
+                "background-color: rgb(255, 255, 255);")
                 self.pantallaAnadirArchivo.setObjectName("pantallaAnadirArchivo")
                 self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.pantallaAnadirArchivo)
                 self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -795,7 +819,7 @@ class Ui_MainWindow(object):
                 self.frame_24.setMinimumSize(QtCore.QSize(0, 400))
                 self.frame_24.setMaximumSize(QtCore.QSize(16777215, 2000))
                 self.frame_24.setStyleSheet("background-color: #E8C9ED;\n"
-        "border-radius: 15px;")
+                "border-radius: 15px;")
                 self.frame_24.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_24.setObjectName("frame_24")
                 self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.frame_24)
@@ -804,7 +828,7 @@ class Ui_MainWindow(object):
                 self.frame_25.setMinimumSize(QtCore.QSize(10, 0))
                 self.frame_25.setMaximumSize(QtCore.QSize(16777215, 1000))
                 self.frame_25.setStyleSheet("border: 2px dashed #5A639C;\n"
-        "border-radius: 15px;")
+                "border-radius: 15px;")
                 self.frame_25.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_25.setObjectName("frame_25")
                 self.gridLayout_2 = QtWidgets.QGridLayout(self.frame_25)
@@ -814,9 +838,9 @@ class Ui_MainWindow(object):
                 self.pushButton = QtWidgets.QPushButton(self.frame_25)
                 self.pushButton.setStyleSheet("border: 2px dashed #E8C9ED;")
                 self.pushButton.setText("")
-                icon27 = QtGui.QIcon()
-                icon27.addPixmap(QtGui.QPixmap(":/icons/Assets/icon_documentUpload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.pushButton.setIcon(icon27)
+                icon26 = QtGui.QIcon()
+                icon26.addPixmap(QtGui.QPixmap(":/icons/Assets/icon_documentUpload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButton.setIcon(icon26)
                 self.pushButton.setIconSize(QtCore.QSize(160, 160))
                 self.pushButton.setObjectName("pushButton")
                 self.gridLayout_2.addWidget(self.pushButton, 1, 0, 1, 1)
@@ -851,8 +875,8 @@ class Ui_MainWindow(object):
                 self.archivoButton_carpeta.setFont(font)
                 self.archivoButton_carpeta.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 self.archivoButton_carpeta.setStyleSheet("background-color: rgb(90, 99, 156);\n"
-        "color:#ffffff;\n"
-        "border-radius:15px;")
+                "color:#ffffff;\n"
+                "border-radius:15px;")
                 self.archivoButton_carpeta.setObjectName("archivoButton_carpeta")
                 self.horizontalLayout_4.addWidget(self.archivoButton_carpeta)
                 spacerItem11 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
@@ -862,8 +886,6 @@ class Ui_MainWindow(object):
                 self.stackedWidgetPrincipal.addWidget(self.pantallaAnadirArchivo)
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
                 MainWindow.setCentralWidget(self.centralwidget)
-                 # Crear instancia de ViewerActions
-                self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, viewers, self.ViewersConnection, self.vtkBaseClass)       
 
         def display_one_image(self):
                 self.viewer_actions.display_one_image()
@@ -886,14 +908,50 @@ class Ui_MainWindow(object):
         def display_four_images(self):
                 self.viewer_actions.display_four_images()
 
+        self.retranslateUi(MainWindow)
+        self.stackedWidgetPrincipal.setCurrentIndex(0)
+        self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        def retranslateUi(self, MainWindow):
+                _translate = QtCore.QCoreApplication.translate
+                MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+                self.subMenu_tools.setShortcut(_translate("MainWindow", "Esc"))
+                item = self.patientInfo_table.horizontalHeaderItem(0)
+                item.setText(_translate("MainWindow", "Campo"))
+                item = self.patientInfo_table.horizontalHeaderItem(1)
+                item.setText(_translate("MainWindow", "Valor"))
+                self.label_9.setText(_translate("MainWindow", "Paciente"))
+                item = self.studyInfo_table.horizontalHeaderItem(0)
+                item.setText(_translate("MainWindow", "Campo"))
+                item = self.studyInfo_table.horizontalHeaderItem(1)
+                item.setText(_translate("MainWindow", "Valor"))
+                self.label_11.setText(_translate("MainWindow", "Estudio"))
+                self.label_8.setText(_translate("MainWindow", "Herramientas"))
+                self.label_10.setText(_translate("MainWindow", "Funciones"))
+                self.label_14.setText(_translate("MainWindow", "Disposición"))
+                self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" color:#5a639c;\">Base de Datos</span></p></body></html>"))
+                item = self.database_table.horizontalHeaderItem(0)
+                item.setText(_translate("MainWindow", "Nombre"))
+                item = self.database_table.horizontalHeaderItem(1)
+                item.setText(_translate("MainWindow", "ID - Paciente"))
+                item = self.database_table.horizontalHeaderItem(2)
+                item.setText(_translate("MainWindow", "Sexo"))
+                item = self.database_table.horizontalHeaderItem(3)
+                item.setText(_translate("MainWindow", "Fecha Nac."))
+                item = self.database_table.horizontalHeaderItem(4)
+                item.setText(_translate("MainWindow", "Modalidades"))
+                self.label.setText(_translate("MainWindow", "Carga de Archivos"))
+                self.label_2.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt; color:#5a639c;\">Arrastre y suelte los archivos </span></p><p><span style=\" font-size:20pt; color:#5a639c;\">DICOM acá</span></p></body></html>"))
+                self.archivoButton_carpeta.setText(_translate("MainWindow", "Seleccionar carpeta"))
 import resources_rc
 
 
 if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+        import sys
+        app = QtWidgets.QApplication(sys.argv)
+        MainWindow = QtWidgets.QMainWindow()
+        ui = Ui_MainWindow()
+        ui.setupUi(MainWindow)
+        MainWindow.show()
+        sys.exit(app.exec_())

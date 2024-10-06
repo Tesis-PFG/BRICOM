@@ -14,6 +14,5 @@ Comandos para el descargue de requerimientos:
 Comandos Generación Código:
 - pyuic5 -x .\ventanaPrincipal.ui -o generatedInterface.py  #Genera la interfaz en python (autogenerado)
 - pyuic5 -x .\dialogoTagsSubida.ui -o generatedDialogTagsSubida.py  #Genera el diálogo de verificación de archivo en python (autogenerado)
-    #Toca cambiar el nombre de la clase a Ui_Dialog_TS (TAMBIEN EN EL MAIN DEL MISMO ARCHIVO AUTOGENERADO)
 - pyuic5 -x .\dialog_escoger_estudio.ui -o generatedDialogEscogerEstudio.py
 - python main.py #Corre la interfaz con la lógica integrada
