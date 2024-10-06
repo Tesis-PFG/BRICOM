@@ -87,6 +87,9 @@ class OrthoViewer(VtkViewer):
                             
         # Add observers
         self.add_observers()
+        
+        # Transparent background
+        self.renderer.SetBackground(0, 0, 0)
 
     # Connect on data
     def connect_on_data(self, path:str):
