@@ -22,6 +22,9 @@ class MyApp(Ui_MainWindow):
         self.current_patient = None
         self.current_study = None
 
+        # Variable global para almacenar todos los pacientes de la db
+        self.all_patients = {}
+
 
 
     #Función encargarda de inicializar la interfaz, los botones y las pantallas
@@ -55,6 +58,8 @@ class MyApp(Ui_MainWindow):
         #Se encarga de hacer la tabla de database bonita y dinámica
         self.database_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+
+
         # Setear Botones del menú principal
         self.mainButton_visualizacion.clicked.connect(switch_pantallaVisualizacion)
         self.mainButton_DB.clicked.connect(switch_pantallaBaseDeDatos)
@@ -69,6 +74,7 @@ class MyApp(Ui_MainWindow):
 
         # Connect the cellClicked signal to open the patient selection dialog
         self.database_table.cellClicked.connect(self.open_patient_selection_dialog)
+
 
     #Función encargada de desplegar los pacientes en la tabla de base de datos
     def loadData_database(self):
@@ -168,6 +174,7 @@ class MyApp(Ui_MainWindow):
                             background-color: transparent;
                         }
                     """)
+                    pb.clicked.connect(lambda _, pid=id_paciente: delete_patient(pid))
                     self.database_table.setCellWidget(row, 5, pb)  # Colocar el botón en la columna 5 (ícono de borrar)
 
                     row += 1
@@ -175,8 +182,48 @@ class MyApp(Ui_MainWindow):
                 # Ajustar el tamaño de las filas para que se vea correctamente
                 self.database_table.resizeRowsToContents()
         
-        pacientes_db = leer_metadata_pacientes()
-        cargar_datos_en_tabla(pacientes_db)
+
+        def filterData():
+            filter_text = self.filterLiner_db.text().lower()
+            
+            filtered_pacientes = {}
+            for paciente_key, paciente_data in self.all_patients.items():
+                nombre = paciente_data['PatientName'].replace('^', ' ').lower()
+                id_paciente = paciente_data['PatientID'].lower()
+                
+                if filter_text in nombre or filter_text in id_paciente:
+                    filtered_pacientes[paciente_key] = paciente_data
+
+            cargar_datos_en_tabla(filtered_pacientes)
+
+        def delete_patient(patient_id):
+            patient_folder = os.path.join("local_database", patient_id)
+            reply = QMessageBox.question(None, 'Confirmar Eliminación',
+                                         f'¿Está seguro que desea eliminar al paciente {patient_id}?\n'
+                                         'Esta acción no se puede deshacer.',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            
+            if reply == QMessageBox.Yes:
+                try:
+                    shutil.rmtree(patient_folder)
+                    if patient_id in self.all_patients:
+                        del self.all_patients[patient_id]
+                    self.loadData_database()
+                    QMessageBox.information(None, 'Éxito', f'El paciente {patient_id} ha sido eliminado.')
+                except Exception as e:
+                    QMessageBox.critical(None, 'Error', f'No se pudo eliminar al paciente: {str(e)}')
+            else:
+                print("Eliminación cancelada.")
+        
+        
+        # Cargar todos los pacientes
+        self.all_patients = leer_metadata_pacientes()
+        
+        # Cargar datos iniciales en la tabla
+        cargar_datos_en_tabla(self.all_patients)
+
+        # Conectar el filterLiner_db con la función de filtrado
+        self.filterLiner_db.textChanged.connect(filterData)
 
     #Función encargada de cargar los archivos a la base de datos local
     def procesar_dicom_carpeta(self, tags_requeridos):
@@ -431,15 +478,50 @@ class MyApp(Ui_MainWindow):
             return {}, {}, False
     
 
+
     def open_patient_selection_dialog(self, row, column):
         dialog = QtWidgets.QDialog()
         ui =  Ui_DialogEscogerEstudio()
         ui.setupUi(dialog)
 
+        def update_info_tables(patient_id, study_type=None):
+            # Load patient data
+            patient_folder = os.path.join("local_database", patient_id)
+            patient_metadata_file = os.path.join(patient_folder, "metadata.json")
+            if os.path.exists(patient_metadata_file):
+                with open(patient_metadata_file, 'r') as f:
+                    patient_data = json.load(f)
+                
+                # Update patientInfo_table
+                self.patientInfo_table.setRowCount(len(patient_data))
+                for row, (key, value) in enumerate(patient_data.items()):
+                    self.patientInfo_table.setItem(row, 0, QTableWidgetItem(key))
+                    self.patientInfo_table.setItem(row, 1, QTableWidgetItem(str(value)))
+            
+            # Load study data if a study type is selected
+            if study_type:
+                study_folder = os.path.join(patient_folder, study_type)
+                study_metadata_file = os.path.join(study_folder, "metadata.json")
+                if os.path.exists(study_metadata_file):
+                    with open(study_metadata_file, 'r') as f:
+                        study_data = json.load(f)
+                    
+                    # Update studyInfo_table
+                    self.studyInfo_table.setRowCount(len(study_data))
+                    for row, (key, value) in enumerate(study_data.items()):
+                        self.studyInfo_table.setItem(row, 0, QTableWidgetItem(key))
+                        self.studyInfo_table.setItem(row, 1, QTableWidgetItem(str(value)))
+                else:
+                    # Clear study table if no study data is found
+                    self.studyInfo_table.setRowCount(0)
+            else:
+                # Clear study table if no study type is selected
+                self.studyInfo_table.setRowCount(0)
+
         def set_current_study(study_type):
             self.current_study = study_type
             print(f"Current patient: {self.current_patient}, Current study: {self.current_study}")
-            # Here you can add any additional logic needed when a study is selected
+            update_info_tables(self.current_patient, study_type)
             dialog.accept()  # Close the dialog after selection
 
         def navigate_patient(direction):
@@ -451,6 +533,7 @@ class MyApp(Ui_MainWindow):
             else:
                 QMessageBox.information(dialog, "Navegación", "No hay más pacientes en esta dirección.")
 
+    
         # Get patient data from the selected row
         patient_name = self.database_table.item(row, 0).text()
         patient_id = self.database_table.item(row, 1).text()
@@ -473,6 +556,7 @@ class MyApp(Ui_MainWindow):
 
         # Set the current patient
         self.current_patient = patient_id
+        update_info_tables(patient_id)
 
         dialog.exec_()
     
