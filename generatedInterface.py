@@ -578,10 +578,13 @@ class Ui_MainWindow(object):
                 self.stackedWidget_submenuVisualizacion.addWidget(self.submenuTools)
                 self.verticalLayout.addWidget(self.stackedWidget_submenuVisualizacion)
                 self.horizontalLayout_5.addWidget(self.frame_2)
-                self.frame_3 = QtWidgets.QFrame(self.pantallaVisualizacion)
-                self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-                self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+                self.frame_3 = QtWidgets.QWidget(self.pantallaVisualizacion)
+                self.frame_3.setMinimumSize(QtCore.QSize(1100, 0))
+                self.frame_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
+                self.frame_3.setCursor(QtGui.QCursor(QtCore.Qt.OpenHandCursor))
                 self.frame_3.setObjectName("frame_3")
+                self.central_layout = QtWidgets.QHBoxLayout(self.frame_3)
+                self.frame_3.setLayout(self.central_layout)
                 self.horizontalLayout_5.addWidget(self.frame_3)
                 self.stackedWidgetPrincipal.addWidget(self.pantallaVisualizacion)
                 self.pantallaBaseDeDatos = QtWidgets.QWidget()
@@ -885,6 +888,7 @@ class Ui_MainWindow(object):
                 self.horizontalLayout_2.addLayout(self.verticalLayout_5)
                 self.stackedWidgetPrincipal.addWidget(self.pantallaAnadirArchivo)
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
+                self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, viewers, self.ViewersConnection, self.vtkBaseClass)
                 MainWindow.setCentralWidget(self.centralwidget)
 
         def display_one_image(self):
@@ -908,10 +912,10 @@ class Ui_MainWindow(object):
         def display_four_images(self):
                 self.viewer_actions.display_four_images()
 
-        self.retranslateUi(MainWindow)
-        self.stackedWidgetPrincipal.setCurrentIndex(0)
-        self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+                self.retranslateUi(MainWindow)
+                self.stackedWidgetPrincipal.setCurrentIndex(0)
+                self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
+                QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
