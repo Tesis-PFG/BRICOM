@@ -15,12 +15,11 @@ class ViewerActions:
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
 
-
     def clear_layout(self):
         if self.frame_3.layout() is not None:
             while self.frame_3.layout().count():
                 child = self.frame_3.layout().takeAt(0)
-                if child.widget() and isinstance(child.widget(), QtWidgets.QSplitter):
+                if child.widget() and type(child.widget()) == 'QSplitter':
                     self.frame_3.layout().removeWidget(child.widget())
 
 
