@@ -9,7 +9,7 @@ from app.interface.QtViewer import *
 
 class QtOrthoViewer(QtViewer):
     # Constructor
-    def __init__(self, vtkBaseClass, orientation, label: str = "Orthogonal Viewer", data: dict = None):
+    def __init__(self, vtkBaseClass, orientation, label: str = "Orthogonal Viewer", data: dict = None, patient: int = 0):
         super(QtOrthoViewer, self).__init__()
 
         # Properties
@@ -27,8 +27,16 @@ class QtOrthoViewer(QtViewer):
         if len(self.data) == 0:  # Cambié a self.data
             self.info_paciente = "No hay datos de paciente disponibles."
         else:
-            paciente = self.data[0]
-            self.info_paciente = f"{paciente['apellido']}\n{paciente['nombre']}\n{paciente['documento']}\n{paciente['fecha_estudio']}"
+            # Buscar el paciente por ID
+            paciente = None
+            for p in self.data.values():
+                if p.get('id') == patient:
+                    paciente = p
+                    break
+            if paciente is None:
+                self.info_paciente = "Paciente no encontrado."
+            else:
+                self.info_paciente = f"{paciente['apellido']}\n{paciente['nombre']}\n{paciente['documento']}\n{paciente['fecha_estudio']}" 
 
         # Initialize the UI        
         self._init_UI()

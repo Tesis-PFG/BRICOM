@@ -23,9 +23,9 @@ class Ui_MainWindow(object):
                 MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
                 #Definición de Orthoviewers a utilizar
                 self.vtkBaseClass = VtkBase()
-                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital",all_patients)
-                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal",all_patients)
-                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial",all_patients)
+                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital",all_patients, current_patient)
+                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal",all_patients, current_patient)
+                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial",all_patients, current_patient)
                 self.QtSegmentationViewer = QtSegmentationViewer(self.vtkBaseClass, label="3D")
                 self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
                 self.ViewersConnection.add_orthogonal_viewer(self.QtSagittalOrthoViewer.get_viewer())
