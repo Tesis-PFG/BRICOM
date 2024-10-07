@@ -1,5 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 from actions import ViewerActions
 from app.interface.QtOrthoViewer import *
 from app.interface.QtSegmentationViewer import *
@@ -8,6 +9,8 @@ from app.interface.ViewersConnection import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
 from Dicom_vis.DicomViewer import *
+from config import all_patients, current_patient
+
 
 
 class Ui_MainWindow(object):
@@ -20,9 +23,9 @@ class Ui_MainWindow(object):
                 MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
                 #Definición de Orthoviewers a utilizar
                 self.vtkBaseClass = VtkBase()
-                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
-                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal")
-                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial")
+                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital",all_patients)
+                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal",all_patients)
+                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial",all_patients)
                 self.QtSegmentationViewer = QtSegmentationViewer(self.vtkBaseClass, label="3D")
                 self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
                 self.ViewersConnection.add_orthogonal_viewer(self.QtSagittalOrthoViewer.get_viewer())
