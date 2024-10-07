@@ -27,35 +27,32 @@ class Canvas(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        # Enable mouse tracking for the widget
         self.setMouseTracking(True)
-        
+
         # Set size of the canvas
         self.setFixedSize(parent.size())
-        
+
         # Enable transparent background for the widget itself
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
 
-        # Create a transparent pixmap
-        pixmap = QtGui.QPixmap(self.size())
-        pixmap.fill(QtGui.QColor(0, 0, 0, 0))  # Fully transparent background
-        self.setPixmap(pixmap)
+        # Create a transparent pixmap for drawing
+        self.pixmap = QtGui.QPixmap(self.size())
+        self.pixmap.fill(QtCore.Qt.transparent)  # Transparent background for pixmap
+        self.setPixmap(self.pixmap)
 
         self.last_x, self.last_y = None, None
         self.pen_color = QtGui.QColor('#ff0000')
-        
+
         self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
-        painter.eraseRect(self.rect())
+        #painter.eraseRect(self.rect())
         
-        # Ensure transparency by setting the composition mode
-        painter.setCompositionMode(QPainter.CompositionMode_Source)
-        
-        # This prevents any automatic background fill, keeping the canvas transparent
+        # Draw the current pixmap (which may contain drawings)
+        painter.drawPixmap(0, 0, self.pixmap)
         super().paintEvent(event)  # Call the base class's paint event if needed
 
     def mouseMoveEvent(self, e):
@@ -64,14 +61,14 @@ class Canvas(QtWidgets.QLabel):
             self.last_y = e.y()
             return  # Ignore the first time.
 
-        # Check if we are inside the drawing area
         if e.buttons() == QtCore.Qt.LeftButton:
-            painter = QtGui.QPainter(self.pixmap())
-            pen = QtGui.QPen(self.pen_color, 4)
+            # Draw on the pixmap
+            painter = QtGui.QPainter(self.pixmap)
+            pen = QtGui.QPen(self.pen_color, 4, QtCore.Qt.SolidLine, QtCore.Qt.RoundCap, QtCore.Qt.RoundJoin)
             painter.setPen(pen)
             painter.drawLine(self.last_x, self.last_y, e.x(), e.y())
             painter.end()
-            self.update()
+            self.update()  # Repaint the widget
 
         # Update the origin for next time.
         self.last_x = e.x()
@@ -86,6 +83,7 @@ class Canvas(QtWidgets.QLabel):
         if e.button() == QtCore.Qt.LeftButton:
             self.last_x = None
             self.last_y = None
+
 
 class DistanceMeasurement(QWidget):
     def __init__(self, mhd_file, parent=None):
@@ -1261,9 +1259,9 @@ class Ui_MainWindow(object):
         def set_canvas(self):
                 if self.canvas is None:
                         # Crear una instancia del canvas como hijo de frame_3
-                        self.canvas = Canvas(self.QtSagittalOrthoViewer.get_viewer())
+                        self.canvas = Canvas(self.frame_3)
                         # Asegurarse de que el canvas no interfiera con el widget subyacente
-                        # self.canvas.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
+                        self.canvas.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
                         # Mostrar el canvas
                         self.canvas.show()
  
