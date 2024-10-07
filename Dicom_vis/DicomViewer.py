@@ -6,8 +6,10 @@ import os
 import pydicom
 from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+from app.interface.Worker import *
 
 class DicomViewer(QWidget):
+
     
     # Constructor
     def __init__(self, dicom_folder_path, label: str = "DICOM Viewer"):
@@ -152,5 +154,44 @@ class DicomViewer(QWidget):
 
     
     # Función de play y pausa  
+    def play_slices(self):
+        self.thread = QThread()
+        self.worker = Worker(self.slider)
+        self.status = True
+
+        # Play Button icon
+        self.playBtn.setIcon(QIcon("./app/assets/pause.ico"))
+
+        # Final resets
+        # Move worker to the thread
+        self.worker.moveToThread(self.thread)
+
+        # Connect signals and slots
+        self.thread.started.connect(self.worker.play)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progress.connect(self.update_slice)
+
+        # Start the thread
+        self.thread.start()
+        self.slider.setHidden(True)
+        self.thread.finished.connect(
+            lambda: self.slider.setHidden(False)
+        )
+        self.thread.finished.connect(
+            self.pause_slices
+        )
+
+    # Pause slices
+    def pause_slices(self):
+        self.playBtn.setIcon(QIcon("./app/assets/play.ico"))
+        self.worker.pause()
+        self.status = False
+
+    # Play/Pause button function
     def play_pause_btn(self):
-        pass
+        if self.status is False:
+            self.play_slices()
+        else:
+            self.pause_slices()
