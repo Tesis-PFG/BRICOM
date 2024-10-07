@@ -9,7 +9,7 @@ from app.interface.ViewersConnection import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
 from Dicom_vis.DicomViewer import *
-from config import all_patients, current_patient
+import config
 
 
 
@@ -23,9 +23,9 @@ class Ui_MainWindow(object):
                 MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
                 #Definición de Orthoviewers a utilizar
                 self.vtkBaseClass = VtkBase()
-                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital",all_patients, current_patient)
-                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal",all_patients, current_patient)
-                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial",all_patients, current_patient)
+                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital",config.all_patients, config.current_patient)
+                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal",config.all_patients, config.current_patient)
+                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial",config.all_patients, config.current_patient)
                 self.QtSegmentationViewer = QtSegmentationViewer(self.vtkBaseClass, label="3D")
                 self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
                 self.ViewersConnection.add_orthogonal_viewer(self.QtSagittalOrthoViewer.get_viewer())
