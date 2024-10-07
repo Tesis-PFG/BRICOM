@@ -16,27 +16,13 @@ class QtOrthoViewer(QtViewer):
         self.orientation = orientation
         self.status = False
         self.label = label
+        self.patient = patient
 
         # Aceptar un diccionario opcional
         self.data = data if data is not None else {}
 
         # Render Viewer
         self.viewer = OrthoViewer(vtkBaseClass, self.orientation, self.label)
-
-        # Manejo de info_paciente
-        if len(self.data) == 0:  # Cambié a self.data
-            self.info_paciente = "No hay datos de paciente disponibles."
-        else:
-            # Buscar el paciente por ID
-            paciente = None
-            for p in self.data.values():
-                if p.get('id') == patient:
-                    paciente = p
-                    break
-            if paciente is None:
-                self.info_paciente = "Paciente no encontrado."
-            else:
-                self.info_paciente = f"{paciente['apellido']}\n{paciente['nombre']}\n{paciente['documento']}\n{paciente['fecha_estudio']}" 
 
         # Initialize the UI        
         self._init_UI()
@@ -62,13 +48,6 @@ class QtOrthoViewer(QtViewer):
         self.slider.setValue(0)
         self.slider.setEnabled(False)
         self.viewer.commandSliceSelect.sliders[self.orientation] = self.slider
-        self.info_label = QLabel(self.info_paciente, self)
-        self.info_label.setStyleSheet("font-size: 12px; color: black;")
-
-        # Agregar información del paciente al layout existente
-        self.info_label = QLabel(self.info_paciente, self)
-        self.info_label.setStyleSheet("font-size: 12px; color: white;")
-        self.layout().addWidget(self.info_label)  # Añadiendo al layout del padre
 
         self.slider.setStyleSheet("""
             QSlider::groove:vertical {
@@ -135,6 +114,29 @@ class QtOrthoViewer(QtViewer):
     def connect_on_data(self, path):
         super().connect_on_data(path)
 
+        # Manejo de info_paciente
+        if len(self.data) == 0:
+            self.info_paciente = "No hay datos de paciente disponibles."
+        else:
+            # Buscar el paciente por ID
+            paciente = None
+            for p in self.data.values():
+                if p.get('id') == self.patient:
+                    paciente = p
+                    break
+            if paciente is None:
+                self.info_paciente = "Paciente no encontrado."
+            else:
+                self.info_paciente = f"{paciente['apellido']}\n{paciente['nombre']}\n{paciente['documento']}\n{paciente['fecha_estudio']}"
+
+        # Actualizar la información del paciente en el label existente
+        if hasattr(self, 'info_label'):
+            self.info_label.setText(self.info_paciente)
+        else:
+            self.info_label = QLabel(self.info_paciente, self)
+            self.info_label.setStyleSheet("font-size: 12px; color: white;")
+            self.layout().addWidget(self.info_label)
+
         # Settings of the button
         self.prevBtn.setEnabled(True)
         self.playBtn.setEnabled(True)
@@ -145,6 +147,7 @@ class QtOrthoViewer(QtViewer):
         self.slider.setMinimum(self.viewer.min_slice)
         self.slider.setMaximum(self.viewer.max_slice)
         self.slider.setValue((self.slider.maximum() + self.slider.minimum()) // 2)
+
 
     # Next/Previous button function
     def next_prev_btn(self, slice_index):

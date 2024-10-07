@@ -19,8 +19,6 @@ class MyApp(Ui_MainWindow):
         self.setearInterfaz(window)
         self.loadData_database()
 
-        self.current_study = None
-
 
 
     #Función encargarda de inicializar la interfaz, los botones y las pantallas
@@ -515,8 +513,8 @@ class MyApp(Ui_MainWindow):
                 self.studyInfo_table.setRowCount(0)
 
         def set_current_study(study_type):
-            self.current_study = study_type
-            print(f"Current patient: {config.current_patient}, Current study: {self.current_study}")
+            config.current_study = study_type
+            print(f"Current patient: {config.current_patient}, Current study: {config.current_study}")
             update_info_tables(config.current_patient, study_type)
             dialog.accept()  # Close the dialog after selection
 

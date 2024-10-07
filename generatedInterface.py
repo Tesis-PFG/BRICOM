@@ -915,11 +915,6 @@ class Ui_MainWindow(object):
         def display_four_images(self):
                 self.viewer_actions.display_four_images()
 
-                self.retranslateUi(MainWindow)
-                self.stackedWidgetPrincipal.setCurrentIndex(0)
-                self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
-                QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
                 MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
