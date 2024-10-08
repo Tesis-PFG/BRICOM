@@ -10,6 +10,9 @@ from app.interface.ViewersConnection import *
 from app.interface.mat_3d import registro
 from Dicom_vis.DicomViewer import *
 import config
+from PyQt5.QtGui import QPen
+from PyQt5.QtGui import QPainter, QPen, QMouseEvent
+from PyQt5.QtCore import Qt, QPoint
 
 
 
@@ -333,6 +336,7 @@ class Ui_MainWindow(object):
                 self.toolButton_filtros.setIcon(icon5)
                 self.toolButton_filtros.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_filtros.setObjectName("toolButton_filtros")
+                self.toolButton_filtros.setToolTip("Aplicar filtros sobre los estudios")
                 self.gridLayout.addWidget(self.toolButton_filtros, 0, 2, 1, 1)
                 self.toolButton_regla = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_regla.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -341,6 +345,9 @@ class Ui_MainWindow(object):
                 self.toolButton_regla.setIcon(icon6)
                 self.toolButton_regla.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_regla.setObjectName("toolButton_regla")
+                self.toolButton_regla.clicked.connect(self.activate_distance_measurement)
+                self.toolButton_regla.setToolTip("Realizar mediciones sobre los estudios")
+                self.measurement_view = None
                 self.gridLayout.addWidget(self.toolButton_regla, 0, 0, 1, 1)
                 self.toolButton_areaCircular = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_areaCircular.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -349,6 +356,8 @@ class Ui_MainWindow(object):
                 self.toolButton_areaCircular.setIcon(icon7)
                 self.toolButton_areaCircular.setIconSize(QtCore.QSize(45, 45))
                 self.toolButton_areaCircular.setObjectName("toolButton_areaCircular")
+                self.toolButton_areaCircular.setToolTip("Encontrar el área circular dentro del estudio")
+
                 self.gridLayout.addWidget(self.toolButton_areaCircular, 1, 0, 1, 1)
                 self.toolButton_flechas = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_flechas.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -357,6 +366,7 @@ class Ui_MainWindow(object):
                 self.toolButton_flechas.setIcon(icon8)
                 self.toolButton_flechas.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_flechas.setObjectName("toolButton_flechas")
+                self.toolButton_flechas.setToolTip("Dibujar flechas")
                 self.gridLayout.addWidget(self.toolButton_flechas, 1, 3, 1, 1)
                 self.toolButton_dibujoLibre = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_dibujoLibre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -365,6 +375,9 @@ class Ui_MainWindow(object):
                 self.toolButton_dibujoLibre.setIcon(icon9)
                 self.toolButton_dibujoLibre.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_dibujoLibre.setObjectName("toolButton_dibujoLibre")
+                self.toolButton_dibujoLibre.setToolTip("Iniciar dibujo libre sobre la imagen")
+                self.toolButton_dibujoLibre.clicked.connect(self.set_canvas)
+                self.canvas = None
                 self.gridLayout.addWidget(self.toolButton_dibujoLibre, 0, 1, 1, 1)
                 self.toolButton_angulos = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_angulos.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -373,6 +386,7 @@ class Ui_MainWindow(object):
                 self.toolButton_angulos.setIcon(icon10)
                 self.toolButton_angulos.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_angulos.setObjectName("toolButton_angulos")
+                self.toolButton_angulos.setToolTip("Encontrar ángulos dentro de los estudios")
                 self.gridLayout.addWidget(self.toolButton_angulos, 1, 2, 1, 1)
                 self.toolButton_descargaImagen = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_descargaImagen.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -381,6 +395,7 @@ class Ui_MainWindow(object):
                 self.toolButton_descargaImagen.setIcon(icon11)
                 self.toolButton_descargaImagen.setIconSize(QtCore.QSize(45, 40))
                 self.toolButton_descargaImagen.setObjectName("toolButton_descargaImagen")
+                self.toolButton_descargaImagen.setToolTip("Descargar imagen con las notaciones realizadas")
                 self.gridLayout.addWidget(self.toolButton_descargaImagen, 2, 1, 1, 1)
                 self.toolButton_borrador = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_borrador.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -389,6 +404,7 @@ class Ui_MainWindow(object):
                 self.toolButton_borrador.setIcon(icon12)
                 self.toolButton_borrador.setIconSize(QtCore.QSize(45, 45))
                 self.toolButton_borrador.setObjectName("toolButton_borrador")
+                self.toolButton_borrador.setToolTip("Borrar dibujos realizados")
                 self.gridLayout.addWidget(self.toolButton_borrador, 2, 0, 1, 1)
                 self.toolButton_areaRectangular = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_areaRectangular.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -397,6 +413,7 @@ class Ui_MainWindow(object):
                 self.toolButton_areaRectangular.setIcon(icon13)
                 self.toolButton_areaRectangular.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_areaRectangular.setObjectName("toolButton_areaRectangular")
+                self.toolButton_areaRectangular.setToolTip("Encontrar el área rectangular dentro de los estudios")
                 self.gridLayout.addWidget(self.toolButton_areaRectangular, 1, 1, 1, 1)
                 self.toolButton_escritura = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_escritura.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -405,6 +422,7 @@ class Ui_MainWindow(object):
                 self.toolButton_escritura.setIcon(icon14)
                 self.toolButton_escritura.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_escritura.setObjectName("toolButton_escritura")
+                self.toolButton_escritura.setToolTip("Escribir encima de los estudios")
                 self.gridLayout.addWidget(self.toolButton_escritura, 0, 3, 1, 1)
                 self.label_8 = QtWidgets.QLabel(self.frame_12)
                 self.label_8.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -446,6 +464,7 @@ class Ui_MainWindow(object):
                 self.functionButton_brillo.setIcon(icon15)
                 self.functionButton_brillo.setIconSize(QtCore.QSize(40, 40))
                 self.functionButton_brillo.setObjectName("functionButton_brillo")
+                self.functionButton_brillo.setToolTip("Cambiar el brillo de los estudios")
                 self.gridLayout_3.addWidget(self.functionButton_brillo, 0, 2, 1, 1)
                 self.functionButton_rotacion = QtWidgets.QPushButton(self.gridLayoutWidget_3)
                 self.functionButton_rotacion.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -454,6 +473,7 @@ class Ui_MainWindow(object):
                 self.functionButton_rotacion.setIcon(icon16)
                 self.functionButton_rotacion.setIconSize(QtCore.QSize(50, 50))
                 self.functionButton_rotacion.setObjectName("functionButton_rotacion")
+                self.functionButton_rotacion.setToolTip("Rotar los estudios")
                 self.gridLayout_3.addWidget(self.functionButton_rotacion, 0, 1, 1, 1)
                 self.functionButton_desplazamiento = QtWidgets.QPushButton(self.gridLayoutWidget_3)
                 self.functionButton_desplazamiento.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -462,6 +482,7 @@ class Ui_MainWindow(object):
                 self.functionButton_desplazamiento.setIcon(icon17)
                 self.functionButton_desplazamiento.setIconSize(QtCore.QSize(50, 50))
                 self.functionButton_desplazamiento.setObjectName("functionButton_desplazamiento")
+                self.functionButton_desplazamiento.setToolTip("Realizar desplazamientos")
                 self.gridLayout_3.addWidget(self.functionButton_desplazamiento, 0, 0, 1, 1)
                 self.label_10 = QtWidgets.QLabel(self.frame_14)
                 self.label_10.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -503,6 +524,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x2.setIcon(icon18)
                 self.dispositionButton_2x2.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_2x2.setObjectName("dispositionButton_2x2")
+                self.dispositionButton_2x2.setToolTip("Mostrar disposición 2x2 (Sagital) (Axial) (Coronal) (3D)")
                 self.dispositionButton_2x2.clicked.connect(self.display_four_images)
 
                 self.gridLayout_7.addWidget(self.dispositionButton_2x2, 1, 1, 1, 1)
@@ -513,6 +535,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x1.setIcon(icon19)
                 self.dispositionButton_1x1.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1x1.setObjectName("dispositionButton_1x1")
+                self.dispositionButton_1x1.setToolTip("Mostrar disposición 1x1 (Sagital)")
                 self.dispositionButton_1x1.clicked.connect(self.display_one_image)
 
                 self.gridLayout_7.addWidget(self.dispositionButton_1x1, 0, 0, 1, 1)
@@ -522,8 +545,8 @@ class Ui_MainWindow(object):
                 icon20.addPixmap(QtGui.QPixmap(".\\Assets/2x1grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 self.dispositionButton_2x1.setIcon(icon20)
                 self.dispositionButton_2x1.setIconSize(QtCore.QSize(35, 35))
-                self.dispositionButton_2x1.setObjectName("dispositionButton_2x1")
-                self.dispositionButton_2x1.clicked.connect(self.display_two_images_horizontal)
+                self.dispositionButton_2x1.setToolTip("Mostrar disposición 2x1 (Sagital) arriba (Axial) abajo")
+                self.dispositionButton_2x1.clicked.connect(self.display_two_images_vertical)
 
                 self.gridLayout_7.addWidget(self.dispositionButton_2x1, 0, 3, 1, 1)
                 self.dispositionButton_1x3 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
@@ -533,6 +556,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x3.setIcon(icon21)
                 self.dispositionButton_1x3.setIconSize(QtCore.QSize(40, 40))
                 self.dispositionButton_1x3.setObjectName("dispositionButton_1x3")
+                self.dispositionButton_1x3.setToolTip("Mostrar disposición 1x3 (Sagital) (Axial) (Coronal)")
                 self.dispositionButton_1x3.clicked.connect(self.display_three_images_horizontal)
 
                 self.gridLayout_7.addWidget(self.dispositionButton_1x3, 0, 2, 1, 1)
@@ -543,7 +567,8 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x2.setIcon(icon22)
                 self.dispositionButton_1x2.setIconSize(QtCore.QSize(40, 40))
                 self.dispositionButton_1x2.setObjectName("dispositionButton_1x2")
-                self.dispositionButton_1x2.clicked.connect(self.display_two_images_vertical)
+                self.dispositionButton_1x2.setToolTip("Mostrar disposición 1x2 (Sagital) izquierda (Axial) derecha")
+                self.dispositionButton_1x2.clicked.connect(self.display_two_images_horizontal)
 
                 self.gridLayout_7.addWidget(self.dispositionButton_1x2, 0, 1, 1, 1)
                 self.dispositionButton_1u2d = QtWidgets.QPushButton(self.gridLayoutWidget_7)
@@ -553,6 +578,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1u2d.setIcon(icon23)
                 self.dispositionButton_1u2d.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1u2d.setObjectName("dispositionButton_1u2d")
+                self.dispositionButton_1u2d.setToolTip("Mostrar disposición (Sagital) arriba y (Axial y Coronal) abajo")
                 self.dispositionButton_1u2d.clicked.connect(self.display_three_images_t)
 
                 self.gridLayout_7.addWidget(self.dispositionButton_1u2d, 1, 0, 1, 1)
@@ -563,6 +589,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1l2r.setIcon(icon24)
                 self.dispositionButton_1l2r.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1l2r.setObjectName("dispositionButton_1l2r")
+                self.dispositionButton_1l2r.setToolTip("Mostrar disposición (Sagital) izquierda y (Axial y Coronal) derecha")
                 self.dispositionButton_1l2r.clicked.connect(self.display_three_images_inverted_t)
 
                 self.gridLayout_7.addWidget(self.dispositionButton_1l2r, 1, 2, 1, 1)
@@ -914,6 +941,12 @@ class Ui_MainWindow(object):
 
         def display_four_images(self):
                 self.viewer_actions.display_four_images()
+
+        def activate_distance_measurement(self):
+                self.viewer_actions.activate_distance_measurement(self.measurement_view)
+               
+        def set_canvas(self):
+                self.viewer_actions.set_canvas(self.canvas)
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
