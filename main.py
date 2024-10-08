@@ -7,6 +7,7 @@ import shutil
 import pydicom
 import json
 import sys, os, re
+import config
 
 
 class MyApp(Ui_MainWindow):
@@ -17,13 +18,6 @@ class MyApp(Ui_MainWindow):
         #Se encarga de setear los listener de los botones y los índices de los stackedWidgets
         self.setearInterfaz(window)
         self.loadData_database()
-
-        # Variables globales para el paciente actual
-        self.current_patient = None
-        self.current_study = None
-
-        # Variable global para almacenar todos los pacientes de la db
-        self.all_patients = {}
 
 
 
@@ -187,7 +181,7 @@ class MyApp(Ui_MainWindow):
             filter_text = self.filterLiner_db.text().lower()
             
             filtered_pacientes = {}
-            for paciente_key, paciente_data in self.all_patients.items():
+            for paciente_key, paciente_data in config.all_patients.items():
                 nombre = paciente_data['PatientName'].replace('^', ' ').lower()
                 id_paciente = paciente_data['PatientID'].lower()
                 
@@ -206,8 +200,8 @@ class MyApp(Ui_MainWindow):
             if reply == QMessageBox.Yes:
                 try:
                     shutil.rmtree(patient_folder)
-                    if patient_id in self.all_patients:
-                        del self.all_patients[patient_id]
+                    if patient_id in config.all_patients:
+                        del config.all_patients[patient_id]
                     self.loadData_database()
                     QMessageBox.information(None, 'Éxito', f'El paciente {patient_id} ha sido eliminado.')
                 except Exception as e:
@@ -217,10 +211,10 @@ class MyApp(Ui_MainWindow):
         
         
         # Cargar todos los pacientes
-        self.all_patients = leer_metadata_pacientes()
+        config.all_patients = leer_metadata_pacientes()
         
         # Cargar datos iniciales en la tabla
-        cargar_datos_en_tabla(self.all_patients)
+        cargar_datos_en_tabla(config.all_patients)
 
         # Conectar el filterLiner_db con la función de filtrado
         self.filterLiner_db.textChanged.connect(filterData)
@@ -519,9 +513,9 @@ class MyApp(Ui_MainWindow):
                 self.studyInfo_table.setRowCount(0)
 
         def set_current_study(study_type):
-            self.current_study = study_type
-            print(f"Current patient: {self.current_patient}, Current study: {self.current_study}")
-            update_info_tables(self.current_patient, study_type)
+            config.current_study = study_type
+            print(f"Current patient: {config.current_patient}, Current study: {config.current_study}")
+            update_info_tables(config.current_patient, study_type)
             dialog.accept()  # Close the dialog after selection
 
         def navigate_patient(direction):
@@ -555,7 +549,7 @@ class MyApp(Ui_MainWindow):
         ui.siguienteButton_paciente.clicked.connect(lambda: navigate_patient(1))
 
         # Set the current patient
-        self.current_patient = patient_id
+        config.current_patient = patient_id
         update_info_tables(patient_id)
 
         dialog.exec_()

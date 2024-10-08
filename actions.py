@@ -6,6 +6,7 @@ from app.interface.ViewersConnection import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
 from Dicom_vis.DicomViewer import *
+import config
 
 class ViewerActions:
     def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection,vtkBaseClass):
@@ -24,13 +25,25 @@ class ViewerActions:
 
 
     def display_one_image(self):
-        self.clear_layout()
-        self.dcm_viewer.setFixedSize(500, 500)
-        self.QtSagittalOrthoViewer.setFixedSize(0, 0)
-        self.QtAxialOrthoViewer.setFixedSize(0, 0)
-        self.QtCoronalOrthoViewer.setFixedSize(0, 0)
-        self.QtSegmentationViewer.setFixedSize(0, 0)
-        self.frame_3.layout().addWidget(self.dcm_viewer)
+
+        if config.current_study == 'CT' or config.current_study == 'RM':
+            self.clear_layout()
+            self.dcm_viewer.setFixedSize(500, 500)
+            self.QtSagittalOrthoViewer.setFixedSize(0, 0)
+            self.QtAxialOrthoViewer.setFixedSize(0, 0)
+            self.QtCoronalOrthoViewer.setFixedSize(0, 0)
+            self.QtSegmentationViewer.setFixedSize(0, 0)
+            self.frame_3.layout().addWidget(self.dcm_viewer)
+           
+        elif config.current_study == 'ImagenConjunta':
+            self.clear_layout()
+            self.dcm_viewer.setFixedSize(0, 0)
+            self.QtSagittalOrthoViewer.setFixedSize(300, 300)
+            self.QtAxialOrthoViewer.setFixedSize(0, 0)
+            self.QtCoronalOrthoViewer.setFixedSize(0, 0)
+            self.QtSegmentationViewer.setFixedSize(0, 0)
+            self.frame_3.layout().addWidget(self.QtSagittalOrthoViewer)
+
         self.frame_3.layout().update()
         self.frame_3.update()
         self.open_data()
@@ -140,17 +153,40 @@ class ViewerActions:
 
 
     def open_data(self):
-        file_paths = './Data/reg/CT/_Head_10_3'
-        file_paths_2 = './Data/reg/RM/T1_3D_TFE_AXI_501'
-        registro(file_paths, file_paths_2)
-        myFile = './Data/raw/patient.mhd'
-        try:
-            self.load_data(myFile)
-            self.render_data()
-        except Exception as e:
-            print(e)
-            QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+        # Mapeo de estudios
+        study_paths = {
+        "CT": "CT",  # TAC
+        "RM": "RM"   # Resonancia Magnética
+        }
 
+        if config.current_patient is None or config.current_study is None:
+            QtWidgets.QMessageBox.critical(self, "Error", "No hay un paciente o estudio seleccionado.")
+            return
+
+        # Definir los paths dinámicos basados en el paciente y el estudio
+        base_path = f'./local_database/{config.current_patient}/{study_paths.get(config.current_study, "CT")}/'
+        
+        # Asigna las rutas para los estudios CT y RM basados en el paciente actual
+        file_paths = f'./local_database/{config.current_patient}/CT'
+        file_paths_2 = f'./local_database/{config.current_patient}/MR'
+
+        if config.current_study == 'CT' or config.current_study == 'MR':
+            try: 
+                self.dcm_viewer.load_dicom_files(base_path)
+            except Exception as e:
+                print(e)
+                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+        else:
+            try:
+                registro(file_paths, file_paths_2)
+                # Ruta de la imagen principal (ajusta si cambia según el paciente)
+                myFile = f'./Data/raw/patient.mhd'
+                # Carga y renderiza los datos
+                self.load_data(myFile)
+                self.render_data()
+            except Exception as e:
+                print(e)
+                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
 
     def load_data(self, filename):
         self.vtkBaseClass.connect_on_data(filename)

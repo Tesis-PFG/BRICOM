@@ -1,5 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 from actions import ViewerActions
 from app.interface.QtOrthoViewer import *
 from app.interface.QtSegmentationViewer import *
@@ -8,6 +9,8 @@ from app.interface.ViewersConnection import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
 from Dicom_vis.DicomViewer import *
+import config
+
 
 
 class Ui_MainWindow(object):
@@ -20,9 +23,9 @@ class Ui_MainWindow(object):
                 MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
                 #Definición de Orthoviewers a utilizar
                 self.vtkBaseClass = VtkBase()
-                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
-                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal")
-                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial")
+                self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital",config.all_patients, config.current_patient)
+                self.QtCoronalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XZ, "Coronal",config.all_patients, config.current_patient)
+                self.QtAxialOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_XY, "Axial",config.all_patients, config.current_patient)
                 self.QtSegmentationViewer = QtSegmentationViewer(self.vtkBaseClass, label="3D")
                 self.ViewersConnection = ViewersConnection(self.vtkBaseClass)
                 self.ViewersConnection.add_orthogonal_viewer(self.QtSagittalOrthoViewer.get_viewer())
@@ -30,7 +33,7 @@ class Ui_MainWindow(object):
                 self.ViewersConnection.add_orthogonal_viewer(self.QtAxialOrthoViewer.get_viewer())
                 self.ViewersConnection.add_segmentation_viewer(self.QtSegmentationViewer.get_viewer())
                 # Prueba para el visualizador de dicom
-                self.dcm_viewer = DicomViewer('./Data/reg/CT/_Head_10_3','TAC')
+                self.dcm_viewer = DicomViewer('Axial')
                 viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
                 self.centralwidget.setObjectName("centralwidget")
@@ -911,11 +914,6 @@ class Ui_MainWindow(object):
 
         def display_four_images(self):
                 self.viewer_actions.display_four_images()
-
-                self.retranslateUi(MainWindow)
-                self.stackedWidgetPrincipal.setCurrentIndex(0)
-                self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
-                QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
