@@ -4,36 +4,37 @@ from PyQt5.QtGui import *
 import vtk
 import os
 import pydicom
+import numpy as np  # Importa numpy para manejar operaciones numéricas
 from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
 
 class DicomViewer(QWidget):
 
-    
-    # Constructor
     def __init__(self, dicom_folder_path, view_orientation='Axial'):
         super(DicomViewer, self).__init__()
-        
+
         self.dicom_folder_path = dicom_folder_path
-        self.view_orientation = view_orientation  # Se le pasa la vista por parámetro
+        self.view_orientation = view_orientation
         self.status = False
-        
+
         self.dicom_files = self.load_dicom_files(self.dicom_folder_path)
         self.min_slice = 0
         self.max_slice = len(self.dicom_files) - 1
         self.current_slice = self.min_slice
         
+        # Brillo y contraste por defecto
+        self.brightness = 0  # Valor de brillo
+        self.contrast = 1    # Valor de contraste
+
         self.vtkWidget = QVTKRenderWindowInteractor(self)
         self.viewer = vtk.vtkResliceImageViewer()
         self.viewer.SetRenderWindow(self.vtkWidget.GetRenderWindow())
         self.viewer.SetupInteractor(self.vtkWidget.GetRenderWindow().GetInteractor())
- 
         
         self._init_UI()
         self.set_view_orientation(self.view_orientation)
         self.update_slice(self.current_slice)
-
 
     def load_dicom_files(self, folder_path):
         if not os.path.exists(folder_path):
@@ -44,15 +45,12 @@ class DicomViewer(QWidget):
                 dicom_files.append(os.path.join(folder_path, filename))
         return dicom_files
 
-
-    # Initialize the UI
     def _init_UI(self):
-        # Layout principal
         main_layout = QVBoxLayout(self)
         color_light = "#E2BBE9" 
         color_dark = "#5A639C"
 
-        # Layout horizontal para imagen y slider
+        # Layout para el slider y la imagen
         image_slider_layout = QHBoxLayout()
 
         # Slider
@@ -79,14 +77,13 @@ class DicomViewer(QWidget):
             }
         """)
         
-        # Añadir el widget de imagen y el slider al layout horizontal
-        image_slider_layout.addWidget(self.vtkWidget)  # Añadir el visualizador de imagen
-        image_slider_layout.addWidget(self.slider)     # Añadir el slider a la derecha
+        # Añadir el widget de imagen y el slider al layout
+        image_slider_layout.addWidget(self.vtkWidget)
+        image_slider_layout.addWidget(self.slider)
         
-        # Añadir el layout de imagen+slider al layout principal
         main_layout.addLayout(image_slider_layout)
-        
-        # Layout horizontal para los botones
+
+        # Layout para los botones
         self.buttonsLayout = QHBoxLayout()
         
         self.prevBtn = QPushButton()
@@ -96,39 +93,64 @@ class DicomViewer(QWidget):
         self.playBtn = QPushButton()
         self.playBtn.setIcon(QIcon("./app/assets/play.ico"))
         self.playBtn.setStyleSheet(f"font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px; background: {color_dark}")
-        
+
         self.nextBtn = QPushButton()
         self.nextBtn.setIcon(QIcon("./app/assets/increase.svg"))
         self.nextBtn.setStyleSheet(f"font-size:15px; border-radius: 6px;border: 1px solid rgba(27, 31, 35, 0.15);padding: 5px 15px; background: {color_light}")
 
-        
         self.buttonsLayout.setSpacing(10)
-        
-        # Añadir los botones al layout de botones
         self.buttonsLayout.addWidget(self.prevBtn)
         self.buttonsLayout.addWidget(self.playBtn)
         self.buttonsLayout.addWidget(self.nextBtn)
-        
-        # Añadir el layout de botones al layout principal, justo debajo de la imagen
+
         main_layout.addLayout(self.buttonsLayout)
         self.prevBtn.clicked.connect(lambda: self.next_prev_btn(self.slider.value()-10))
         self.playBtn.clicked.connect(self.play_pause_btn)
         self.nextBtn.clicked.connect(lambda: self.next_prev_btn(self.slider.value()+10))
 
+        # Añadir QLabel y Slider para brillo y contraste
+        self.contrast_label = QLabel(f'Contrast: {self.contrast:.2f}')
+        self.contrast_label.setStyleSheet("""
+            color: #ffffff;
+        """)
+        self.contrast_slider = QSlider(Qt.Horizontal)
+        self.contrast_slider.setStyleSheet("""
+            QSlider::groove:horizontal {
+                background: #ffffff;
+                width: 500px;
+                height : 10px;                           
+                border-radius: 4px;
+            }
+            QSlider::handle:horizontal {
+                background: #5A639C;
+                border: 1px solid #5c5c5c;
+                width: 50px;
+                height: 10px;  
+                margin: -5px 0; 
+                border-radius: 100px; 
+            }
+        """)
+        self.contrast_slider.setRange(0, 200)  # Rango de 0 a 200
+        self.contrast_slider.setValue(100)      # Valor por defecto al 100%
+        self.contrast_slider.valueChanged.connect(self.update_contrast)
 
-    # Cambiar la orientación del plano de visualización
+        # Añadir QLabel y Slider al layout
+        main_layout.addWidget(self.contrast_label)
+        main_layout.addWidget(self.contrast_slider)
+
+        self.setLayout(main_layout)
+
     def set_view_orientation(self, view):
         if view == 'Axial':
-            self.viewer.SetSliceOrientationToXY()  # Vista axial (XY)
+            self.viewer.SetSliceOrientationToXY()
         elif view == 'Sagittal':
-            self.viewer.SetSliceOrientationToYZ()  # Vista sagital (YZ)
+            self.viewer.SetSliceOrientationToYZ()
         elif view == 'Coronal':
-            self.viewer.SetSliceOrientationToXZ()  # Vista coronal (XZ)
+            self.viewer.SetSliceOrientationToXZ()
         else:
             raise ValueError("La vista proporcionada no es válida. Usa 'Axial', 'Sagittal' o 'Coronal'.")
         
         self.viewer.Render()
-
 
     def update_slice(self, slice_index):
         if slice_index < self.min_slice:
@@ -136,17 +158,20 @@ class DicomViewer(QWidget):
         elif slice_index > self.max_slice:
             slice_index = self.max_slice
         self.current_slice = slice_index
-        
+
         dicom_data = pydicom.dcmread(self.dicom_files[slice_index])
         pixel_array = dicom_data.pixel_array
         
+        # Ajustar brillo y contraste
+        pixel_array = self.adjust_brightness_contrast(pixel_array)
+
         vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
         vtk_image = vtk.vtkImageData()
-        
-        if pixel_array.ndim == 2:  
-            vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)  
-        elif pixel_array.ndim == 3: 
-            vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])  
+
+        if pixel_array.ndim == 2:
+            vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
+        elif pixel_array.ndim == 3:
+            vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
         else:
             raise ValueError("Forma de array sin soporte: {}".format(pixel_array.shape))
         
@@ -155,42 +180,44 @@ class DicomViewer(QWidget):
         self.viewer.SetInputData(vtk_image)
         self.viewer.Render()
 
+    def adjust_brightness_contrast(self, pixel_array):
+        # Ajustar brillo
+        adjusted_image = pixel_array + self.brightness
+        
+        # Ajustar contraste
+        adjusted_image = np.clip(adjusted_image * (self.contrast / 100.0), 0, 255)  # Asegúrate que los valores se mantengan en el rango [0, 255]
+
+        return adjusted_image
+
+    def update_contrast(self, value):
+        self.contrast = value
+        self.contrast_label.setText(f'Contrast: {self.contrast:.2f}')  # Actualizar el QLabel
+        self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo contraste
 
     def next_prev_btn(self, slice_index):
-        # Asegúrate de que el índice no exceda los límites
         if slice_index < self.slider.minimum():
             slice_index = self.slider.minimum()
         elif slice_index > self.slider.maximum():
             slice_index = self.slider.maximum()
 
-        # Establecer el valor del slider al nuevo índice de corte
         self.slider.setValue(slice_index)
-
-        # Actualizar el visualizador con el nuevo slice
         self.update_slice(slice_index)
 
-    
-    # Función de play y pausa  
     def play_slices(self):
         self.thread = QThread()
         self.worker = Worker(self.slider)
         self.status = True
 
-        # Play Button icon
         self.playBtn.setIcon(QIcon("./app/assets/pause.ico"))
 
-        # Final resets
-        # Move worker to the thread
         self.worker.moveToThread(self.thread)
 
-        # Connect signals and slots
         self.thread.started.connect(self.worker.play)
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.progress.connect(self.update_slice)
 
-        # Start the thread
         self.thread.start()
         self.slider.setHidden(True)
         self.thread.finished.connect(
@@ -200,13 +227,11 @@ class DicomViewer(QWidget):
             self.pause_slices
         )
 
-    # Pause slices
     def pause_slices(self):
         self.playBtn.setIcon(QIcon("./app/assets/play.ico"))
         self.worker.pause()
         self.status = False
 
-    # Play/Pause button function
     def play_pause_btn(self):
         if self.status is False:
             self.play_slices()
