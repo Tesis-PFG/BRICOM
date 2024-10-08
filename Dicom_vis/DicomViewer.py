@@ -12,11 +12,11 @@ class DicomViewer(QWidget):
 
     
     # Constructor
-    def __init__(self, dicom_folder_path, label: str = "DICOM Viewer"):
+    def __init__(self, dicom_folder_path, view_orientation='Axial'):
         super(DicomViewer, self).__init__()
         
         self.dicom_folder_path = dicom_folder_path
-        self.label = label
+        self.view_orientation = view_orientation  # Se le pasa la vista por parámetro
         self.status = False
         
         self.dicom_files = self.load_dicom_files(self.dicom_folder_path)
@@ -25,12 +25,15 @@ class DicomViewer(QWidget):
         self.current_slice = self.min_slice
         
         self.vtkWidget = QVTKRenderWindowInteractor(self)
-        self.viewer = vtk.vtkImageViewer2()
+        self.viewer = vtk.vtkResliceImageViewer()
         self.viewer.SetRenderWindow(self.vtkWidget.GetRenderWindow())
-        self.viewer.SetupInteractor(self.vtkWidget.GetRenderWindow().GetInteractor())  
+        self.viewer.SetupInteractor(self.vtkWidget.GetRenderWindow().GetInteractor())
+ 
         
         self._init_UI()
+        self.set_view_orientation(self.view_orientation)
         self.update_slice(self.current_slice)
+
 
     def load_dicom_files(self, folder_path):
         if not os.path.exists(folder_path):
@@ -111,6 +114,20 @@ class DicomViewer(QWidget):
         self.prevBtn.clicked.connect(lambda: self.next_prev_btn(self.slider.value()-10))
         self.playBtn.clicked.connect(self.play_pause_btn)
         self.nextBtn.clicked.connect(lambda: self.next_prev_btn(self.slider.value()+10))
+
+
+    # Cambiar la orientación del plano de visualización
+    def set_view_orientation(self, view):
+        if view == 'Axial':
+            self.viewer.SetSliceOrientationToXY()  # Vista axial (XY)
+        elif view == 'Sagittal':
+            self.viewer.SetSliceOrientationToYZ()  # Vista sagital (YZ)
+        elif view == 'Coronal':
+            self.viewer.SetSliceOrientationToXZ()  # Vista coronal (XZ)
+        else:
+            raise ValueError("La vista proporcionada no es válida. Usa 'Axial', 'Sagittal' o 'Coronal'.")
+        
+        self.viewer.Render()
 
 
     def update_slice(self, slice_index):
