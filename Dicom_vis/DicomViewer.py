@@ -109,10 +109,36 @@ class DicomViewer(QWidget):
         self.nextBtn.clicked.connect(lambda: self.next_prev_btn(self.slider.value()+10))
 
         # Añadir QLabel y Slider para brillo y contraste
-        self.contrast_label = QLabel(f'Contrast: {self.contrast:.2f}')
+        self.contrast_label = QLabel(f'Contraste: {self.contrast:.2f}')
         self.contrast_label.setStyleSheet("""
             color: #ffffff;
         """)
+
+         # Añadir QLabel y Slider para brillo
+        self.brightness_label = QLabel(f'Brillo: {self.brightness:.2f}')
+        self.brightness_label.setStyleSheet("color: #ffffff;")
+
+        self.brightness_slider = QSlider(Qt.Horizontal)
+        self.brightness_slider.setStyleSheet("""
+            QSlider::groove:horizontal {
+                background: #ffffff;
+                width: 500px;
+                height: 10px;                           
+                border-radius: 4px;
+            }
+            QSlider::handle:horizontal {
+                background: #5A639C;
+                border: 1px solid #5c5c5c;
+                width: 50px;
+                height: 10px;  
+                margin: -5px 0; 
+                border-radius: 100px; 
+            }
+        """)
+        self.brightness_slider.setRange(-100, 100)  # Rango de -100 a 100 para el brillo
+        self.brightness_slider.setValue(0)           # Valor por defecto al 0%
+        self.brightness_slider.valueChanged.connect(self.update_brightness)
+
         self.contrast_slider = QSlider(Qt.Horizontal)
         self.contrast_slider.setStyleSheet("""
             QSlider::groove:horizontal {
@@ -135,10 +161,18 @@ class DicomViewer(QWidget):
         self.contrast_slider.valueChanged.connect(self.update_contrast)
 
         # Añadir QLabel y Slider al layout
+        main_layout.addWidget(self.brightness_label)
+        main_layout.addWidget(self.brightness_slider)
         main_layout.addWidget(self.contrast_label)
         main_layout.addWidget(self.contrast_slider)
 
+
         self.setLayout(main_layout)
+
+    def update_brightness(self, value):
+        self.brightness = value
+        self.brightness_label.setText(f'Brightness: {self.brightness:.2f}')  # Actualizar el QLabel
+        self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo brillo
 
     def set_view_orientation(self, view):
         if view == 'Axial':
