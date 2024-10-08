@@ -11,16 +11,15 @@ from app.interface.Worker import *
 
 class DicomViewer(QWidget):
 
-    def __init__(self, dicom_folder_path, view_orientation='Axial'):
+    def __init__(self, view_orientation='Axial'):
         super(DicomViewer, self).__init__()
 
-        self.dicom_folder_path = dicom_folder_path
         self.view_orientation = view_orientation
         self.status = False
-
-        self.dicom_files = self.load_dicom_files(self.dicom_folder_path)
+        self.max_slice = 0
+        self.dicom_files = None
         self.min_slice = 0
-        self.max_slice = len(self.dicom_files) - 1
+        
         self.current_slice = self.min_slice
         
         # Brillo y contraste por defecto
@@ -34,16 +33,20 @@ class DicomViewer(QWidget):
         
         self._init_UI()
         self.set_view_orientation(self.view_orientation)
-        self.update_slice(self.current_slice)
 
     def load_dicom_files(self, folder_path):
+        dicom_files = []
         if not os.path.exists(folder_path):
             raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
-        dicom_files = []
         for filename in os.listdir(folder_path):
+            print(f"Entro a leer la carpeta {folder_path}")
             if filename.endswith('.dcm'):
                 dicom_files.append(os.path.join(folder_path, filename))
-        return dicom_files
+        print(f'El contenido tiene una longitud de {len(dicom_files)}')
+        self.max_slice = len(dicom_files) - 1
+        self.dicom_files = dicom_files
+        self.update_slice(self.current_slice)
+
 
     def _init_UI(self):
         main_layout = QVBoxLayout(self)
@@ -192,7 +195,7 @@ class DicomViewer(QWidget):
         elif slice_index > self.max_slice:
             slice_index = self.max_slice
         self.current_slice = slice_index
-
+        
         dicom_data = pydicom.dcmread(self.dicom_files[slice_index])
         pixel_array = dicom_data.pixel_array
         

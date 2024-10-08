@@ -153,18 +153,40 @@ class ViewerActions:
 
 
     def open_data(self):
-        # TODO: cambiar el path para que se acople al current patient
-        file_paths = './Data/reg/CT/_Head_10_3'
-        file_paths_2 = './Data/reg/RM/T1_3D_TFE_AXI_501'
-        registro(file_paths, file_paths_2)
-        myFile = './Data/raw/patient.mhd'
-        try:
-            self.load_data(myFile)
-            self.render_data()
-        except Exception as e:
-            print(e)
-            QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+        # Mapeo de estudios
+        study_paths = {
+        "CT": "CT",  # TAC
+        "RM": "RM"   # Resonancia Magnética
+        }
 
+        if config.current_patient is None or config.current_study is None:
+            QtWidgets.QMessageBox.critical(self, "Error", "No hay un paciente o estudio seleccionado.")
+            return
+
+        # Definir los paths dinámicos basados en el paciente y el estudio
+        base_path = f'./local_database/{config.current_patient}/{study_paths.get(config.current_study, "CT")}/'
+        
+        # Asigna las rutas para los estudios CT y RM basados en el paciente actual
+        file_paths = f'./local_database/{config.current_patient}/CT'
+        file_paths_2 = f'./local_database/{config.current_patient}/MR'
+
+        if config.current_study == 'CT' or config.current_study == 'MR':
+            try: 
+                self.dcm_viewer.load_dicom_files(base_path)
+            except Exception as e:
+                print(e)
+                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+        else:
+            try:
+                registro(file_paths, file_paths_2)
+                # Ruta de la imagen principal (ajusta si cambia según el paciente)
+                myFile = f'./Data/raw/patient.mhd'
+                # Carga y renderiza los datos
+                self.load_data(myFile)
+                self.render_data()
+            except Exception as e:
+                print(e)
+                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
 
     def load_data(self, filename):
         self.vtkBaseClass.connect_on_data(filename)
