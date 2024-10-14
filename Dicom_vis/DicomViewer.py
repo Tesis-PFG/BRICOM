@@ -8,6 +8,8 @@ import numpy as np  # Importa numpy para manejar operaciones numéricas
 from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
+from config import current_patient, all_patients, current_study 
+
 
 class DicomViewer(QWidget):
 
@@ -24,8 +26,8 @@ class DicomViewer(QWidget):
         
         # Brillo y contraste por defecto
         self.brightness = 0  # Valor de brillo
-        self.contrast = 1    # Valor de contraste
-
+        self.contrast = 1.0  # Valor de contraste normalizado entre 0 y 2
+        
         self.vtkWidget = QVTKRenderWindowInteractor(self)
         self.viewer = vtk.vtkResliceImageViewer()
         self.viewer.SetRenderWindow(self.vtkWidget.GetRenderWindow())
@@ -34,19 +36,21 @@ class DicomViewer(QWidget):
         self._init_UI()
         self.set_view_orientation(self.view_orientation)
 
+       
+
     def load_dicom_files(self, folder_path):
         dicom_files = []
         if not os.path.exists(folder_path):
             raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
         for filename in os.listdir(folder_path):
-            print(f"Entro a leer la carpeta {folder_path}")
             if filename.endswith('.dcm'):
                 dicom_files.append(os.path.join(folder_path, filename))
-        print(f'El contenido tiene una longitud de {len(dicom_files)}')
         self.max_slice = len(dicom_files) - 1
         self.dicom_files = dicom_files
+        self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
+         # Mostrar metadata en la esquina superior izquierda
+        self.show_patient_metadata()
         self.update_slice(self.current_slice)
-
 
     def _init_UI(self):
         main_layout = QVBoxLayout(self)
@@ -117,7 +121,7 @@ class DicomViewer(QWidget):
             color: #ffffff;
         """)
 
-         # Añadir QLabel y Slider para brillo
+        # Añadir QLabel y Slider para brillo
         self.brightness_label = QLabel(f'Brillo: {self.brightness:.2f}')
         self.brightness_label.setStyleSheet("color: #ffffff;")
 
@@ -159,7 +163,7 @@ class DicomViewer(QWidget):
                 border-radius: 100px; 
             }
         """)
-        self.contrast_slider.setRange(0, 200)  # Rango de 0 a 200
+        self.contrast_slider.setRange(50, 200)  # Rango de 50 a 200 para evitar 0
         self.contrast_slider.setValue(100)      # Valor por defecto al 100%
         self.contrast_slider.valueChanged.connect(self.update_contrast)
 
@@ -169,13 +173,17 @@ class DicomViewer(QWidget):
         main_layout.addWidget(self.contrast_label)
         main_layout.addWidget(self.contrast_slider)
 
-
         self.setLayout(main_layout)
 
     def update_brightness(self, value):
         self.brightness = value
-        self.brightness_label.setText(f'Brightness: {self.brightness:.2f}')  # Actualizar el QLabel
+        self.brightness_label.setText(f'Brillo: {self.brightness:.2f}')  # Actualizar el QLabel
         self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo brillo
+
+    def update_contrast(self, value):
+        self.contrast = value / 100.0  # Normalizar contraste al rango [0.5, 2.0]
+        self.contrast_label.setText(f'Contraste: {self.contrast:.2f}')  # Actualizar el QLabel
+        self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo contraste
 
     def set_view_orientation(self, view):
         if view == 'Axial':
@@ -211,25 +219,16 @@ class DicomViewer(QWidget):
             vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
         else:
             raise ValueError("Forma de array sin soporte: {}".format(pixel_array.shape))
-        
+            
         vtk_image.GetPointData().SetScalars(vtk_data_array)
-        
         self.viewer.SetInputData(vtk_image)
         self.viewer.Render()
 
-    def adjust_brightness_contrast(self, pixel_array):
-        # Ajustar brillo
-        adjusted_image = pixel_array + self.brightness
-        
-        # Ajustar contraste
-        adjusted_image = np.clip(adjusted_image * (self.contrast / 100.0), 0, 255)  # Asegúrate que los valores se mantengan en el rango [0, 255]
-
+    def adjust_brightness_contrast(self, image):
+        image = image.astype(np.float32)
+        adjusted_image = self.contrast * (image - 127.5) + 127.5 + self.brightness
+        adjusted_image = np.clip(adjusted_image, 0, 255)
         return adjusted_image
-
-    def update_contrast(self, value):
-        self.contrast = value
-        self.contrast_label.setText(f'Contrast: {self.contrast:.2f}')  # Actualizar el QLabel
-        self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo contraste
 
     def next_prev_btn(self, slice_index):
         if slice_index < self.slider.minimum():
@@ -243,26 +242,21 @@ class DicomViewer(QWidget):
     def play_slices(self):
         self.thread = QThread()
         self.worker = Worker(self.slider)
-        self.status = True
-
+        self.status = True  
         self.playBtn.setIcon(QIcon("./app/assets/pause.ico"))
 
         self.worker.moveToThread(self.thread)
-
         self.thread.started.connect(self.worker.play)
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.progress.connect(self.update_slice)
 
+        self.worker.progress.connect(self.update_slice)
         self.thread.start()
         self.slider.setHidden(True)
-        self.thread.finished.connect(
-            lambda: self.slider.setHidden(False)
-        )
-        self.thread.finished.connect(
-            self.pause_slices
-        )
+
+        self.thread.finished.connect(lambda: self.slider.setHidden(False))
+        self.thread.finished.connect(self.pause_slices)
 
     def pause_slices(self):
         self.playBtn.setIcon(QIcon("./app/assets/play.ico"))
@@ -274,3 +268,30 @@ class DicomViewer(QWidget):
             self.play_slices()
         else:
             self.pause_slices()
+
+    def show_patient_metadata(self):
+        # Buscar el paciente actual en la lista de todos los pacientes
+        patient = None
+        # print(f'El paciente que se busca es: {current_patient}')
+        # TODO: Hablar con moises, la variable current_patient no almacena nada
+        for p in all_patients:
+            if p['id'] == current_patient:  # Asumiendo que los pacientes tienen un 'id'
+                patient = p
+                break
+
+        # Comprobar si se encontró el paciente
+        if patient is not None:
+            # Crear un QLabel para mostrar el nombre y apellido del paciente
+            self.metadata_label = QLabel(f"Paciente: {patient['last_name']} {patient['first_name']}", self)
+            self.metadata_label.setStyleSheet("""
+                color: white;
+                background-color: rgba(0, 0, 0, 50%);
+                font-size: 14px;
+                padding: 5px;
+            """)
+            self.metadata_label.setFixedWidth(250)
+            self.metadata_label.setFixedHeight(30)
+            self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
+            self.metadata_label.show()
+        else:
+            print("No se encontró información del paciente.")
