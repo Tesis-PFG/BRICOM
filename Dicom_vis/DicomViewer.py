@@ -273,25 +273,28 @@ class DicomViewer(QWidget):
         # Buscar el paciente actual en la lista de todos los pacientes
         patient = None
         # print(f'El paciente que se busca es: {current_patient}')
-        # TODO: Hablar con moises, la variable current_patient no almacena nada
+        # TODO: Hablar con moises, la variable current_patient no se esta almacenando de manera correcta 
         for p in all_patients:
-            if p['id'] == current_patient:  # Asumiendo que los pacientes tienen un 'id'
+            if p[0] == current_patient: 
                 patient = p
                 break
 
         # Comprobar si se encontró el paciente
         if patient is not None:
             # Crear un QLabel para mostrar el nombre y apellido del paciente
+            #Revisar si la extracciòn de datos es correcta de acuerdo a como se almacenan en datos
             self.metadata_label = QLabel(f"Paciente: {patient['last_name']} {patient['first_name']}", self)
-            self.metadata_label.setStyleSheet("""
+        else:
+            self.metadata_label = QLabel(f"No hay informaciòn del paciente {current_patient}", self)
+            print("No se encontró información del paciente.")
+
+        self.metadata_label.setStyleSheet("""
                 color: white;
                 background-color: rgba(0, 0, 0, 50%);
                 font-size: 14px;
                 padding: 5px;
             """)
-            self.metadata_label.setFixedWidth(250)
-            self.metadata_label.setFixedHeight(30)
-            self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
-            self.metadata_label.show()
-        else:
-            print("No se encontró información del paciente.")
+        self.metadata_label.setFixedWidth(250)
+        self.metadata_label.setFixedHeight(30)
+        self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
+        self.metadata_label.show()

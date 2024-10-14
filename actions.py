@@ -28,7 +28,7 @@ class ViewerActions:
 
     def display_one_image(self):
 
-        if config.current_study == 'CT' or config.current_study == 'RM':
+        if config.current_study == 'CT' or config.current_study == 'MR':
             self.clear_layout()
             self.dcm_viewer.setFixedSize(500, 500)
             self.QtSagittalOrthoViewer.setFixedSize(0, 0)
@@ -158,7 +158,7 @@ class ViewerActions:
         # Mapeo de estudios
         study_paths = {
         "CT": "CT",  # TAC
-        "RM": "RM"   # Resonancia Magnética
+        "MR": "MR"   # Resonancia Magnética
         }
 
         if config.current_patient is None or config.current_study is None:
@@ -166,7 +166,8 @@ class ViewerActions:
             return
 
         # Definir los paths dinámicos basados en el paciente y el estudio
-        base_path = f'./local_database/{config.current_patient}/{study_paths.get(config.current_study, "CT")}/'
+        # TODO: Verificar como se puede trabajar lo del "pixel_array de dicomviewer con RM"
+        base_path = f'./local_database/{config.current_patient}/{study_paths.get(config.current_study, "CT")}'
         
         # Asigna las rutas para los estudios CT y RM basados en el paciente actual
         file_paths = f'./local_database/{config.current_patient}/CT'

@@ -4,22 +4,19 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
+import config
 
 
 
 class QtOrthoViewer(QtViewer):
     # Constructor
-    def __init__(self, vtkBaseClass, orientation, label: str = "Orthogonal Viewer", data: dict = None, patient: int = 0):
+    def __init__(self, vtkBaseClass, orientation, label: str = "Orthogonal Viewer"):
         super(QtOrthoViewer, self).__init__()
 
         # Properties
         self.orientation = orientation
         self.status = False
         self.label = label
-        self.patient = patient
-
-        # Aceptar un diccionario opcional
-        self.data = data if data is not None else {}
 
         # Render Viewer
         self.viewer = OrthoViewer(vtkBaseClass, self.orientation, self.label)
@@ -113,29 +110,8 @@ class QtOrthoViewer(QtViewer):
     # Connect on data
     def connect_on_data(self, path):
         super().connect_on_data(path)
+        self.show_patient_metadata()
 
-        # Manejo de info_paciente
-        if len(self.data) == 0:
-            self.info_paciente = "No hay datos de paciente disponibles."
-        else:
-            # Buscar el paciente por ID
-            paciente = None
-            for p in self.data.values():
-                if p.get('id') == self.patient:
-                    paciente = p
-                    break
-            if paciente is None:
-                self.info_paciente = "Paciente no encontrado."
-            else:
-                self.info_paciente = f"{paciente['apellido']}\n{paciente['nombre']}\n{paciente['documento']}\n{paciente['fecha_estudio']}"
-
-        # Actualizar la información del paciente en el label existente
-        if hasattr(self, 'info_label'):
-            self.info_label.setText(self.info_paciente)
-        else:
-            self.info_label = QLabel(self.info_paciente, self)
-            self.info_label.setStyleSheet("font-size: 12px; color: white;")
-            self.layout().addWidget(self.info_label)
 
         # Settings of the button
         self.prevBtn.setEnabled(True)
@@ -201,3 +177,33 @@ class QtOrthoViewer(QtViewer):
             self.play_slices()
         else:
             self.pause_slices()
+
+    # Método para mostrar la metadata del paciente
+    def show_patient_metadata(self):
+        # Buscar el paciente actual en la lista de todos los pacientes
+        patient = None
+        for p in config.all_patients:
+            if p[0] == config.current_patient:
+                patient = p
+                break
+
+        # Comprobar si se encontró el paciente
+        if patient is not None:
+            # Crear un QLabel para mostrar el nombre y apellido del paciente
+            #Verificar si se esta adquiriendo la informaciòn de manera correcta.
+            self.metadata_label = QLabel(f"Paciente: {patient['last_name']} {patient['first_name']}", self)
+           
+        else:
+            self.metadata_label = QLabel(f"No se encontró información del paciente {config.current_patient}", self)
+            print("No se encontró información del paciente.")
+
+        self.metadata_label.setStyleSheet("""
+                color: white;
+                background-color: rgba(0, 0, 0, 50%);
+                font-size: 14px;
+                padding: 5px;
+            """)
+        self.metadata_label.setFixedWidth(250)
+        self.metadata_label.setFixedHeight(30)
+        self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
+        self.metadata_label.show()
