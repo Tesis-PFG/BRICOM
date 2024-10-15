@@ -1010,10 +1010,10 @@ class Ui_MainWindow(object):
                 self.viewer_actions.display_four_images()
 
         def activate_distance_measurement(self):
-                self.viewer_actions.activate_distance_measurement(self.measurement_view)
+                self.viewer_actions.activate_distance_measurement()
                
         def set_canvas(self):
-                self.viewer_actions.set_canvas(self.canvas)
+                self.viewer_actions.set_canvas()
         
         def set_shape_canvas(self,shape):
                 self.viewer_actions.set_shape_canvas(shape)

@@ -25,6 +25,13 @@ class ViewerActions:
                 if child.widget() and type(child.widget()) == 'QSplitter':
                     self.frame_3.layout().removeWidget(child.widget())
 
+    def hide_studies(self):
+        self.dcm_viewer.setFixedSize(0, 0)
+        self.QtSagittalOrthoViewer.setFixedSize(0, 0)
+        self.QtAxialOrthoViewer.setFixedSize(0, 0)
+        self.QtCoronalOrthoViewer.setFixedSize(0, 0)
+        self.QtSegmentationViewer.setFixedSize(0, 0)
+
 
     def display_one_image(self):
 
@@ -208,13 +215,25 @@ class ViewerActions:
         self.QtSegmentationViewer.render()
 
     def activate_distance_measurement(self):
-        self.QtSagittalOrthoViewer.set_distance_measurement("./app/tmp/out.mhd")
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.set_distance_measurement()
+        else:
+            self.QtSagittalOrthoViewer.set_distance_measurement("./Data/raw/patient.mhd")
 
     def set_canvas(self):
-        self.QtSagittalOrthoViewer.set_canvas()
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.set_canvas()
+        else:
+            self.QtSagittalOrthoViewer.set_canvas()
         
     def clear_canvas_drawing(self):
-        self.QtSagittalOrthoViewer.clear_canvas_drawing()
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.clear_canvas_drawing()
+        else:
+            self.QtSagittalOrthoViewer.clear_canvas_drawing()
         
     def set_shape_canvas(self, shape):
-        self.QtSagittalOrthoViewer.set_shape_canvas(shape)
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.set_shape_canvas(shape)
+        else:
+            self.QtSagittalOrthoViewer.set_shape_canvas(shape)

@@ -1,12 +1,8 @@
 from app.interface.OrthoViewer import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
-import config
 from app.interface.Herramientas import *
-
-
-
-
+import config
 class QtOrthoViewer(QtViewer):
     # Constructor
     def __init__(self, vtkBaseClass, orientation, label: str = "Orthogonal Viewer"):
@@ -212,7 +208,7 @@ class QtOrthoViewer(QtViewer):
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
 
-       # Método para inicializar Canvas
+    # Método para inicializar Canvas
     def set_canvas(self):
         if self.canvas is None:
             # Crear e insertar el Canvas sobre el viewer

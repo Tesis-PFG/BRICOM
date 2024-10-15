@@ -9,6 +9,8 @@ from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
 from config import current_patient, all_patients, current_study 
+from app.interface.Herramientas import *
+import config
 
 
 class DicomViewer(QWidget):
@@ -21,6 +23,9 @@ class DicomViewer(QWidget):
         self.max_slice = 0
         self.dicom_files = None
         self.min_slice = 0
+        self.canvas = None  # Inicializar el Canvas como None
+        self.shape_canvas = None # Inicializar
+        self.distance_measurement = None  # Inicializar DistanceMeasurement como None
         
         self.current_slice = self.min_slice
         
@@ -50,6 +55,8 @@ class DicomViewer(QWidget):
         self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
          # Mostrar metadata en la esquina superior izquierda
         self.show_patient_metadata()
+        # Extraer el Pixel Spacing (tamaño de los píxeles en mm)
+        self.pixel_spacing = self.get_pixel_spacing()
         self.update_slice(self.current_slice)
 
     def _init_UI(self):
@@ -303,3 +310,56 @@ class DicomViewer(QWidget):
         self.metadata_label.setFixedHeight(30)
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
+    
+    def get_pixel_spacing(self):
+        """Obtiene el tamaño de los píxeles del archivo DICOM en mm."""
+        if 'PixelSpacing' in self.dicom_files[3]:
+            pixel_spacing = self.dicom_files[3].PixelSpacing  # List [X_spacing, Y_spacing]
+            return (float(pixel_spacing[0]) + float(pixel_spacing[1])) / 2  # Tamaño en X y Y
+        else:
+            # Valor por defecto si no existe el campo PixelSpacing
+            return 1.0
+
+    
+    # Método para inicializar Canvas
+    def set_canvas(self):
+        if self.canvas is None:
+            # Crear e insertar el Canvas sobre el viewer
+            self.canvas = Canvas(self)
+            self.canvas.show()
+
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.canvas.close()
+            self.canvas = None
+
+    # Método para inicializar DistanceMeasurement
+    def set_distance_measurement(self):
+        if self.distance_measurement is None:
+            # Crear e insertar DistanceMeasurement
+            self.distance_measurement = DistanceMeasurementDicom(self.pixel_spacing, self)
+            self.distance_measurement.show()
+        else:
+            # Si ya existe, ocultar DistanceMeasurement
+            self.distance_measurement.close()
+            self.distance_measurement = None
+            
+    # Método para borrar el contenido del Canvas
+    def clear_canvas_drawing(self):
+        if self.canvas:
+            self.canvas.clear_canvas()
+        if self.shape_canvas:
+            self.shape_canvas.clear_canvas()
+            
+    def set_shape_canvas(self, shape):
+        if self.shape_canvas is None:
+            # Crear e insertar el Canvas sobre el viewer
+            self.shape_canvas = ShapeCanvas(self)
+            self.shape_canvas.set_shape(shape)
+            self.shape_canvas.show()
+
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.shape_canvas.close()
+            self.shape_canvas = None
+

@@ -304,3 +304,54 @@ class DistanceMeasurement(QWidget):
     def calculate_distance(self, point1, point2):
         # Calcula la distancia euclidiana entre dos puntos
         return ((point2.x() - point1.x())**2 + (point2.y() - point1.y())**2)**0.5
+    
+class DistanceMeasurementDicom(QWidget):
+    def __init__(self, pixel_distance, parent=None):
+        super().__init__(parent)
+        self.start_point = None
+        self.end_point = None
+        self.is_measuring = False
+        self.pixel_spacing = pixel_distance  # Extrae el tamaño de los píxeles
+        
+        # Set size of the canvas
+        self.setFixedSize(parent.size())
+        
+        # Enable transparent background for the widget itself
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            if not self.is_measuring:
+                # Primer clic, marca el punto de inicio
+                self.start_point = event.pos()
+                self.end_point = None  # Resetea el punto final
+                self.is_measuring = True
+                self.update()  # Borra cualquier medición anterior
+            else:
+                # Segundo clic, marca el punto final
+                self.end_point = event.pos()
+                self.is_measuring = False
+                self.update()  # Solicita una actualización de la pantalla para dibujar la línea final
+
+    def paintEvent(self, event):
+        # Limpia la pantalla antes de realizar una nueva medición
+        painter = QPainter(self)
+        painter.eraseRect(self.rect())  # Borra el contenido anterior
+        
+        if self.start_point and self.end_point:
+            painter.setRenderHint(QPainter.Antialiasing)
+            pen = QPen(Qt.red, 2)
+            painter.setPen(pen)
+            painter.drawLine(self.start_point, self.end_point)
+
+            # Calcula la distancia en píxeles y convierte a milímetros
+            distance_pixels = self.calculate_distance(self.start_point, self.end_point)
+            distance_mm = distance_pixels * self.pixel_spacing
+
+            # Muestra la distancia en pantalla
+            painter.drawText(self.end_point, f"{distance_mm:.2f} mm")
+
+    def calculate_distance(self, point1, point2):
+        # Calcula la distancia euclidiana entre dos puntos
+        return ((point2.x() - point1.x())**2 + (point2.y() - point1.y())**2)**0.5
