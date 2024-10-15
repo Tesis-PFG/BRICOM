@@ -9,6 +9,8 @@ from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
 from config import current_patient, all_patients, current_study 
+import SimpleITK as sitk
+
 
 
 class DicomViewer(QWidget):
@@ -198,36 +200,44 @@ class DicomViewer(QWidget):
         self.viewer.Render()
 
     def update_slice(self, slice_index):
+        # Ajustar los índices para mantenerlos dentro del rango
         if slice_index < self.min_slice:
             slice_index = self.min_slice
         elif slice_index > self.max_slice:
             slice_index = self.max_slice
         self.current_slice = slice_index
         
-        dicom_data = pydicom.dcmread(self.dicom_files[slice_index])
+        # Leer la imagen DICOM con SimpleITK
+        dicom_image = sitk.ReadImage(self.dicom_files[slice_index])
+        
+        # Obtener la matriz de píxeles como un array de NumPy
+        pixel_array = sitk.GetArrayFromImage(dicom_image)
         
         # Ajustar brillo y contraste
-        if hasattr(dicom_data, 'PixelData'):
-            pixel_array = dicom_data.pixel_array
-            pixel_array = self.adjust_brightness_contrast(pixel_array)
-
-            vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
-            vtk_image = vtk.vtkImageData()
-
-            if pixel_array.ndim == 2:
-                vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
-            elif pixel_array.ndim == 3:
-                vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
-            else:
-                raise ValueError("Forma de array sin soporte: {}".format(pixel_array.shape))
-                
-            vtk_image.GetPointData().SetScalars(vtk_data_array)
-            self.viewer.SetInputData(vtk_image)
-            self.viewer.Render()
+        pixel_array = self.adjust_brightness_contrast(pixel_array)
+        
+        # Convertir la imagen NumPy a un formato que VTK pueda manejar
+        vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
+        vtk_image = vtk.vtkImageData()
+        
+        # Establecer las dimensiones de la imagen en VTK
+        if pixel_array.ndim == 2:
+            vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
+        elif pixel_array.ndim == 3:
+            vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
         else:
-            raise ValueError("El archivo DICOM no contiene datos de píxeles")
+            raise ValueError("Forma de array sin soporte: {}".format(pixel_array.shape))
+        
+        # Asignar los datos a VTK y renderizar la imagen
+        vtk_image.GetPointData().SetScalars(vtk_data_array)
+        self.viewer.SetInputData(vtk_image)
+        
+        # Resetea la cámara para ajustar el tamaño de la nueva imagen
+        self.viewer.GetRenderer().ResetCamera()  # Esta línea ajusta el zoom y la cámara al tamaño de la nueva imagen
+        
+        # Renderizar la nueva imagen
+        self.viewer.Render()
 
-       
 
     def adjust_brightness_contrast(self, image):
         image = image.astype(np.float32)
