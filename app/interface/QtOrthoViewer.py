@@ -1,10 +1,7 @@
 from app.interface.OrthoViewer import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
-
+from app.interface.Herramientas import *
 
 
 class QtOrthoViewer(QtViewer):
@@ -14,15 +11,19 @@ class QtOrthoViewer(QtViewer):
 
         # Properties
         self.orientation = orientation
+        self.vtkBaseClass = vtkBaseClass
         self.status = False
         self.label = label
         self.patient = patient
+        self.canvas = None  # Inicializar el Canvas como None
+        self.shape_canvas = None # Inicializar
+        self.distance_measurement = None  # Inicializar DistanceMeasurement como None
 
         # Aceptar un diccionario opcional
         self.data = data if data is not None else {}
 
         # Render Viewer
-        self.viewer = OrthoViewer(vtkBaseClass, self.orientation, self.label)
+        self.viewer = OrthoViewer(self.vtkBaseClass, self.orientation, self.label)
 
         # Initialize the UI        
         self._init_UI()
@@ -33,7 +34,6 @@ class QtOrthoViewer(QtViewer):
 
         # Connect signals and slots
         self.connect()
-
 
     # Initialize the UI
     def _init_UI(self):
@@ -201,3 +201,50 @@ class QtOrthoViewer(QtViewer):
             self.play_slices()
         else:
             self.pause_slices()
+            
+    # Método para inicializar Canvas
+    def set_canvas(self):
+        if self.canvas is None:
+            # Crear e insertar el Canvas sobre el viewer
+            self.canvas = Canvas(self)
+            self.canvas.setFixedSize(self.viewer.size())
+            self.canvas.show()
+
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.canvas.close()
+            self.canvas = None
+
+    # Método para inicializar DistanceMeasurement
+    def set_distance_measurement(self, mhd_file):
+        if self.distance_measurement is None:
+            # Crear e insertar DistanceMeasurement
+            self.distance_measurement = DistanceMeasurement(mhd_file, self)
+            self.distance_measurement.setFixedSize(self.viewer.size())
+            self.distance_measurement.show()
+        else:
+            # Si ya existe, ocultar DistanceMeasurement
+            self.distance_measurement.close()
+            self.distance_measurement = None
+            
+    # Método para borrar el contenido del Canvas
+    def clear_canvas_drawing(self):
+        if self.canvas:
+            self.canvas.clear_canvas()
+            print("Hola")
+        if self.shape_canvas:
+            self.shape_canvas.clear_canvas()
+            print("Hola")
+            
+    def set_shape_canvas(self, shape):
+        if self.shape_canvas is None:
+            # Crear e insertar el Canvas sobre el viewer
+            self.shape_canvas = ShapeCanvas(self)
+            self.shape_canvas.setFixedSize(self.viewer.size())
+            self.shape_canvas.set_shape(shape)
+            self.shape_canvas.show()
+
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.shape_canvas.close()
+            self.shape_canvas = None
