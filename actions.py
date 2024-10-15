@@ -28,7 +28,7 @@ class ViewerActions:
 
     def display_one_image(self):
 
-        if config.current_study == 'CT' or config.current_study == 'RM':
+        if config.current_study == 'CT' or config.current_study == 'MR':
             self.clear_layout()
             self.dcm_viewer.setFixedSize(500, 500)
             self.QtSagittalOrthoViewer.setFixedSize(0, 0)
@@ -158,15 +158,16 @@ class ViewerActions:
         # Mapeo de estudios
         study_paths = {
         "CT": "CT",  # TAC
-        "RM": "RM"   # Resonancia Magnética
+        "MR": "MR"   # Resonancia Magnética
         }
 
         if config.current_patient is None or config.current_study is None:
-            QtWidgets.QMessageBox.critical(self, "Error", "No hay un paciente o estudio seleccionado.")
+            QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
             return
 
         # Definir los paths dinámicos basados en el paciente y el estudio
-        base_path = f'./local_database/{config.current_patient}/{study_paths.get(config.current_study, "CT")}/'
+        # TODO: Verificar como se puede trabajar lo del "pixel_array de dicomviewer con RM"
+        base_path = f'./local_database/{config.current_patient}/{study_paths.get(config.current_study, "CT")}'
         
         # Asigna las rutas para los estudios CT y RM basados en el paciente actual
         file_paths = f'./local_database/{config.current_patient}/CT'
@@ -177,7 +178,7 @@ class ViewerActions:
                 self.dcm_viewer.load_dicom_files(base_path)
             except Exception as e:
                 print(e)
-                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+                QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
         else:
             try:
                 registro(file_paths, file_paths_2)
@@ -188,7 +189,7 @@ class ViewerActions:
                 self.render_data()
             except Exception as e:
                 print(e)
-                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+                QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
 
     def load_data(self, filename):
         self.vtkBaseClass.connect_on_data(filename)
@@ -206,157 +207,14 @@ class ViewerActions:
         self.QtSagittalOrthoViewer.render()
         self.QtSegmentationViewer.render()
 
-    def activate_distance_measurement(self,measurement_view):
-                if measurement_view is None:
-                        # Crear la instancia de medición
-                        measurement_view = DistanceMeasurement("./app/tmp/out.mhd",self.QtSagittalOrthoViewer.get_viewer())
-                        # Mostrar la vista
-                        measurement_view.show()
-                else:
-                        measurement_view.close()
-                        measurement_view = None 
-            
-    def set_canvas(self, canvas):
-            if canvas is None:
-                    # Crear una instancia del canvas como hijo de frame_3
-                    canvas = Canvas(self.QtSagittalOrthoViewer.get_viewer())
-                    # Asegurarse de que el canvas no interfiera con el widget subyacente
-                    # self.canvas.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents, True)
-                    # Mostrar el canvas
-                    canvas.show()
+    def activate_distance_measurement(self):
+        self.QtSagittalOrthoViewer.set_distance_measurement("./app/tmp/out.mhd")
 
-            else:
-                    canvas.close()
-                    canvas = None
-
-
-# Clase para dibujar
-class Canvas(QtWidgets.QLabel):
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        # Enable mouse tracking for the widget
-        self.setMouseTracking(True)
+    def set_canvas(self):
+        self.QtSagittalOrthoViewer.set_canvas()
         
-        # Set size of the canvas
-        self.setFixedSize(parent.size())
+    def clear_canvas_drawing(self):
+        self.QtSagittalOrthoViewer.clear_canvas_drawing()
         
-        # Enable transparent background for the widget itself
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
-
-        # Create a transparent pixmap
-        pixmap = QtGui.QPixmap(self.size())
-        pixmap.fill(QtGui.QColor(0, 0, 0, 0))  # Fully transparent background
-        self.setPixmap(pixmap)
-
-        self.last_x, self.last_y = None, None
-        self.pen_color = QtGui.QColor('#ff0000')
-        
-        self.update()
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.eraseRect(self.rect())
-        
-        # Ensure transparency by setting the composition mode
-        painter.setCompositionMode(QPainter.CompositionMode_Source)
-        
-        # This prevents any automatic background fill, keeping the canvas transparent
-        super().paintEvent(event)  # Call the base class's paint event if needed
-
-    def mouseMoveEvent(self, e):
-        if self.last_x is None:  # First event.
-            self.last_x = e.x()
-            self.last_y = e.y()
-            return  # Ignore the first time.
-
-        # Check if we are inside the drawing area
-        if e.buttons() == QtCore.Qt.LeftButton:
-            painter = QtGui.QPainter(self.pixmap())
-            pen = QtGui.QPen(self.pen_color, 4)
-            painter.setPen(pen)
-            painter.drawLine(self.last_x, self.last_y, e.x(), e.y())
-            painter.end()
-            self.update()
-
-        # Update the origin for next time.
-        self.last_x = e.x()
-        self.last_y = e.y()
-
-    def mousePressEvent(self, e):
-        if e.button() == QtCore.Qt.LeftButton:
-            self.last_x = e.x()
-            self.last_y = e.y()
-
-    def mouseReleaseEvent(self, e):
-        if e.button() == QtCore.Qt.LeftButton:
-            self.last_x = None
-            self.last_y = None
-
-
-class DistanceMeasurement(QWidget):
-    def __init__(self, mhd_file, parent=None):
-        super().__init__(parent)
-        self.start_point = None
-        self.end_point = None
-        self.is_measuring = False
-        self.pixel_spacing = self.extract_pixel_spacing(mhd_file)  # Extrae el tamaño de los píxeles
-        
-        # Set size of the canvas
-        self.setFixedSize(parent.size())
-        
-        # Enable transparent background for the widget itself
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
-
-    def extract_pixel_spacing(self, mhd_file):
-        """Lee el archivo .mhd y extrae el tamaño de los píxeles."""
-        with open(mhd_file, 'r') as file:
-            for line in file:
-                if line.startswith("ElementSpacing"):
-                    # Formato típico: ElementSpacing = x_spacing y_spacing z_spacing
-                    spacing = line.split('=')[1].strip().split()
-                    # Nos interesa solo el tamaño en 2D, así que tomamos x_spacing y y_spacing
-                    x_spacing = float(spacing[0])
-                    y_spacing = float(spacing[1])
-                    # Suponiendo que queremos la media de los valores de x e y
-                    return (x_spacing + y_spacing) / 2
-        return 1.0  # Valor predeterminado si no se encuentra ElementSpacing
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            if not self.is_measuring:
-                # Primer clic, marca el punto de inicio
-                self.start_point = event.pos()
-                self.end_point = None  # Resetea el punto final
-                self.is_measuring = True
-                self.update()  # Borra cualquier medición anterior
-            else:
-                # Segundo clic, marca el punto final
-                self.end_point = event.pos()
-                self.is_measuring = False
-                self.update()  # Solicita una actualización de la pantalla para dibujar la línea final
-
-    def paintEvent(self, event):
-        # Limpia la pantalla antes de realizar una nueva medición
-        painter = QPainter(self)
-        painter.eraseRect(self.rect())  # Borra el contenido anterior
-        
-        if self.start_point and self.end_point:
-            painter.setRenderHint(QPainter.Antialiasing)
-            pen = QPen(Qt.red, 2)
-            painter.setPen(pen)
-            painter.drawLine(self.start_point, self.end_point)
-
-            # Calcula la distancia en píxeles y convierte a milímetros
-            distance_pixels = self.calculate_distance(self.start_point, self.end_point)
-            distance_mm = distance_pixels * self.pixel_spacing
-
-            # Muestra la distancia en pantalla
-            painter.drawText(self.end_point, f"{distance_mm:.2f} mm")
-
-    def calculate_distance(self, point1, point2):
-        # Calcula la distancia euclidiana entre dos puntos
-        return ((point2.x() - point1.x())**2 + (point2.y() - point1.y())**2)**0.5
+    def set_shape_canvas(self, shape):
+        self.QtSagittalOrthoViewer.set_shape_canvas(shape)
