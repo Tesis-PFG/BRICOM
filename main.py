@@ -72,7 +72,6 @@ class MyApp(Ui_MainWindow):
 
     #Función encargada de desplegar los pacientes en la tabla de base de datos
     def loadData_database(self):
-
         def leer_metadata_pacientes():
             base_path = "local_database"
             pacientes_metadata = {}
@@ -83,24 +82,25 @@ class MyApp(Ui_MainWindow):
                 
                 # Asegurarse de que es un directorio
                 if os.path.isdir(paciente_path):
-                    metadata_file = os.path.join(paciente_path, "metadata.json")
+                    metadata_paciente_file = os.path.join(paciente_path, "metadata_paciente.json")
                     
-                    # Verificar si existe el archivo de metadata
-                    if os.path.exists(metadata_file):
-                        with open(metadata_file, 'r') as f:
-                            metadata = json.load(f)
+                    # Verificar si existe el archivo de metadata del paciente
+                    if os.path.exists(metadata_paciente_file):
+                        with open(metadata_paciente_file, 'r') as f:
+                            metadata_paciente = json.load(f)
                         
-                        # Añadir la metadata al diccionario de pacientes
-                        pacientes_metadata[paciente_folder] = metadata
+                        # Añadir la metadata del paciente al diccionario de pacientes
+                        pacientes_metadata[paciente_folder] = metadata_paciente
                     
                     # Recopilar información de las modalidades
                     modalidades = {}
-                    for modalidad_folder in os.listdir(paciente_path):
-                        modalidad_path = os.path.join(paciente_path, modalidad_folder)
-                        if os.path.isdir(modalidad_path):
-                            # Contar los archivos DICOM en la carpeta de modalidad
-                            dicom_files = [f for f in os.listdir(modalidad_path) if f.endswith('.dcm')]
-                            modalidades[modalidad_folder] = len(dicom_files)
+                    for file in os.listdir(paciente_path):
+                        if file.startswith("metadata_") and file.endswith(".json") and file != "metadata_paciente.json":
+                            modalidad = file[9:-5]  # Extrae la modalidad del nombre del archivo
+                            modalidad_file = os.path.join(paciente_path, file)
+                            with open(modalidad_file, 'r') as f:
+                                metadata_estudio = json.load(f)
+                            modalidades[modalidad] = metadata_estudio
                     
                     # Añadir información de modalidades a la metadata del paciente
                     if paciente_folder in pacientes_metadata:
@@ -111,79 +111,78 @@ class MyApp(Ui_MainWindow):
             print(pacientes_metadata)
             return pacientes_metadata
         
-        def cargar_datos_en_tabla( pacientes):
-                # Configurar el número de filas de la tabla de acuerdo a la cantidad de pacientes
-                self.database_table.setRowCount(len(pacientes))
+        def cargar_datos_en_tabla(pacientes):
+            # Configurar el número de filas de la tabla de acuerdo a la cantidad de pacientes
+            self.database_table.setRowCount(len(pacientes))
 
-                # Ruta del ícono de la papelera
-                icon_path_trash = "Assets/trash.png"
-                icon = QtGui.QIcon(icon_path_trash)
+            # Ruta del ícono de la papelera
+            icon_path_trash = "Assets/trash.png"
+            icon = QtGui.QIcon(icon_path_trash)
 
-                # Ajustar el tamaño predeterminado de las filas
-                self.database_table.verticalHeader().setDefaultSectionSize(50)  # Cambia este valor para hacer las filas más grandes
+            # Ajustar el tamaño predeterminado de las filas
+            self.database_table.verticalHeader().setDefaultSectionSize(50)
 
-                # Centramos todo el contenido de las celdas
-                alignment = QtCore.Qt.AlignCenter
+            # Centramos todo el contenido de las celdas
+            alignment = QtCore.Qt.AlignCenter
 
-                row = 0
-                for paciente_key, paciente_data in pacientes.items():
-                    # Extraer y formatear los valores específicos para cada columna
-                    nombre = paciente_data['PatientName'].replace('^', ' ')  
-                    id_paciente = paciente_data['PatientID']
-                    sexo = paciente_data['PatientSex']
-                    fecha_nacimiento = f"{paciente_data['PatientBirthDate'][:4]}-{paciente_data['PatientBirthDate'][4:6]}-{paciente_data['PatientBirthDate'][6:]}"  # Formato YYYY-MM-DD
-                    modalidades = ', '.join(paciente_data['modalidades'].keys())
+            row = 0
+            for paciente_key, paciente_data in pacientes.items():
+                # Extraer y formatear los valores específicos para cada columna
+                nombre = paciente_data.get('PatientName', 'Desconocido').replace('^', ' ')
+                id_paciente = paciente_data.get('PatientID', 'Desconocido')
+                sexo = paciente_data.get('PatientSex', 'Desconocido')
+                fecha_nacimiento = paciente_data.get('PatientBirthDate', 'Desconocido')
+                if fecha_nacimiento != 'Desconocido':
+                    fecha_nacimiento = f"{fecha_nacimiento[:4]}-{fecha_nacimiento[4:6]}-{fecha_nacimiento[6:]}"
+                modalidades = ', '.join(paciente_data.get('modalidades', {}).keys())
 
-                    # Crear y centrar cada valor en su respectiva columna
-                    item_nombre = QtWidgets.QTableWidgetItem(nombre)
-                    item_nombre.setTextAlignment(alignment)
-                    self.database_table.setItem(row, 0, item_nombre)  # Columna "Nombre"
+                # Crear y centrar cada valor en su respectiva columna
+                item_nombre = QtWidgets.QTableWidgetItem(nombre)
+                item_nombre.setTextAlignment(alignment)
+                self.database_table.setItem(row, 0, item_nombre)  # Columna "Nombre"
 
-                    item_id_paciente = QtWidgets.QTableWidgetItem(id_paciente)
-                    item_id_paciente.setTextAlignment(alignment)
-                    self.database_table.setItem(row, 1, item_id_paciente)  # Columna "ID_Paciente"
+                item_id_paciente = QtWidgets.QTableWidgetItem(id_paciente)
+                item_id_paciente.setTextAlignment(alignment)
+                self.database_table.setItem(row, 1, item_id_paciente)  # Columna "ID_Paciente"
 
-                    item_sexo = QtWidgets.QTableWidgetItem(sexo)
-                    item_sexo.setTextAlignment(alignment)
-                    self.database_table.setItem(row, 2, item_sexo)  # Columna "Sexo"
+                item_sexo = QtWidgets.QTableWidgetItem(sexo)
+                item_sexo.setTextAlignment(alignment)
+                self.database_table.setItem(row, 2, item_sexo)  # Columna "Sexo"
 
-                    item_fecha_nacimiento = QtWidgets.QTableWidgetItem(fecha_nacimiento)
-                    item_fecha_nacimiento.setTextAlignment(alignment)
-                    self.database_table.setItem(row, 3, item_fecha_nacimiento)  # Columna "Fecha_nacimiento"
+                item_fecha_nacimiento = QtWidgets.QTableWidgetItem(fecha_nacimiento)
+                item_fecha_nacimiento.setTextAlignment(alignment)
+                self.database_table.setItem(row, 3, item_fecha_nacimiento)  # Columna "Fecha_nacimiento"
 
-                    item_modalidades = QtWidgets.QTableWidgetItem(modalidades)
-                    item_modalidades.setTextAlignment(alignment)
-                    self.database_table.setItem(row, 4, item_modalidades)  # Columna "Modalidades"
+                item_modalidades = QtWidgets.QTableWidgetItem(modalidades)
+                item_modalidades.setTextAlignment(alignment)
+                self.database_table.setItem(row, 4, item_modalidades)  # Columna "Modalidades"
 
-                    # Insertar el botón con ícono de borrar
-                    pb = QtWidgets.QPushButton()
-                    pb.setIcon(icon)
-                    pb.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))  # Cambiar el cursor a "hand pointing"
-                    pb.setIconSize(QtCore.QSize(48, 48))  # Ajusta el tamaño del ícono
+                # Insertar el botón con ícono de borrar
+                pb = QtWidgets.QPushButton()
+                pb.setIcon(icon)
+                pb.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                pb.setIconSize(QtCore.QSize(48, 48))
+                pb.setStyleSheet("""
+                    QPushButton {
+                        border: none;
+                        background-color: transparent;
+                    }
+                """)
+                pb.clicked.connect(lambda _, pid=id_paciente: delete_patient(pid))
+                self.database_table.setCellWidget(row, 5, pb)  # Colocar el botón en la columna 5 (ícono de borrar)
 
-                    # Estilo para eliminar el fondo y el borde del botón
-                    pb.setStyleSheet("""
-                        QPushButton {
-                            border: none;
-                            background-color: transparent;
-                        }
-                    """)
-                    pb.clicked.connect(lambda _, pid=id_paciente: delete_patient(pid))
-                    self.database_table.setCellWidget(row, 5, pb)  # Colocar el botón en la columna 5 (ícono de borrar)
+                row += 1
 
-                    row += 1
-
-                # Ajustar el tamaño de las filas para que se vea correctamente
-                self.database_table.resizeRowsToContents()
-        
+            # Ajustar el tamaño de las filas para que se vea correctamente
+            self.database_table.resizeRowsToContents()
 
         def filterData():
             filter_text = self.filterLiner_db.text().lower()
             
             filtered_pacientes = {}
             for paciente_key, paciente_data in config.all_patients.items():
-                nombre = paciente_data['PatientName'].replace('^', ' ').lower()
-                id_paciente = paciente_data['PatientID'].lower()
+                nombre = paciente_data.get('PatientName', '').replace('^', ' ').lower()
+                id_paciente = paciente_data.get('PatientID', '').lower()
                 
                 if filter_text in nombre or filter_text in id_paciente:
                     filtered_pacientes[paciente_key] = paciente_data
@@ -193,9 +192,9 @@ class MyApp(Ui_MainWindow):
         def delete_patient(patient_id):
             patient_folder = os.path.join("local_database", patient_id)
             reply = QMessageBox.question(None, 'Confirmar Eliminación',
-                                         f'¿Está seguro que desea eliminar al paciente {patient_id}?\n'
-                                         'Esta acción no se puede deshacer.',
-                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                                        f'¿Está seguro que desea eliminar al paciente {patient_id}?\n'
+                                        'Esta acción no se puede deshacer.',
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             
             if reply == QMessageBox.Yes:
                 try:
@@ -208,7 +207,6 @@ class MyApp(Ui_MainWindow):
                     QMessageBox.critical(None, 'Error', f'No se pudo eliminar al paciente: {str(e)}')
             else:
                 print("Eliminación cancelada.")
-        
         
         # Cargar todos los pacientes
         config.all_patients = leer_metadata_pacientes()
@@ -261,8 +259,8 @@ class MyApp(Ui_MainWindow):
             for ruta in rutas_origen:
                 shutil.copy2(ruta, carpeta_destino)
 
-        def guardar_metadata(metadata, ruta_carpeta):
-            ruta_metadata = os.path.join(ruta_carpeta, "metadata.json")
+        def guardar_metadata(metadata, ruta_carpeta, nombre_archivo):
+            ruta_metadata = os.path.join(ruta_carpeta, nombre_archivo)
             with open(ruta_metadata, 'w') as f:
                 json.dump(metadata, f, indent=4)
 
@@ -331,8 +329,8 @@ class MyApp(Ui_MainWindow):
                     modificar_tags_dicom(ruta_destino, metadata_paciente, metadata_estudio)
 
                 # Guardar metadata
-                guardar_metadata(metadata_paciente, carpeta_paciente)
-                guardar_metadata(metadata_estudio, carpeta_modalidad)
+                guardar_metadata(metadata_paciente, carpeta_paciente, "metadata_paciente.json")
+                guardar_metadata(metadata_estudio, carpeta_paciente, f"metadata_{modality.lower()}.json")
 
                 # Mostrar mensaje de éxito
                 QtWidgets.QMessageBox.information(None, 'Éxito', f"Procesados {num_imagenes} archivos DICOM. Guardados en: {carpeta_modalidad}")
@@ -472,7 +470,6 @@ class MyApp(Ui_MainWindow):
             return {}, {}, False
     
 
-
     def open_patient_selection_dialog(self, row, column):
         dialog = QtWidgets.QDialog()
         ui =  Ui_DialogEscogerEstudio()
@@ -481,7 +478,7 @@ class MyApp(Ui_MainWindow):
         def update_info_tables(patient_id, study_type=None):
             # Load patient data
             patient_folder = os.path.join("local_database", patient_id)
-            patient_metadata_file = os.path.join(patient_folder, "metadata.json")
+            patient_metadata_file = os.path.join(patient_folder, "metadata_paciente.json")
             if os.path.exists(patient_metadata_file):
                 with open(patient_metadata_file, 'r') as f:
                     patient_data = json.load(f)
@@ -494,8 +491,7 @@ class MyApp(Ui_MainWindow):
             
             # Load study data if a study type is selected
             if study_type:
-                study_folder = os.path.join(patient_folder, study_type)
-                study_metadata_file = os.path.join(study_folder, "metadata.json")
+                study_metadata_file = os.path.join(patient_folder, f"metadata_{study_type.lower()}.json")
                 if os.path.exists(study_metadata_file):
                     with open(study_metadata_file, 'r') as f:
                         study_data = json.load(f)
