@@ -337,6 +337,14 @@ class Ui_MainWindow(object):
                 self.toolButton_filtros.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_filtros.setObjectName("toolButton_filtros")
                 self.toolButton_filtros.setToolTip("Aplicar filtros sobre los estudios")
+                self.toolButton_filtros.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_filtros.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_filtros, 0, 2, 1, 1)
                 self.toolButton_regla = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_regla.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -347,6 +355,14 @@ class Ui_MainWindow(object):
                 self.toolButton_regla.setObjectName("toolButton_regla")
                 self.toolButton_regla.clicked.connect(self.activate_distance_measurement)
                 self.toolButton_regla.setToolTip("Realizar mediciones sobre los estudios")
+                self.toolButton_regla.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_regla.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.measurement_view = None
                 self.gridLayout.addWidget(self.toolButton_regla, 0, 0, 1, 1)
                 self.toolButton_areaCircular = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -357,7 +373,15 @@ class Ui_MainWindow(object):
                 self.toolButton_areaCircular.setIconSize(QtCore.QSize(45, 45))
                 self.toolButton_areaCircular.setObjectName("toolButton_areaCircular")
                 self.toolButton_areaCircular.setToolTip("Encontrar el área circular dentro del estudio")
-
+                self.toolButton_areaCircular.clicked.connect(lambda: self.set_shape_canvas("circle"))
+                self.toolButton_areaCircular.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_areaCircular.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_areaCircular, 1, 0, 1, 1)
                 self.toolButton_flechas = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_flechas.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -367,6 +391,15 @@ class Ui_MainWindow(object):
                 self.toolButton_flechas.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_flechas.setObjectName("toolButton_flechas")
                 self.toolButton_flechas.setToolTip("Dibujar flechas")
+                self.toolButton_flechas.clicked.connect(lambda: self.set_shape_canvas("arrow"))
+                self.toolButton_flechas.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_flechas.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_flechas, 1, 3, 1, 1)
                 self.toolButton_dibujoLibre = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_dibujoLibre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -377,6 +410,14 @@ class Ui_MainWindow(object):
                 self.toolButton_dibujoLibre.setObjectName("toolButton_dibujoLibre")
                 self.toolButton_dibujoLibre.setToolTip("Iniciar dibujo libre sobre la imagen")
                 self.toolButton_dibujoLibre.clicked.connect(self.set_canvas)
+                self.toolButton_dibujoLibre.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_dibujoLibre.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.canvas = None
                 self.gridLayout.addWidget(self.toolButton_dibujoLibre, 0, 1, 1, 1)
                 self.toolButton_angulos = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -387,6 +428,14 @@ class Ui_MainWindow(object):
                 self.toolButton_angulos.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_angulos.setObjectName("toolButton_angulos")
                 self.toolButton_angulos.setToolTip("Encontrar ángulos dentro de los estudios")
+                self.toolButton_angulos.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_angulos.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_angulos, 1, 2, 1, 1)
                 self.toolButton_descargaImagen = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_descargaImagen.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -396,6 +445,12 @@ class Ui_MainWindow(object):
                 self.toolButton_descargaImagen.setIconSize(QtCore.QSize(45, 40))
                 self.toolButton_descargaImagen.setObjectName("toolButton_descargaImagen")
                 self.toolButton_descargaImagen.setToolTip("Descargar imagen con las notaciones realizadas")
+                self.toolButton_descargaImagen.setStyleSheet("""
+                QPushButton:pressed {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_descargaImagen, 2, 1, 1, 1)
                 self.toolButton_borrador = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_borrador.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -405,6 +460,13 @@ class Ui_MainWindow(object):
                 self.toolButton_borrador.setIconSize(QtCore.QSize(45, 45))
                 self.toolButton_borrador.setObjectName("toolButton_borrador")
                 self.toolButton_borrador.setToolTip("Borrar dibujos realizados")
+                self.toolButton_borrador.clicked.connect(self.clear_canvas_drawing)
+                self.toolButton_borrador.setStyleSheet("""
+                QPushButton:pressed {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_borrador, 2, 0, 1, 1)
                 self.toolButton_areaRectangular = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_areaRectangular.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -414,6 +476,15 @@ class Ui_MainWindow(object):
                 self.toolButton_areaRectangular.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_areaRectangular.setObjectName("toolButton_areaRectangular")
                 self.toolButton_areaRectangular.setToolTip("Encontrar el área rectangular dentro de los estudios")
+                self.toolButton_areaRectangular.clicked.connect(lambda: self.set_shape_canvas("square"))
+                self.toolButton_areaRectangular.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_areaRectangular.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_areaRectangular, 1, 1, 1, 1)
                 self.toolButton_escritura = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_escritura.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -423,6 +494,14 @@ class Ui_MainWindow(object):
                 self.toolButton_escritura.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_escritura.setObjectName("toolButton_escritura")
                 self.toolButton_escritura.setToolTip("Escribir encima de los estudios")
+                self.toolButton_escritura.setCheckable(True)
+                # Estilo del botón
+                self.toolButton_escritura.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout.addWidget(self.toolButton_escritura, 0, 3, 1, 1)
                 self.label_8 = QtWidgets.QLabel(self.frame_12)
                 self.label_8.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -465,6 +544,14 @@ class Ui_MainWindow(object):
                 self.functionButton_brillo.setIconSize(QtCore.QSize(40, 40))
                 self.functionButton_brillo.setObjectName("functionButton_brillo")
                 self.functionButton_brillo.setToolTip("Cambiar el brillo de los estudios")
+                self.functionButton_brillo.setCheckable(True)
+                # Estilo del botón
+                self.functionButton_brillo.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout_3.addWidget(self.functionButton_brillo, 0, 2, 1, 1)
                 self.functionButton_rotacion = QtWidgets.QPushButton(self.gridLayoutWidget_3)
                 self.functionButton_rotacion.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -474,6 +561,14 @@ class Ui_MainWindow(object):
                 self.functionButton_rotacion.setIconSize(QtCore.QSize(50, 50))
                 self.functionButton_rotacion.setObjectName("functionButton_rotacion")
                 self.functionButton_rotacion.setToolTip("Rotar los estudios")
+                self.functionButton_rotacion.setCheckable(True)
+                # Estilo del botón
+                self.functionButton_rotacion.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout_3.addWidget(self.functionButton_rotacion, 0, 1, 1, 1)
                 self.functionButton_desplazamiento = QtWidgets.QPushButton(self.gridLayoutWidget_3)
                 self.functionButton_desplazamiento.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -483,6 +578,14 @@ class Ui_MainWindow(object):
                 self.functionButton_desplazamiento.setIconSize(QtCore.QSize(50, 50))
                 self.functionButton_desplazamiento.setObjectName("functionButton_desplazamiento")
                 self.functionButton_desplazamiento.setToolTip("Realizar desplazamientos")
+                self.functionButton_desplazamiento.setCheckable(True)
+                # Estilo del botón
+                self.functionButton_desplazamiento.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
                 self.gridLayout_3.addWidget(self.functionButton_desplazamiento, 0, 0, 1, 1)
                 self.label_10 = QtWidgets.QLabel(self.frame_14)
                 self.label_10.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -526,7 +629,15 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x2.setObjectName("dispositionButton_2x2")
                 self.dispositionButton_2x2.setToolTip("Mostrar disposición 2x2 (Sagital) (Axial) (Coronal) (3D)")
                 self.dispositionButton_2x2.clicked.connect(self.display_four_images)
-
+                self.dispositionButton_2x2.setCheckable(True)
+                # Estilo del botón
+                self.dispositionButton_2x2.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
+                
                 self.gridLayout_7.addWidget(self.dispositionButton_2x2, 1, 1, 1, 1)
                 self.dispositionButton_1x1 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -537,7 +648,15 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x1.setObjectName("dispositionButton_1x1")
                 self.dispositionButton_1x1.setToolTip("Mostrar disposición 1x1 (Sagital)")
                 self.dispositionButton_1x1.clicked.connect(self.display_one_image)
-
+                self.dispositionButton_1x1.setCheckable(True)
+                # Estilo del botón
+                self.dispositionButton_1x1.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
+                
                 self.gridLayout_7.addWidget(self.dispositionButton_1x1, 0, 0, 1, 1)
                 self.dispositionButton_2x1 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_2x1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -547,7 +666,15 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x1.setIconSize(QtCore.QSize(35, 35))
                 self.dispositionButton_2x1.setToolTip("Mostrar disposición 2x1 (Sagital) arriba (Axial) abajo")
                 self.dispositionButton_2x1.clicked.connect(self.display_two_images_vertical)
-
+                self.dispositionButton_2x1.setCheckable(True)
+                # Estilo del botón
+                self.dispositionButton_2x1.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
+                
                 self.gridLayout_7.addWidget(self.dispositionButton_2x1, 0, 3, 1, 1)
                 self.dispositionButton_1x3 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -558,7 +685,15 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x3.setObjectName("dispositionButton_1x3")
                 self.dispositionButton_1x3.setToolTip("Mostrar disposición 1x3 (Sagital) (Axial) (Coronal)")
                 self.dispositionButton_1x3.clicked.connect(self.display_three_images_horizontal)
-
+                self.dispositionButton_1x3.setCheckable(True)
+                # Estilo del botón
+                self.dispositionButton_1x3.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
+                
                 self.gridLayout_7.addWidget(self.dispositionButton_1x3, 0, 2, 1, 1)
                 self.dispositionButton_1x2 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -569,7 +704,15 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1x2.setObjectName("dispositionButton_1x2")
                 self.dispositionButton_1x2.setToolTip("Mostrar disposición 1x2 (Sagital) izquierda (Axial) derecha")
                 self.dispositionButton_1x2.clicked.connect(self.display_two_images_horizontal)
-
+                self.dispositionButton_1x2.setCheckable(True)
+                # Estilo del botón
+                self.dispositionButton_1x2.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
+                
                 self.gridLayout_7.addWidget(self.dispositionButton_1x2, 0, 1, 1, 1)
                 self.dispositionButton_1u2d = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1u2d.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -580,7 +723,15 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1u2d.setObjectName("dispositionButton_1u2d")
                 self.dispositionButton_1u2d.setToolTip("Mostrar disposición (Sagital) arriba y (Axial y Coronal) abajo")
                 self.dispositionButton_1u2d.clicked.connect(self.display_three_images_t)
-
+                self.dispositionButton_1u2d.setCheckable(True)
+                # Estilo del botón
+                self.dispositionButton_1u2d.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
+                
                 self.gridLayout_7.addWidget(self.dispositionButton_1u2d, 1, 0, 1, 1)
                 self.dispositionButton_1l2r = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1l2r.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -591,7 +742,15 @@ class Ui_MainWindow(object):
                 self.dispositionButton_1l2r.setObjectName("dispositionButton_1l2r")
                 self.dispositionButton_1l2r.setToolTip("Mostrar disposición (Sagital) izquierda y (Axial y Coronal) derecha")
                 self.dispositionButton_1l2r.clicked.connect(self.display_three_images_inverted_t)
-
+                self.dispositionButton_1l2r.setCheckable(True)
+                # Estilo del botón
+                self.dispositionButton_1l2r.setStyleSheet("""
+                QPushButton:checked {
+                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                        border: 2px solid #808080; /* Bordes al presionar */
+                }
+                """)
+                
                 self.gridLayout_7.addWidget(self.dispositionButton_1l2r, 1, 2, 1, 1)
                 self.label_14 = QtWidgets.QLabel(self.frame_22)
                 self.label_14.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -922,31 +1081,61 @@ class Ui_MainWindow(object):
                 MainWindow.setCentralWidget(self.centralwidget)
 
         def display_one_image(self):
+                self.uncheck_views()
+                self.dispositionButton_1x1.setChecked(True)
                 self.viewer_actions.display_one_image()
 
         def display_two_images_vertical(self):
+                self.uncheck_views()
+                self.dispositionButton_2x1.setChecked(True)
                 self.viewer_actions.display_two_images_vertical()
 
         def display_two_images_horizontal(self):
+                self.uncheck_views()
+                self.dispositionButton_1x2.setChecked(True)
                 self.viewer_actions.display_two_images_horizontal()
 
         def display_three_images_horizontal(self):
+                self.uncheck_views()
+                self.dispositionButton_1x3.setChecked(True)
                 self.viewer_actions.display_three_images_horizontal()
 
         def display_three_images_t(self):
+                self.uncheck_views()
+                self.dispositionButton_1u2d.setChecked(True)
                 self.viewer_actions.display_three_images_t()
 
         def display_three_images_inverted_t(self):
+                self.uncheck_views()
+                self.dispositionButton_1l2r.setChecked(True)
                 self.viewer_actions.display_three_images_inverted_t()
 
         def display_four_images(self):
+                self.uncheck_views()
+                self.dispositionButton_2x2.setChecked(True)
                 self.viewer_actions.display_four_images()
+                
 
         def activate_distance_measurement(self):
-                self.viewer_actions.activate_distance_measurement(self.measurement_view)
+                self.viewer_actions.activate_distance_measurement()
                
         def set_canvas(self):
-                self.viewer_actions.set_canvas(self.canvas)
+                self.viewer_actions.set_canvas()
+                
+        def set_shape_canvas(self,shape):
+                self.viewer_actions.set_shape_canvas(shape)
+                
+        def clear_canvas_drawing(self):
+                self.viewer_actions.clear_canvas_drawing()
+                
+        def uncheck_views(self):
+                self.dispositionButton_2x2.setChecked(False)
+                self.dispositionButton_1x1.setChecked(False)
+                self.dispositionButton_2x1.setChecked(False)
+                self.dispositionButton_1x3.setChecked(False)
+                self.dispositionButton_1x2.setChecked(False)
+                self.dispositionButton_1u2d.setChecked(False)
+                self.dispositionButton_1l2r.setChecked(False)
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
