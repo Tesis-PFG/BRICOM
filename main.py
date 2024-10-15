@@ -541,7 +541,7 @@ class MyApp(Ui_MainWindow):
         ui.fechaNacimiento_label.setText(f"Fecha de Nacimiento: {patient_birth_date}")
 
         # Connect buttons to their respective functions
-        ui.IRMButton_paciente.clicked.connect(lambda: set_current_study("IRM"))
+        ui.IRMButton_paciente.clicked.connect(lambda: set_current_study("MR"))
         ui.CTButton_paciente.clicked.connect(lambda: set_current_study("CT"))
         ui.ImagenConjuntaButton_paciente.clicked.connect(lambda: set_current_study("ImagenConjunta"))
         
