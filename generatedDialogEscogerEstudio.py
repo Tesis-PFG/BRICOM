@@ -172,6 +172,7 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.IRMButton_paciente.setFont(font)
+        self.IRMButton_paciente.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.IRMButton_paciente.setStyleSheet("background-color: rgb(90, 99, 156);\n"
 "border-radius: 15px;\n"
 "color: rgb(255, 255, 255);")
@@ -185,6 +186,7 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.CTButton_paciente.setFont(font)
+        self.CTButton_paciente.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.CTButton_paciente.setStyleSheet("background-color: #5A639C;\n"
 "border-radius: 15px;\n"
 "color: rgb(255, 255, 255);")
@@ -198,6 +200,7 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.ImagenConjuntaButton_paciente.setFont(font)
+        self.ImagenConjuntaButton_paciente.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.ImagenConjuntaButton_paciente.setStyleSheet("background-color: #5A639C;\n"
 "border-radius: 15px;\n"
 "color: rgb(255, 255, 255);")

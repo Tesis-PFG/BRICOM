@@ -279,7 +279,6 @@ class DicomViewer(QWidget):
         patient = None
         # print(f'El paciente que se busca es: {current_patient}')
         # TODO: Hablar con moises, la variable current_patient no se esta almacenando de manera correcta 
-        print(current_patient)
         for p in all_patients:
             if p[0] == current_patient: 
                 patient = p

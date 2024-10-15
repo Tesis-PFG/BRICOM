@@ -249,7 +249,7 @@ background-color:#E2BBE9;
     <item>
      <widget class="QStackedWidget" name="stackedWidgetPrincipal">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pantallaVisualizacion">
        <property name="styleSheet">
@@ -598,7 +598,7 @@ border-radius: 15px;</string>
                     <x>0</x>
                     <y>20</y>
                     <width>250</width>
-                    <height>300</height>
+                    <height>200</height>
                    </rect>
                   </property>
                   <property name="minimumSize">
@@ -1588,6 +1588,9 @@ QScrollBar::handle:vertical {
           </property>
           <property name="horizontalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
           </property>
           <property name="showGrid">
            <bool>false</bool>
