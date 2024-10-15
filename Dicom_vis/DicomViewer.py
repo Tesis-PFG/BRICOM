@@ -205,24 +205,29 @@ class DicomViewer(QWidget):
         self.current_slice = slice_index
         
         dicom_data = pydicom.dcmread(self.dicom_files[slice_index])
-        pixel_array = dicom_data.pixel_array
         
         # Ajustar brillo y contraste
-        pixel_array = self.adjust_brightness_contrast(pixel_array)
+        if hasattr(dicom_data, 'PixelData'):
+            pixel_array = dicom_data.pixel_array
+            pixel_array = self.adjust_brightness_contrast(pixel_array)
 
-        vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
-        vtk_image = vtk.vtkImageData()
+            vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
+            vtk_image = vtk.vtkImageData()
 
-        if pixel_array.ndim == 2:
-            vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
-        elif pixel_array.ndim == 3:
-            vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
+            if pixel_array.ndim == 2:
+                vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
+            elif pixel_array.ndim == 3:
+                vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
+            else:
+                raise ValueError("Forma de array sin soporte: {}".format(pixel_array.shape))
+                
+            vtk_image.GetPointData().SetScalars(vtk_data_array)
+            self.viewer.SetInputData(vtk_image)
+            self.viewer.Render()
         else:
-            raise ValueError("Forma de array sin soporte: {}".format(pixel_array.shape))
-            
-        vtk_image.GetPointData().SetScalars(vtk_data_array)
-        self.viewer.SetInputData(vtk_image)
-        self.viewer.Render()
+            raise ValueError("El archivo DICOM no contiene datos de píxeles")
+
+       
 
     def adjust_brightness_contrast(self, image):
         image = image.astype(np.float32)

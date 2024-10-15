@@ -162,7 +162,7 @@ class ViewerActions:
         }
 
         if config.current_patient is None or config.current_study is None:
-            QtWidgets.QMessageBox.critical(self, "Error", "No hay un paciente o estudio seleccionado.")
+            QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
             return
 
         # Definir los paths dinámicos basados en el paciente y el estudio
@@ -178,7 +178,7 @@ class ViewerActions:
                 self.dcm_viewer.load_dicom_files(base_path)
             except Exception as e:
                 print(e)
-                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+                QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
         else:
             try:
                 registro(file_paths, file_paths_2)
@@ -189,7 +189,7 @@ class ViewerActions:
                 self.render_data()
             except Exception as e:
                 print(e)
-                QtWidgets.QMessageBox.critical(self, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+                QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
 
     def load_data(self, filename):
         self.vtkBaseClass.connect_on_data(filename)
