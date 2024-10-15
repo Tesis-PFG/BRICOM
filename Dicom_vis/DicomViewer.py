@@ -44,15 +44,26 @@ class DicomViewer(QWidget):
         dicom_files = []
         if not os.path.exists(folder_path):
             raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
+        
         for filename in os.listdir(folder_path):
             if filename.endswith('.dcm'):
                 dicom_files.append(os.path.join(folder_path, filename))
+        
+        # Saltar la primera imagen (índice 0) y empezar desde la segunda
+        if len(dicom_files) > 1:
+            # TODO: Validar si esto es correcto o existe alguna manera de hacerlo mejor
+            dicom_files = dicom_files[1:]
+        else:
+            raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
+        
         self.max_slice = len(dicom_files) - 1
         self.dicom_files = dicom_files
         self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
-         # Mostrar metadata en la esquina superior izquierda
+        
+        # Mostrar metadata en la esquina superior izquierda
         self.show_patient_metadata()
         self.update_slice(self.current_slice)
+
 
     def _init_UI(self):
         main_layout = QVBoxLayout(self)
@@ -200,7 +211,6 @@ class DicomViewer(QWidget):
         self.viewer.Render()
 
     def update_slice(self, slice_index):
-        # Ajustar los índices para mantenerlos dentro del rango
         if slice_index < self.min_slice:
             slice_index = self.min_slice
         elif slice_index > self.max_slice:
@@ -210,13 +220,16 @@ class DicomViewer(QWidget):
         # Leer la imagen DICOM con SimpleITK
         dicom_image = sitk.ReadImage(self.dicom_files[slice_index])
         
+        # Verificar si la imagen contiene datos de píxeles
+        if sitk.GetArrayFromImage(dicom_image).size == 0:
+            print(f"La imagen en la posición {slice_index} no contiene datos de píxeles, se omitirá.")
+            return  # Saltar esta imagen
+        
         # Obtener la matriz de píxeles como un array de NumPy
         pixel_array = sitk.GetArrayFromImage(dicom_image)
         
-        # Ajustar brillo y contraste
+        # Continuar con el procesamiento normal...
         pixel_array = self.adjust_brightness_contrast(pixel_array)
-        
-        # Convertir la imagen NumPy a un formato que VTK pueda manejar
         vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
         vtk_image = vtk.vtkImageData()
         
@@ -225,17 +238,10 @@ class DicomViewer(QWidget):
             vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
         elif pixel_array.ndim == 3:
             vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
-        else:
-            raise ValueError("Forma de array sin soporte: {}".format(pixel_array.shape))
         
-        # Asignar los datos a VTK y renderizar la imagen
         vtk_image.GetPointData().SetScalars(vtk_data_array)
         self.viewer.SetInputData(vtk_image)
-        
-        # Resetea la cámara para ajustar el tamaño de la nueva imagen
-        self.viewer.GetRenderer().ResetCamera()  # Esta línea ajusta el zoom y la cámara al tamaño de la nueva imagen
-        
-        # Renderizar la nueva imagen
+        self.viewer.GetRenderer().ResetCamera()
         self.viewer.Render()
 
 
