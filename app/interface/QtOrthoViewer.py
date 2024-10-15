@@ -1,10 +1,9 @@
 from app.interface.OrthoViewer import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
 import config
+from app.interface.Herramientas import *
+
 
 
 
@@ -15,11 +14,16 @@ class QtOrthoViewer(QtViewer):
 
         # Properties
         self.orientation = orientation
+        self.vtkBaseClass = vtkBaseClass
         self.status = False
         self.label = label
+        self.canvas = None  # Inicializar el Canvas como None
+        self.shape_canvas = None # Inicializar
+        self.distance_measurement = None  # Inicializar DistanceMeasurement como None
+
 
         # Render Viewer
-        self.viewer = OrthoViewer(vtkBaseClass, self.orientation, self.label)
+        self.viewer = OrthoViewer(self.vtkBaseClass, self.orientation, self.label)
 
         # Initialize the UI        
         self._init_UI()
@@ -30,7 +34,6 @@ class QtOrthoViewer(QtViewer):
 
         # Connect signals and slots
         self.connect()
-
 
     # Initialize the UI
     def _init_UI(self):
@@ -107,7 +110,7 @@ class QtOrthoViewer(QtViewer):
     def update_slice(self, slice_index):
         self.viewer.set_slice(slice_index)
 
-    # Connect on data
+       # Connect on data
     def connect_on_data(self, path):
         super().connect_on_data(path)
         self.show_patient_metadata()
@@ -123,6 +126,7 @@ class QtOrthoViewer(QtViewer):
         self.slider.setMinimum(self.viewer.min_slice)
         self.slider.setMaximum(self.viewer.max_slice)
         self.slider.setValue((self.slider.maximum() + self.slider.minimum()) // 2)
+
 
 
     # Next/Previous button function
@@ -178,7 +182,7 @@ class QtOrthoViewer(QtViewer):
         else:
             self.pause_slices()
 
-    # Método para mostrar la metadata del paciente
+     # Método para mostrar la metadata del paciente
     def show_patient_metadata(self):
         # Buscar el paciente actual en la lista de todos los pacientes
         patient = None
@@ -207,3 +211,51 @@ class QtOrthoViewer(QtViewer):
         self.metadata_label.setFixedHeight(30)
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
+
+       # Método para inicializar Canvas
+    def set_canvas(self):
+        if self.canvas is None:
+            # Crear e insertar el Canvas sobre el viewer
+            self.canvas = Canvas(self)
+            self.canvas.setFixedSize(self.viewer.size())
+            self.canvas.show()
+
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.canvas.close()
+            self.canvas = None
+
+    # Método para inicializar DistanceMeasurement
+    def set_distance_measurement(self, mhd_file):
+        if self.distance_measurement is None:
+            # Crear e insertar DistanceMeasurement
+            self.distance_measurement = DistanceMeasurement(mhd_file, self)
+            self.distance_measurement.setFixedSize(self.viewer.size())
+            self.distance_measurement.show()
+        else:
+            # Si ya existe, ocultar DistanceMeasurement
+            self.distance_measurement.close()
+            self.distance_measurement = None
+            
+    # Método para borrar el contenido del Canvas
+    def clear_canvas_drawing(self):
+        if self.canvas:
+            self.canvas.clear_canvas()
+            print("Hola")
+        if self.shape_canvas:
+            self.shape_canvas.clear_canvas()
+            print("Hola")
+            
+    def set_shape_canvas(self, shape):
+        if self.shape_canvas is None:
+            # Crear e insertar el Canvas sobre el viewer
+            self.shape_canvas = ShapeCanvas(self)
+            self.shape_canvas.setFixedSize(self.viewer.size())
+            self.shape_canvas.set_shape(shape)
+            self.shape_canvas.show()
+
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.shape_canvas.close()
+            self.shape_canvas = None
+
