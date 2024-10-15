@@ -471,7 +471,7 @@ class Ui_MainWindow(object):
                 self.toolButton_areaRectangular.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_areaRectangular.setObjectName("toolButton_areaRectangular")
                 self.toolButton_areaRectangular.setToolTip("Encontrar el área rectangular dentro de los estudios")
-                 self.toolButton_areaRectangular.clicked.connect(lambda: self.set_shape_canvas("square"))
+                self.toolButton_areaRectangular.clicked.connect(lambda: self.set_shape_canvas("square"))
                 self.toolButton_areaRectangular.setCheckable(True)
                 # Estilo del botón
                 self.toolButton_areaRectangular.setStyleSheet("""
