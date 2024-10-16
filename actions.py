@@ -237,3 +237,9 @@ class ViewerActions:
             self.dcm_viewer.set_shape_canvas(shape)
         else:
             self.QtSagittalOrthoViewer.set_shape_canvas(shape)
+
+    def set_text_canvas(self):
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.set_text_canvas()
+        else:
+            self.QtSagittalOrthoViewer.set_text_canvas()

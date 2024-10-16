@@ -16,7 +16,7 @@ class QtOrthoViewer(QtViewer):
         self.canvas = None  # Inicializar el Canvas como None
         self.shape_canvas = None # Inicializar
         self.distance_measurement = None  # Inicializar DistanceMeasurement como None
-
+        self.text_canvas = None  # Inicializar DistanceMeasurement como None
 
         # Render Viewer
         self.viewer = OrthoViewer(self.vtkBaseClass, self.orientation, self.label)
@@ -237,10 +237,10 @@ class QtOrthoViewer(QtViewer):
     def clear_canvas_drawing(self):
         if self.canvas:
             self.canvas.clear_canvas()
-            print("Hola")
         if self.shape_canvas:
             self.shape_canvas.clear_canvas()
-            print("Hola")
+        if self.text_canvas:
+            self.text_canvas.clear_canvas()
             
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
@@ -254,4 +254,13 @@ class QtOrthoViewer(QtViewer):
             # Si ya existe, ocultar el Canvas
             self.shape_canvas.close()
             self.shape_canvas = None
+
+    def set_text_canvas(self):
+        if self.text_canvas is None:
+            self.text_canvas = TextCanvas(self)
+            self.text_canvas.show()
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.text_canvas.close()
+            self.text_canvas = None
 

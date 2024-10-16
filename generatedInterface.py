@@ -435,6 +435,7 @@ class Ui_MainWindow(object):
                 self.toolButton_escritura.setIcon(icon14)
                 self.toolButton_escritura.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_escritura.setObjectName("toolButton_escritura")
+                self.toolButton_escritura.clicked.connect(self.set_text_canvas)
                 self.toolButton_escritura.setToolTip("Escribir encima de los estudios")
                 self.toolButton_escritura.setCheckable(True)
                 self.gridLayout.addWidget(self.toolButton_escritura, 0, 3, 1, 1)
@@ -958,7 +959,8 @@ class Ui_MainWindow(object):
                                       self.toolButton_escritura,
                                       self.functionButton_brillo,
                                       self.functionButton_rotacion,
-                                      self.functionButton_desplazamiento]
+                                      self.functionButton_desplazamiento,
+                                      self.toolButton_borrador]
                 #Inicializa los botones como inhabilitados hasta que no se seleccione un estudio
                 self.set_enabled_views(False)
                 self.set_enabled_tools(False)
@@ -1017,14 +1019,26 @@ class Ui_MainWindow(object):
         
         def set_shape_canvas(self,shape):
                 self.viewer_actions.set_shape_canvas(shape)
-                
+
+        def set_text_canvas(self):
+                self.viewer_actions.set_text_canvas()
+
         def clear_canvas_drawing(self):
                 self.viewer_actions.clear_canvas_drawing()
                 
         def uncheck_views(self):
                 for button in self.view_buttons:
                         button.setChecked(False)
-
+        
+        def uncheck_tools(self):
+                for button in self.tools_buttons:
+                        button.setChecked(False)
+        
+        #TODO: implement
+        def reset_tools(self):
+                if self.canvas is not None:
+                        self.viewer_actions.set_canvas()
+                
         def set_enabled_views(self, enabled: bool):
                 for button in self.view_buttons:
                         button.setEnabled(enabled)
@@ -1039,10 +1053,13 @@ class Ui_MainWindow(object):
                                         QPushButton:checked {
                                                 background-color: #a0a0a0; /* Color de fondo al presionar */
                                                 border: 2px solid #808080; /* Bordes al presionar */
-                                        },
+                                        }
                                         QPushButton:pressed {
                                                 background-color: #a0a0a0; /* Color de fondo al presionar */
                                                 border: 2px solid #808080; /* Bordes al presionar */
+                                        }
+                                        QPushButton:hover {
+                                                background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
                                         }
                                         """)
                 for button in self.tools_buttons:
@@ -1050,10 +1067,13 @@ class Ui_MainWindow(object):
                                         QPushButton:checked {
                                                 background-color: #a0a0a0; /* Color de fondo al presionar */
                                                 border: 2px solid #808080; /* Bordes al presionar */
-                                        },
+                                        }
                                         QPushButton:pressed {
                                                 background-color: #a0a0a0; /* Color de fondo al presionar */
                                                 border: 2px solid #808080; /* Bordes al presionar */
+                                        }
+                                        QPushButton:hover {
+                                                background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
                                         }
                                         """)
 

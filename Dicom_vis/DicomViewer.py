@@ -26,7 +26,7 @@ class DicomViewer(QWidget):
         self.canvas = None  # Inicializar el Canvas como None
         self.shape_canvas = None # Inicializar
         self.distance_measurement = None  # Inicializar DistanceMeasurement como None
-        
+        self.text_canvas = None # Inicializar TextCanvas como None
         self.current_slice = self.min_slice
         
         # Brillo y contraste por defecto
@@ -350,6 +350,8 @@ class DicomViewer(QWidget):
             self.canvas.clear_canvas()
         if self.shape_canvas:
             self.shape_canvas.clear_canvas()
+        if self.text_canvas:
+            self.text_canvas.clear_canvas()
             
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
@@ -363,3 +365,11 @@ class DicomViewer(QWidget):
             self.shape_canvas.close()
             self.shape_canvas = None
 
+    def set_text_canvas(self):
+        if self.text_canvas is None:
+            self.text_canvas = TextCanvas(self)
+            self.text_canvas.show()
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.text_canvas.close()
+            self.text_canvas = None
