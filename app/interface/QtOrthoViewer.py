@@ -1,12 +1,8 @@
 from app.interface.OrthoViewer import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
-import config
 from app.interface.Herramientas import *
-
-
-
-
+import config
 class QtOrthoViewer(QtViewer):
     # Constructor
     def __init__(self, vtkBaseClass, orientation, label: str = "Orthogonal Viewer"):
@@ -20,7 +16,7 @@ class QtOrthoViewer(QtViewer):
         self.canvas = None  # Inicializar el Canvas como None
         self.shape_canvas = None # Inicializar
         self.distance_measurement = None  # Inicializar DistanceMeasurement como None
-
+        self.text_canvas = None  # Inicializar DistanceMeasurement como None
 
         # Render Viewer
         self.viewer = OrthoViewer(self.vtkBaseClass, self.orientation, self.label)
@@ -212,7 +208,7 @@ class QtOrthoViewer(QtViewer):
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
 
-       # Método para inicializar Canvas
+    # Método para inicializar Canvas
     def set_canvas(self):
         if self.canvas is None:
             # Crear e insertar el Canvas sobre el viewer
@@ -241,10 +237,10 @@ class QtOrthoViewer(QtViewer):
     def clear_canvas_drawing(self):
         if self.canvas:
             self.canvas.clear_canvas()
-            print("Hola")
         if self.shape_canvas:
             self.shape_canvas.clear_canvas()
-            print("Hola")
+        if self.text_canvas:
+            self.text_canvas.clear_canvas()
             
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
@@ -258,4 +254,13 @@ class QtOrthoViewer(QtViewer):
             # Si ya existe, ocultar el Canvas
             self.shape_canvas.close()
             self.shape_canvas = None
+
+    def set_text_canvas(self):
+        if self.text_canvas is None:
+            self.text_canvas = TextCanvas(self)
+            self.text_canvas.show()
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.text_canvas.close()
+            self.text_canvas = None
 

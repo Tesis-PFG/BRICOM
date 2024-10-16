@@ -525,6 +525,10 @@ class MyApp(Ui_MainWindow):
             print(f"Current patient: {config.current_patient}, Current study: {config.current_study}")
             update_info_tables(config.current_patient, study_type)
             dialog.accept()  # Close the dialog after selection
+            self.set_enabled_views(True)
+            self.set_enabled_tools(False)
+            #self.hide_studies()
+            #self.clear_layout()            
 
             # Lista de botones de disposición
             disposition_buttons = [
