@@ -348,8 +348,8 @@ class Ui_MainWindow(object):
                 self.canvas = None
                 self.toolButton_dibujoLibre.setToolTip("Iniciar dibujo libre sobre la imagen")
                 self.gridLayout.addWidget(self.toolButton_dibujoLibre, 0, 1, 1, 1)
-                self.toolButton_escritura = QtWidgets.QPushButton(self.gridLayoutWidget)
-                self.toolButton_escritura.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+                
                 icon7 = QtGui.QIcon()
                 icon7.addPixmap(QtGui.QPixmap(".\\Assets/Ellipse.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 self.toolButton_areaCircular = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -358,7 +358,8 @@ class Ui_MainWindow(object):
                 self.toolButton_areaCircular.setObjectName("toolButton_areaCircular")
                 self.toolButton_areaCircular.setToolTip("Encontrar el área circular dentro del estudio")
                 self.toolButton_areaCircular.clicked.connect(lambda: self.set_shape_canvas("circle"))
-                self.gridLayout.addWidget(self.toolButton_areaCircular, 1, 0, 1, 1)
+                self.gridLayout.addWidget(self.toolButton_areaCircular, 0, 3, 1, 1)
+
                 self.toolButton_flechas = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_flechas.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon8 = QtGui.QIcon()
@@ -368,18 +369,7 @@ class Ui_MainWindow(object):
                 self.toolButton_flechas.setObjectName("toolButton_flechas")
                 self.toolButton_flechas.setToolTip("Dibujar flechas")
                 self.toolButton_flechas.clicked.connect(lambda: self.set_shape_canvas("arrow"))
-                self.gridLayout.addWidget(self.toolButton_flechas, 1, 3, 1, 1)
-                self.toolButton_dibujoLibre = QtWidgets.QPushButton(self.gridLayoutWidget)
-                self.toolButton_dibujoLibre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon9 = QtGui.QIcon()
-                icon9.addPixmap(QtGui.QPixmap(".\\Assets/freeDraw.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.toolButton_dibujoLibre.setIcon(icon9)
-                self.toolButton_dibujoLibre.setIconSize(QtCore.QSize(40, 40))
-                self.toolButton_dibujoLibre.setObjectName("toolButton_dibujoLibre")
-                self.toolButton_dibujoLibre.setToolTip("Iniciar dibujo libre sobre la imagen")
-                self.toolButton_dibujoLibre.clicked.connect(self.set_canvas)
-                self.canvas = None
-                self.gridLayout.addWidget(self.toolButton_dibujoLibre, 0, 1, 1, 1)
+                self.gridLayout.addWidget(self.toolButton_flechas, 1, 2, 1, 1)
                 self.toolButton_angulos = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_angulos.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon10 = QtGui.QIcon()
@@ -388,7 +378,7 @@ class Ui_MainWindow(object):
                 self.toolButton_angulos.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_angulos.setObjectName("toolButton_angulos")
                 self.toolButton_angulos.setToolTip("Encontrar ángulos dentro de los estudios")
-                self.gridLayout.addWidget(self.toolButton_angulos, 1, 2, 1, 1)
+                self.gridLayout.addWidget(self.toolButton_angulos, 1, 1, 1, 1)
                 self.toolButton_descargaImagen = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_descargaImagen.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon11 = QtGui.QIcon()
@@ -397,7 +387,8 @@ class Ui_MainWindow(object):
                 self.toolButton_descargaImagen.setIconSize(QtCore.QSize(45, 40))
                 self.toolButton_descargaImagen.setObjectName("toolButton_descargaImagen")
                 self.toolButton_descargaImagen.setToolTip("Descargar imagen con las notaciones realizadas")
-                self.gridLayout.addWidget(self.toolButton_descargaImagen, 2, 1, 1, 1)
+                self.gridLayout.addWidget(self.toolButton_descargaImagen, 2, 0, 1, 1)
+
                 self.toolButton_borrador = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_borrador.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon12 = QtGui.QIcon()
@@ -408,8 +399,6 @@ class Ui_MainWindow(object):
                 self.toolButton_borrador.setToolTip("Borrar dibujos realizados")
                 self.toolButton_borrador.clicked.connect(self.clear_canvas_drawing)
                 self.gridLayout.addWidget(self.toolButton_borrador, 1, 3, 1, 1)
-                self.toolButton_descargaImagen = QtWidgets.QPushButton(self.gridLayoutWidget)
-                self.toolButton_descargaImagen.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon13 = QtGui.QIcon()
                 icon13.addPixmap(QtGui.QPixmap(".\\Assets/Rectangle 20.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 self.toolButton_areaRectangular = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -418,7 +407,7 @@ class Ui_MainWindow(object):
                 self.toolButton_areaRectangular.setObjectName("toolButton_areaRectangular")
                 self.toolButton_areaRectangular.setToolTip("Encontrar el área rectangular dentro de los estudios")
                 self.toolButton_areaRectangular.clicked.connect(lambda: self.set_shape_canvas("square"))
-                self.gridLayout.addWidget(self.toolButton_areaRectangular, 1, 1, 1, 1)
+                self.gridLayout.addWidget(self.toolButton_areaRectangular, 1, 0, 1, 1)
                 self.toolButton_escritura = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_escritura.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon14 = QtGui.QIcon()
@@ -427,7 +416,7 @@ class Ui_MainWindow(object):
                 self.toolButton_escritura.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_escritura.setObjectName("toolButton_escritura")
                 self.toolButton_escritura.setToolTip("Escribir encima de los estudios")
-                self.gridLayout.addWidget(self.toolButton_escritura, 0, 3, 1, 1)
+                self.gridLayout.addWidget(self.toolButton_escritura, 0, 2, 1, 1)
                 self.label_8 = QtWidgets.QLabel(self.frame_12)
                 self.label_8.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_8.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
@@ -935,7 +924,7 @@ class Ui_MainWindow(object):
                                       self.toolButton_escritura,
                                       self.functionButton_brillo,
                                       self.functionButton_constraste,
-                                      self.toolButton_borrador]
+                                      ]
                 #Inicializa los botones como inhabilitados hasta que no se seleccione un estudio
                 self.set_enabled_views(False)
                 self.set_enabled_tools(False)
