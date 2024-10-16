@@ -416,6 +416,7 @@ class Ui_MainWindow(object):
                 self.toolButton_escritura.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_escritura.setObjectName("toolButton_escritura")
                 self.toolButton_escritura.setToolTip("Escribir encima de los estudios")
+                self.toolButton_escritura.clicked.connect(self.set_text_canvas)
                 self.gridLayout.addWidget(self.toolButton_escritura, 0, 2, 1, 1)
                 self.label_8 = QtWidgets.QLabel(self.frame_12)
                 self.label_8.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -931,6 +932,9 @@ class Ui_MainWindow(object):
 
                 #Cambio de apariencia en los botones cuando son presionados
                 self.set_stylesheet()
+                
+                #Inicializa los botones como checkeables
+                self.set_checkable_views()
 
         def display_one_image(self):
                 self.uncheck_views()
@@ -978,10 +982,13 @@ class Ui_MainWindow(object):
                 self.viewer_actions.activate_distance_measurement(self.measurement_view)
                
         def set_canvas(self):
-                self.viewer_actions.set_canvas(self.canvas)
+                self.viewer_actions.set_canvas()
         
         def set_shape_canvas(self,shape):
                 self.viewer_actions.set_shape_canvas(shape)
+                
+        def set_text_canvas(self):
+                self.viewer_actions.set_text_canvas()
                 
         def clear_canvas_drawing(self):
                 self.viewer_actions.clear_canvas_drawing()
@@ -989,6 +996,12 @@ class Ui_MainWindow(object):
         def uncheck_views(self):
                 for button in self.view_buttons:
                         button.setChecked(False)
+                        
+        def set_checkable_views(self):
+                for button in self.view_buttons:
+                        button.setCheckable(True)
+                for button in self.tools_buttons:
+                        button.setCheckable(True)
         
         def uncheck_tools(self):
                 for button in self.tools_buttons:
@@ -1042,9 +1055,6 @@ class Ui_MainWindow(object):
 
         def hide_studies(self):
                 self.viewer_actions.hide_studies()
-
-        def set_text_canvas(self):
-                self.viewer_actions.set_text_canvas()
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
