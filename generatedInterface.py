@@ -335,6 +335,7 @@ class Ui_MainWindow(object):
                 self.toolButton_regla.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_regla.setObjectName("toolButton_regla")
                 self.toolButton_regla.setToolTip("Realizar mediciones sobre los estudios")
+                self.toolButton_regla.clicked.connect(self.activate_distance_measurement)
                 self.measurement_view = None
                 self.gridLayout.addWidget(self.toolButton_regla, 0, 0, 1, 1)
                 self.toolButton_dibujoLibre = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -979,7 +980,7 @@ class Ui_MainWindow(object):
                 self.viewer_actions.display_four_images()
 
         def activate_distance_measurement(self):
-                self.viewer_actions.activate_distance_measurement(self.measurement_view)
+                self.viewer_actions.activate_distance_measurement()
                
         def set_canvas(self):
                 self.viewer_actions.set_canvas()
