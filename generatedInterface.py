@@ -15,12 +15,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
         def setupUi(self, MainWindow):
-
                 MainWindow.setObjectName("MainWindow")
-                MainWindow.resize(869, 600)
-                MainWindow.setMinimumSize(QtCore.QSize(800, 600))
+                MainWindow.resize(1350, 650)
+                MainWindow.setMinimumSize(QtCore.QSize(1350, 650))
                 MainWindow.setMaximumSize(QtCore.QSize(1920, 1080))
                 MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+
                 #Definición de Orthoviewers a utilizar
                 self.vtkBaseClass = VtkBase()
                 self.QtSagittalOrthoViewer = QtOrthoViewer(self.vtkBaseClass, SLICE_ORIENTATION_YZ, "Sagital")
@@ -35,6 +35,7 @@ class Ui_MainWindow(object):
                 # Prueba para el visualizador de dicom
                 self.dcm_viewer = DicomViewer('Axial')
                 viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
+
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
                 self.centralwidget.setObjectName("centralwidget")
                 self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -57,16 +58,16 @@ class Ui_MainWindow(object):
                 self.verticalLayout_2.addWidget(self.frame_9)
                 self.frame_10 = QtWidgets.QFrame(self.frame)
                 self.frame_10.setStyleSheet("QPushButton{\n"
-                "\n"
-                "border-radius: 25px;\n"
-                "}\n"
-                "\n"
-                "QPushButton:checked{\n"
-                "background-color:#E2BBE9;\n"
-                "\n"
-                "}\n"
-                "\n"
-                "")
+        "\n"
+        "border-radius: 25px;\n"
+        "}\n"
+        "\n"
+        "QPushButton:checked{\n"
+        "background-color:#E2BBE9;\n"
+        "\n"
+        "}\n"
+        "\n"
+        "")
                 self.frame_10.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_10.setObjectName("frame_10")
                 self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_10)
@@ -124,7 +125,7 @@ class Ui_MainWindow(object):
                 self.stackedWidgetPrincipal.setObjectName("stackedWidgetPrincipal")
                 self.pantallaVisualizacion = QtWidgets.QWidget()
                 self.pantallaVisualizacion.setStyleSheet("\n"
-                "background-color: rgb(0, 0, 0);")
+        "background-color: rgb(0, 0, 0);")
                 self.pantallaVisualizacion.setObjectName("pantallaVisualizacion")
                 self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.pantallaVisualizacion)
                 self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
@@ -141,10 +142,10 @@ class Ui_MainWindow(object):
                 self.frame_17.setMinimumSize(QtCore.QSize(272, 70))
                 self.frame_17.setMaximumSize(QtCore.QSize(250, 70))
                 self.frame_17.setStyleSheet("background-color: #5A639C;\n"
-                "border-radius: 30px;\n"
-                "\n"
-                "\n"
-                "")
+        "border-radius: 30px;\n"
+        "\n"
+        "\n"
+        "")
                 self.frame_17.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_17.setObjectName("frame_17")
                 self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.frame_17)
@@ -152,10 +153,10 @@ class Ui_MainWindow(object):
                 self.subMenu_patient = QtWidgets.QPushButton(self.frame_17)
                 self.subMenu_patient.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 self.subMenu_patient.setStyleSheet("QPushButton:checked{\n"
-                "background-color:#E2BBE9;\n"
-                "border-radius: 20px\n"
-                "}\n"
-                "")
+        "background-color:#E2BBE9;\n"
+        "border-radius: 20px\n"
+        "}\n"
+        "")
                 self.subMenu_patient.setText("")
                 icon3 = QtGui.QIcon()
                 icon3.addPixmap(QtGui.QPixmap(".\\Assets/subMenu_patient.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -170,10 +171,10 @@ class Ui_MainWindow(object):
                 self.subMenu_tools = QtWidgets.QPushButton(self.frame_17)
                 self.subMenu_tools.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 self.subMenu_tools.setStyleSheet("QPushButton:checked{\n"
-                "background-color:#E2BBE9;\n"
-                "border-radius: 20px\n"
-                "}\n"
-                "")
+        "background-color:#E2BBE9;\n"
+        "border-radius: 20px\n"
+        "}\n"
+        "")
                 self.subMenu_tools.setText("")
                 icon4 = QtGui.QIcon()
                 icon4.addPixmap(QtGui.QPixmap(".\\Assets/subMenu_tools.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -199,8 +200,8 @@ class Ui_MainWindow(object):
                 self.frame_15.setMinimumSize(QtCore.QSize(200, 250))
                 self.frame_15.setMaximumSize(QtCore.QSize(16777215, 240))
                 self.frame_15.setStyleSheet("background-color: #FFFFFF;\n"
-                "\n"
-                "")
+        "\n"
+        "")
                 self.frame_15.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_15.setObjectName("frame_15")
                 self.frame_18 = QtWidgets.QFrame(self.frame_15)
@@ -208,7 +209,7 @@ class Ui_MainWindow(object):
                 self.frame_18.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_18.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_18.setStyleSheet("background-color: #E8C9ED;\n"
-                "border-radius: 15px;")
+        "border-radius: 15px;")
                 self.frame_18.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_18.setObjectName("frame_18")
                 self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.frame_18)
@@ -219,10 +220,10 @@ class Ui_MainWindow(object):
                 font.setFamily("Roboto")
                 self.patientInfo_table.setFont(font)
                 self.patientInfo_table.setStyleSheet("\n"
-                "QTableWidget::item {\n"
-                "    text-align: center;\n"
-                "\n"
-                "}")
+        "QTableWidget::item {\n"
+        "    text-align: center;\n"
+        "\n"
+        "}")
                 self.patientInfo_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
                 self.patientInfo_table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
                 self.patientInfo_table.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
@@ -242,9 +243,9 @@ class Ui_MainWindow(object):
                 self.label_9 = QtWidgets.QLabel(self.frame_15)
                 self.label_9.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_9.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-                "background-color: rgb(119, 118, 179);\n"
-                "color:#FFFFFF;\n"
-                "border-radius: 15px;")
+        "background-color: rgb(119, 118, 179);\n"
+        "color:#FFFFFF;\n"
+        "border-radius: 15px;")
                 self.label_9.setTextFormat(QtCore.Qt.PlainText)
                 self.label_9.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_9.setObjectName("label_9")
@@ -253,16 +254,16 @@ class Ui_MainWindow(object):
                 self.frame_19.setMinimumSize(QtCore.QSize(200, 250))
                 self.frame_19.setMaximumSize(QtCore.QSize(16777215, 240))
                 self.frame_19.setStyleSheet("background-color: #FFFFFF;\n"
-                "\n"
-                "")
+        "\n"
+        "")
                 self.frame_19.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_19.setObjectName("frame_19")
                 self.frame_20 = QtWidgets.QFrame(self.frame_19)
-                self.frame_20.setGeometry(QtCore.QRect(0, 20, 250, 300))
+                self.frame_20.setGeometry(QtCore.QRect(0, 20, 250, 200))
                 self.frame_20.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_20.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_20.setStyleSheet("background-color: #E8C9ED;\n"
-                "border-radius: 15px;")
+        "border-radius: 15px;")
                 self.frame_20.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_20.setObjectName("frame_20")
                 self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.frame_20)
@@ -289,9 +290,9 @@ class Ui_MainWindow(object):
                 self.label_11 = QtWidgets.QLabel(self.frame_19)
                 self.label_11.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_11.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-                "background-color: rgb(119, 118, 179);\n"
-                "color:#FFFFFF;\n"
-                "border-radius: 15px;")
+        "background-color: rgb(119, 118, 179);\n"
+        "color:#FFFFFF;\n"
+        "border-radius: 15px;")
                 self.label_11.setTextFormat(QtCore.Qt.PlainText)
                 self.label_11.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_11.setObjectName("label_11")
@@ -307,8 +308,8 @@ class Ui_MainWindow(object):
                 self.frame_12.setMinimumSize(QtCore.QSize(200, 190))
                 self.frame_12.setMaximumSize(QtCore.QSize(16777215, 190))
                 self.frame_12.setStyleSheet("background-color: #FFFFFF;\n"
-                "\n"
-                "")
+        "\n"
+        "")
                 self.frame_12.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_12.setObjectName("frame_12")
                 self.frame_13 = QtWidgets.QFrame(self.frame_12)
@@ -316,7 +317,7 @@ class Ui_MainWindow(object):
                 self.frame_13.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_13.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_13.setStyleSheet("background-color: #E8C9ED;\n"
-                "border-radius: 15px;")
+        "border-radius: 15px;")
                 self.frame_13.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_13.setObjectName("frame_13")
                 self.gridLayoutWidget = QtWidgets.QWidget(self.frame_13)
@@ -326,38 +327,37 @@ class Ui_MainWindow(object):
                 self.gridLayout.setContentsMargins(5, 5, 5, 5)
                 self.gridLayout.setHorizontalSpacing(0)
                 self.gridLayout.setObjectName("gridLayout")
-                self.toolButton_filtros = QtWidgets.QPushButton(self.gridLayoutWidget)
-                self.toolButton_filtros.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon5 = QtGui.QIcon()
-                icon5.addPixmap(QtGui.QPixmap(".\\Assets/colorfilter.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.toolButton_filtros.setIcon(icon5)
-                self.toolButton_filtros.setIconSize(QtCore.QSize(40, 40))
-                self.toolButton_filtros.setObjectName("toolButton_filtros")
-                self.toolButton_filtros.setToolTip("Aplicar filtros sobre los estudios")
-                self.toolButton_filtros.setCheckable(True)
-                self.gridLayout.addWidget(self.toolButton_filtros, 0, 2, 1, 1)
                 self.toolButton_regla = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_regla.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon6 = QtGui.QIcon()
-                icon6.addPixmap(QtGui.QPixmap(":/icons/Assets/ruler.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.toolButton_regla.setIcon(icon6)
+                icon5 = QtGui.QIcon()
+                icon5.addPixmap(QtGui.QPixmap(":/icons/Assets/ruler.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.toolButton_regla.setIcon(icon5)
                 self.toolButton_regla.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_regla.setObjectName("toolButton_regla")
-                self.toolButton_regla.clicked.connect(self.activate_distance_measurement)
                 self.toolButton_regla.setToolTip("Realizar mediciones sobre los estudios")
-                self.toolButton_regla.setCheckable(True)
                 self.measurement_view = None
                 self.gridLayout.addWidget(self.toolButton_regla, 0, 0, 1, 1)
-                self.toolButton_areaCircular = QtWidgets.QPushButton(self.gridLayoutWidget)
-                self.toolButton_areaCircular.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.toolButton_dibujoLibre = QtWidgets.QPushButton(self.gridLayoutWidget)
+                self.toolButton_dibujoLibre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                icon6 = QtGui.QIcon()
+                icon6.addPixmap(QtGui.QPixmap(".\\Assets/freeDraw.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.toolButton_dibujoLibre.setIcon(icon6)
+                self.toolButton_dibujoLibre.setIconSize(QtCore.QSize(40, 40))
+                self.toolButton_dibujoLibre.setObjectName("toolButton_dibujoLibre")
+                self.toolButton_dibujoLibre.clicked.connect(self.set_canvas)
+                self.canvas = None
+                self.toolButton_dibujoLibre.setToolTip("Iniciar dibujo libre sobre la imagen")
+                self.gridLayout.addWidget(self.toolButton_dibujoLibre, 0, 1, 1, 1)
+                self.toolButton_escritura = QtWidgets.QPushButton(self.gridLayoutWidget)
+                self.toolButton_escritura.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon7 = QtGui.QIcon()
                 icon7.addPixmap(QtGui.QPixmap(".\\Assets/Ellipse.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.toolButton_areaCircular = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_areaCircular.setIcon(icon7)
                 self.toolButton_areaCircular.setIconSize(QtCore.QSize(45, 45))
                 self.toolButton_areaCircular.setObjectName("toolButton_areaCircular")
                 self.toolButton_areaCircular.setToolTip("Encontrar el área circular dentro del estudio")
                 self.toolButton_areaCircular.clicked.connect(lambda: self.set_shape_canvas("circle"))
-                self.toolButton_areaCircular.setCheckable(True)
                 self.gridLayout.addWidget(self.toolButton_areaCircular, 1, 0, 1, 1)
                 self.toolButton_flechas = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_flechas.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -368,7 +368,6 @@ class Ui_MainWindow(object):
                 self.toolButton_flechas.setObjectName("toolButton_flechas")
                 self.toolButton_flechas.setToolTip("Dibujar flechas")
                 self.toolButton_flechas.clicked.connect(lambda: self.set_shape_canvas("arrow"))
-                self.toolButton_flechas.setCheckable(True)
                 self.gridLayout.addWidget(self.toolButton_flechas, 1, 3, 1, 1)
                 self.toolButton_dibujoLibre = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_dibujoLibre.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -379,7 +378,6 @@ class Ui_MainWindow(object):
                 self.toolButton_dibujoLibre.setObjectName("toolButton_dibujoLibre")
                 self.toolButton_dibujoLibre.setToolTip("Iniciar dibujo libre sobre la imagen")
                 self.toolButton_dibujoLibre.clicked.connect(self.set_canvas)
-                self.toolButton_dibujoLibre.setCheckable(True)
                 self.canvas = None
                 self.gridLayout.addWidget(self.toolButton_dibujoLibre, 0, 1, 1, 1)
                 self.toolButton_angulos = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -390,7 +388,6 @@ class Ui_MainWindow(object):
                 self.toolButton_angulos.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_angulos.setObjectName("toolButton_angulos")
                 self.toolButton_angulos.setToolTip("Encontrar ángulos dentro de los estudios")
-                self.toolButton_angulos.setCheckable(True)
                 self.gridLayout.addWidget(self.toolButton_angulos, 1, 2, 1, 1)
                 self.toolButton_descargaImagen = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_descargaImagen.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -410,23 +407,17 @@ class Ui_MainWindow(object):
                 self.toolButton_borrador.setObjectName("toolButton_borrador")
                 self.toolButton_borrador.setToolTip("Borrar dibujos realizados")
                 self.toolButton_borrador.clicked.connect(self.clear_canvas_drawing)
-                self.toolButton_borrador.setStyleSheet("""
-                QPushButton:pressed {
-                        background-color: #a0a0a0; /* Color de fondo al presionar */
-                        border: 2px solid #808080; /* Bordes al presionar */
-                }
-                """)
-                self.gridLayout.addWidget(self.toolButton_borrador, 2, 0, 1, 1)
-                self.toolButton_areaRectangular = QtWidgets.QPushButton(self.gridLayoutWidget)
-                self.toolButton_areaRectangular.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.gridLayout.addWidget(self.toolButton_borrador, 1, 3, 1, 1)
+                self.toolButton_descargaImagen = QtWidgets.QPushButton(self.gridLayoutWidget)
+                self.toolButton_descargaImagen.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon13 = QtGui.QIcon()
                 icon13.addPixmap(QtGui.QPixmap(".\\Assets/Rectangle 20.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.toolButton_areaRectangular = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_areaRectangular.setIcon(icon13)
                 self.toolButton_areaRectangular.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_areaRectangular.setObjectName("toolButton_areaRectangular")
                 self.toolButton_areaRectangular.setToolTip("Encontrar el área rectangular dentro de los estudios")
                 self.toolButton_areaRectangular.clicked.connect(lambda: self.set_shape_canvas("square"))
-                self.toolButton_areaRectangular.setCheckable(True)
                 self.gridLayout.addWidget(self.toolButton_areaRectangular, 1, 1, 1, 1)
                 self.toolButton_escritura = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_escritura.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -435,16 +426,14 @@ class Ui_MainWindow(object):
                 self.toolButton_escritura.setIcon(icon14)
                 self.toolButton_escritura.setIconSize(QtCore.QSize(35, 35))
                 self.toolButton_escritura.setObjectName("toolButton_escritura")
-                self.toolButton_escritura.clicked.connect(self.set_text_canvas)
                 self.toolButton_escritura.setToolTip("Escribir encima de los estudios")
-                self.toolButton_escritura.setCheckable(True)
                 self.gridLayout.addWidget(self.toolButton_escritura, 0, 3, 1, 1)
                 self.label_8 = QtWidgets.QLabel(self.frame_12)
                 self.label_8.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_8.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-                "background-color: rgb(119, 118, 179);\n"
-                "color:#FFFFFF;\n"
-                "border-radius: 15px;")
+        "background-color: rgb(119, 118, 179);\n"
+        "color:#FFFFFF;\n"
+        "border-radius: 15px;")
                 self.label_8.setTextFormat(QtCore.Qt.PlainText)
                 self.label_8.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_8.setObjectName("label_8")
@@ -453,8 +442,8 @@ class Ui_MainWindow(object):
                 self.frame_14.setMinimumSize(QtCore.QSize(250, 100))
                 self.frame_14.setMaximumSize(QtCore.QSize(16777215, 100))
                 self.frame_14.setStyleSheet("background-color: #FFFFFF;\n"
-                "\n"
-                "")
+        "\n"
+        "")
                 self.frame_14.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_14.setObjectName("frame_14")
                 self.frame_16 = QtWidgets.QFrame(self.frame_14)
@@ -462,7 +451,7 @@ class Ui_MainWindow(object):
                 self.frame_16.setMinimumSize(QtCore.QSize(0, 0))
                 self.frame_16.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_16.setStyleSheet("background-color: #E8C9ED;\n"
-                "border-radius: 15px;")
+        "border-radius: 15px;")
                 self.frame_16.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_16.setObjectName("frame_16")
                 self.gridLayoutWidget_3 = QtWidgets.QWidget(self.frame_16)
@@ -472,6 +461,15 @@ class Ui_MainWindow(object):
                 self.gridLayout_3.setContentsMargins(5, 5, 5, 5)
                 self.gridLayout_3.setHorizontalSpacing(0)
                 self.gridLayout_3.setObjectName("gridLayout_3")
+                self.functionButton_constraste = QtWidgets.QPushButton(self.gridLayoutWidget_3)
+                self.functionButton_constraste.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                icon14 = QtGui.QIcon()
+                icon14.addPixmap(QtGui.QPixmap(".\\Assets/constrast.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.functionButton_constraste.setIcon(icon14)
+                self.functionButton_constraste.setIconSize(QtCore.QSize(50, 50))
+                self.functionButton_constraste.setObjectName("functionButton_constraste")
+                self.functionButton_constraste.setToolTip("Cambiar el contraste de los estudios")
+                self.gridLayout_3.addWidget(self.functionButton_constraste, 0, 1, 1, 1)
                 self.functionButton_brillo = QtWidgets.QPushButton(self.gridLayoutWidget_3)
                 self.functionButton_brillo.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 icon15 = QtGui.QIcon()
@@ -480,52 +478,31 @@ class Ui_MainWindow(object):
                 self.functionButton_brillo.setIconSize(QtCore.QSize(40, 40))
                 self.functionButton_brillo.setObjectName("functionButton_brillo")
                 self.functionButton_brillo.setToolTip("Cambiar el brillo de los estudios")
-                self.functionButton_brillo.setCheckable(True)
                 self.gridLayout_3.addWidget(self.functionButton_brillo, 0, 2, 1, 1)
-                self.functionButton_rotacion = QtWidgets.QPushButton(self.gridLayoutWidget_3)
-                self.functionButton_rotacion.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon16 = QtGui.QIcon()
-                icon16.addPixmap(QtGui.QPixmap(".\\Assets/refresh-circle.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.functionButton_rotacion.setIcon(icon16)
-                self.functionButton_rotacion.setIconSize(QtCore.QSize(50, 50))
-                self.functionButton_rotacion.setObjectName("functionButton_rotacion")
-                self.functionButton_rotacion.setToolTip("Rotar los estudios")
-                self.functionButton_rotacion.setCheckable(True)
-                self.gridLayout_3.addWidget(self.functionButton_rotacion, 0, 1, 1, 1)
-                self.functionButton_desplazamiento = QtWidgets.QPushButton(self.gridLayoutWidget_3)
-                self.functionButton_desplazamiento.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon17 = QtGui.QIcon()
-                icon17.addPixmap(QtGui.QPixmap(".\\Assets/displacement.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.functionButton_desplazamiento.setIcon(icon17)
-                self.functionButton_desplazamiento.setIconSize(QtCore.QSize(50, 50))
-                self.functionButton_desplazamiento.setObjectName("functionButton_desplazamiento")
-                self.functionButton_desplazamiento.setToolTip("Realizar desplazamientos")
-                self.functionButton_desplazamiento.setCheckable(True)
-                self.gridLayout_3.addWidget(self.functionButton_desplazamiento, 0, 0, 1, 1)
                 self.label_10 = QtWidgets.QLabel(self.frame_14)
                 self.label_10.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_10.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-                "background-color: rgb(119, 118, 179);\n"
-                "color:#FFFFFF;\n"
-                "border-radius: 15px;")
+        "background-color: rgb(119, 118, 179);\n"
+        "color:#FFFFFF;\n"
+        "border-radius: 15px;")
                 self.label_10.setTextFormat(QtCore.Qt.PlainText)
                 self.label_10.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_10.setObjectName("label_10")
                 self.verticalLayout_4.addWidget(self.frame_14)
-                self.frame_22 = QtWidgets.QFrame(self.submenuTools)
-                self.frame_22.setMinimumSize(QtCore.QSize(0, 160))
-                self.frame_22.setMaximumSize(QtCore.QSize(16777215, 225))
-                self.frame_22.setStyleSheet("background-color: #FFFFFF;\n"
-                "\n"
-                "")
-                self.frame_22.setFrameShape(QtWidgets.QFrame.NoFrame)
-                self.frame_22.setObjectName("frame_22")
-                self.frame_23 = QtWidgets.QFrame(self.frame_22)
+                self.frameDisposicion = QtWidgets.QFrame(self.submenuTools)
+                self.frameDisposicion.setMinimumSize(QtCore.QSize(0, 160))
+                self.frameDisposicion.setMaximumSize(QtCore.QSize(16777215, 225))
+                self.frameDisposicion.setStyleSheet("background-color: #FFFFFF;\n"
+        "\n"
+        "")
+                self.frameDisposicion.setFrameShape(QtWidgets.QFrame.NoFrame)
+                self.frameDisposicion.setObjectName("frameDisposicion")
+                self.frame_23 = QtWidgets.QFrame(self.frameDisposicion)
                 self.frame_23.setGeometry(QtCore.QRect(0, 20, 250, 131))
                 self.frame_23.setMinimumSize(QtCore.QSize(250, 0))
                 self.frame_23.setMaximumSize(QtCore.QSize(250, 200))
                 self.frame_23.setStyleSheet("background-color: #E8C9ED;\n"
-                "border-radius: 15px;")
+        "border-radius: 15px;")
                 self.frame_23.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_23.setObjectName("frame_23")
                 self.gridLayoutWidget_7 = QtWidgets.QWidget(self.frame_23)
@@ -537,90 +514,89 @@ class Ui_MainWindow(object):
                 self.gridLayout_7.setObjectName("gridLayout_7")
                 self.dispositionButton_2x2 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_2x2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon18 = QtGui.QIcon()
-                icon18.addPixmap(QtGui.QPixmap(".\\Assets/2x2 grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.dispositionButton_2x2.setIcon(icon18)
+                icon16 = QtGui.QIcon()
+                icon16.addPixmap(QtGui.QPixmap(".\\Assets/2x2 grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.dispositionButton_2x2.setIcon(icon16)
                 self.dispositionButton_2x2.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_2x2.setObjectName("dispositionButton_2x2")
                 self.dispositionButton_2x2.setToolTip("Mostrar disposición 2x2 (Sagital) (Axial) (Coronal) (3D)")
                 self.dispositionButton_2x2.clicked.connect(self.display_four_images)
-                self.dispositionButton_2x2.setCheckable(True)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_2x2, 1, 1, 1, 1)
                 self.dispositionButton_1x1 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon19 = QtGui.QIcon()
-                icon19.addPixmap(QtGui.QPixmap(".\\Assets/Rectangle 24.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.dispositionButton_1x1.setIcon(icon19)
+                icon17 = QtGui.QIcon()
+                icon17.addPixmap(QtGui.QPixmap(".\\Assets/Rectangle 24.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.dispositionButton_1x1.setIcon(icon17)
                 self.dispositionButton_1x1.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1x1.setObjectName("dispositionButton_1x1")
                 self.dispositionButton_1x1.setToolTip("Mostrar disposición 1x1 (Sagital)")
                 self.dispositionButton_1x1.clicked.connect(self.display_one_image)
-                self.dispositionButton_1x1.setCheckable(True)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1x1, 0, 0, 1, 1)
                 self.dispositionButton_2x1 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_2x1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon20 = QtGui.QIcon()
-                icon20.addPixmap(QtGui.QPixmap(".\\Assets/2x1grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.dispositionButton_2x1.setIcon(icon20)
+                icon18 = QtGui.QIcon()
+                icon18.addPixmap(QtGui.QPixmap(".\\Assets/2x1grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.dispositionButton_2x1.setIcon(icon18)
                 self.dispositionButton_2x1.setIconSize(QtCore.QSize(35, 35))
+                self.dispositionButton_2x1.setObjectName("dispositionButton_2x1")
                 self.dispositionButton_2x1.setToolTip("Mostrar disposición 2x1 (Sagital) arriba (Axial) abajo")
                 self.dispositionButton_2x1.clicked.connect(self.display_two_images_vertical)
-                self.dispositionButton_2x1.setCheckable(True)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_2x1, 0, 3, 1, 1)
                 self.dispositionButton_1x3 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon21 = QtGui.QIcon()
-                icon21.addPixmap(QtGui.QPixmap(".\\Assets/1x3grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.dispositionButton_1x3.setIcon(icon21)
+                icon19 = QtGui.QIcon()
+                icon19.addPixmap(QtGui.QPixmap(".\\Assets/1x3grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.dispositionButton_1x3.setIcon(icon19)
                 self.dispositionButton_1x3.setIconSize(QtCore.QSize(40, 40))
                 self.dispositionButton_1x3.setObjectName("dispositionButton_1x3")
                 self.dispositionButton_1x3.setToolTip("Mostrar disposición 1x3 (Sagital) (Axial) (Coronal)")
                 self.dispositionButton_1x3.clicked.connect(self.display_three_images_horizontal)
-                self.dispositionButton_1x3.setCheckable(True)
                 self.gridLayout_7.addWidget(self.dispositionButton_1x3, 0, 2, 1, 1)
                 self.dispositionButton_1x2 = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1x2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon22 = QtGui.QIcon()
-                icon22.addPixmap(QtGui.QPixmap(".\\Assets/1x2grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.dispositionButton_1x2.setIcon(icon22)
+                icon20 = QtGui.QIcon()
+                icon20.addPixmap(QtGui.QPixmap(".\\Assets/1x2grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.dispositionButton_1x2.setIcon(icon20)
                 self.dispositionButton_1x2.setIconSize(QtCore.QSize(40, 40))
                 self.dispositionButton_1x2.setObjectName("dispositionButton_1x2")
                 self.dispositionButton_1x2.setToolTip("Mostrar disposición 1x2 (Sagital) izquierda (Axial) derecha")
                 self.dispositionButton_1x2.clicked.connect(self.display_two_images_horizontal)
-                self.dispositionButton_1x2.setCheckable(True)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1x2, 0, 1, 1, 1)
                 self.dispositionButton_1u2d = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1u2d.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon23 = QtGui.QIcon()
-                icon23.addPixmap(QtGui.QPixmap(".\\Assets/1up_2downgrid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.dispositionButton_1u2d.setIcon(icon23)
+                icon21 = QtGui.QIcon()
+                icon21.addPixmap(QtGui.QPixmap(".\\Assets/1up_2downgrid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.dispositionButton_1u2d.setIcon(icon21)
                 self.dispositionButton_1u2d.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1u2d.setObjectName("dispositionButton_1u2d")
                 self.dispositionButton_1u2d.setToolTip("Mostrar disposición (Sagital) arriba y (Axial y Coronal) abajo")
                 self.dispositionButton_1u2d.clicked.connect(self.display_three_images_t)
-                self.dispositionButton_1u2d.setCheckable(True)
+
                 self.gridLayout_7.addWidget(self.dispositionButton_1u2d, 1, 0, 1, 1)
                 self.dispositionButton_1l2r = QtWidgets.QPushButton(self.gridLayoutWidget_7)
                 self.dispositionButton_1l2r.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-                icon24 = QtGui.QIcon()
-                icon24.addPixmap(QtGui.QPixmap(".\\Assets/1+2grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.dispositionButton_1l2r.setIcon(icon24)
+                icon22 = QtGui.QIcon()
+                icon22.addPixmap(QtGui.QPixmap(".\\Assets/1+2grid.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.dispositionButton_1l2r.setIcon(icon22)
                 self.dispositionButton_1l2r.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_1l2r.setObjectName("dispositionButton_1l2r")
                 self.dispositionButton_1l2r.setToolTip("Mostrar disposición (Sagital) izquierda y (Axial y Coronal) derecha")
                 self.dispositionButton_1l2r.clicked.connect(self.display_three_images_inverted_t)
-                self.dispositionButton_1l2r.setCheckable(True)
                 self.gridLayout_7.addWidget(self.dispositionButton_1l2r, 1, 2, 1, 1)
-                self.label_14 = QtWidgets.QLabel(self.frame_22)
+                self.label_14 = QtWidgets.QLabel(self.frameDisposicion)
                 self.label_14.setGeometry(QtCore.QRect(40, 0, 171, 31))
                 self.label_14.setStyleSheet("font: 87 16pt \"Roboto\" \"bold\";\n"
-                "background-color: rgb(119, 118, 179);\n"
-                "color:#FFFFFF;\n"
-                "border-radius: 15px;")
+        "background-color: rgb(119, 118, 179);\n"
+        "color:#FFFFFF;\n"
+        "border-radius: 15px;")
                 self.label_14.setTextFormat(QtCore.Qt.PlainText)
                 self.label_14.setAlignment(QtCore.Qt.AlignCenter)
                 self.label_14.setObjectName("label_14")
-                self.verticalLayout_4.addWidget(self.frame_22)
+                self.verticalLayout_4.addWidget(self.frameDisposicion)
                 spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
                 self.verticalLayout_4.addItem(spacerItem2)
                 self.stackedWidget_submenuVisualizacion.addWidget(self.submenuTools)
@@ -645,12 +621,12 @@ class Ui_MainWindow(object):
                 self.filterLiner_db = QtWidgets.QLineEdit(self.pantallaBaseDeDatos)
                 self.filterLiner_db.setMaximumSize(QtCore.QSize(300, 16777215))
                 self.filterLiner_db.setStyleSheet("border: 1px solid #A0A0A0;\n"
-                "border-radius: 5px;\n"
-                "padding: 2px;\n"
-                "background-color: white;")
+        "border-radius: 5px;\n"
+        "padding: 2px;\n"
+        "background-color: white;")
                 self.filterLiner_db.setObjectName("filterLiner_db")
                 self.horizontalLayout_7.addWidget(self.filterLiner_db)
-                spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
+                spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
                 self.horizontalLayout_7.addItem(spacerItem3)
                 self.label_3 = QtWidgets.QLabel(self.pantallaBaseDeDatos)
                 self.label_3.setMinimumSize(QtCore.QSize(0, 70))
@@ -675,93 +651,94 @@ class Ui_MainWindow(object):
                 self.database_table.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.ArrowCursor))
                 self.database_table.setAutoFillBackground(False)
                 self.database_table.setStyleSheet("QTableWidget {\n"
-                "    font-family: \'Roboto\', sans-serif;\n"
-                "\n"
-                "    border-radius: 10px;\n"
-                "    gridline-color: #D9D9D9;\n"
-                "    border: none;\n"
-                "}\n"
-                "\n"
-                "QHeaderView::section {\n"
-                "    background-color: #5A639C;\n"
-                "    color: white;\n"
-                "    font-weight: bold;\n"
-                "    font-size: 20px;\n"
-                "    padding: 5px;\n"
-                "    border: none;\n"
-                "    text-align: center;\n"
-                "}\n"
-                "\n"
-                "QTableWidget::item {\n"
-                "    color: black;\n"
-                "    font-weight: regular;\n"
-                "    background-color: #D9D9D9;\n"
-                "    font-size: 16px;\n"
-                "    padding: 5px;\n"
-                "    text-align: center;\n"
-                "    border: none;\n"
-                "}\n"
-                "\n"
-                "QTableWidget::item:selected {\n"
-                "    background-color: #B0B0B0;\n"
-                "}\n"
-                "\n"
-                "/* Centrar verticalmente el contenido de las celdas */\n"
-                "QTableWidget::item {\n"
-                "    padding-top: 5px;\n"
-                "    padding-bottom: 5px;\n"
-                "}\n"
-                "\n"
-                "/* Asegurar que el texto se centre horizontalmente */\n"
-                "QTableWidget {\n"
-                "    qproperty-textElideMode: ElideNone;\n"
-                "    qproperty-showGrid: false;\n"
-                "}\n"
-                "\n"
-                "/* Estilo para el viewport del QTableWidget */\n"
-                "QTableWidget QTableCornerButton::section {\n"
-                "    background-color: #5A639C;\n"
-                "    border: none;\n"
-                "}\n"
-                "\n"
-                "QScrollBar:horizontal,\n"
-                "QScrollBar:vertical {\n"
-                "    background-color: #D9D9D9;\n"
-                "    border-radius: 5px;\n"
-                "    margin: 0px;\n"
-                "}\n"
-                "\n"
-                "QScrollBar::handle:horizontal,\n"
-                "QScrollBar::handle:vertical {\n"
-                "    background-color: #5A639C;\n"
-                "    border-radius: 5px;\n"
-                "    min-height: 2px;\n"
-                "    min-width: 2px;\n"
-                "}\n"
-                "\n"
-                "QScrollBar::add-line:horizontal,\n"
-                "QScrollBar::sub-line:horizontal,\n"
-                "QScrollBar::add-line:vertical,\n"
-                "QScrollBar::sub-line:vertical {\n"
-                "    border: none;\n"
-                "    background: none;\n"
-                "    width: 0px;\n"
-                "    height: 0px;\n"
-                "}\n"
-                "\n"
-                "QScrollBar::add-page:horizontal,\n"
-                "QScrollBar::sub-page:horizontal,\n"
-                "QScrollBar::add-page:vertical,\n"
-                "QScrollBar::sub-page:vertical {\n"
-                "    background: none;\n"
-                "}\n"
-                "\n"
-                "QScrollBar::handle:vertical {\n"
-                "    max-height: 10px;\n"
-                "    min-height: 8px;\n"
-                "}")
+        "    font-family: \'Roboto\', sans-serif;\n"
+        "\n"
+        "    border-radius: 10px;\n"
+        "    gridline-color: #D9D9D9;\n"
+        "    border: none;\n"
+        "}\n"
+        "\n"
+        "QHeaderView::section {\n"
+        "    background-color: #5A639C;\n"
+        "    color: white;\n"
+        "    font-weight: bold;\n"
+        "    font-size: 20px;\n"
+        "    padding: 5px;\n"
+        "    border: none;\n"
+        "    text-align: center;\n"
+        "}\n"
+        "\n"
+        "QTableWidget::item {\n"
+        "    color: black;\n"
+        "    font-weight: regular;\n"
+        "    background-color: #D9D9D9;\n"
+        "    font-size: 16px;\n"
+        "    padding: 5px;\n"
+        "    text-align: center;\n"
+        "    border: none;\n"
+        "}\n"
+        "\n"
+        "QTableWidget::item:selected {\n"
+        "    background-color: #B0B0B0;\n"
+        "}\n"
+        "\n"
+        "/* Centrar verticalmente el contenido de las celdas */\n"
+        "QTableWidget::item {\n"
+        "    padding-top: 5px;\n"
+        "    padding-bottom: 5px;\n"
+        "}\n"
+        "\n"
+        "/* Asegurar que el texto se centre horizontalmente */\n"
+        "QTableWidget {\n"
+        "    qproperty-textElideMode: ElideNone;\n"
+        "    qproperty-showGrid: false;\n"
+        "}\n"
+        "\n"
+        "/* Estilo para el viewport del QTableWidget */\n"
+        "QTableWidget QTableCornerButton::section {\n"
+        "    background-color: #5A639C;\n"
+        "    border: none;\n"
+        "}\n"
+        "\n"
+        "QScrollBar:horizontal,\n"
+        "QScrollBar:vertical {\n"
+        "    background-color: #D9D9D9;\n"
+        "    border-radius: 5px;\n"
+        "    margin: 0px;\n"
+        "}\n"
+        "\n"
+        "QScrollBar::handle:horizontal,\n"
+        "QScrollBar::handle:vertical {\n"
+        "    background-color: #5A639C;\n"
+        "    border-radius: 5px;\n"
+        "    min-height: 2px;\n"
+        "    min-width: 2px;\n"
+        "}\n"
+        "\n"
+        "QScrollBar::add-line:horizontal,\n"
+        "QScrollBar::sub-line:horizontal,\n"
+        "QScrollBar::add-line:vertical,\n"
+        "QScrollBar::sub-line:vertical {\n"
+        "    border: none;\n"
+        "    background: none;\n"
+        "    width: 0px;\n"
+        "    height: 0px;\n"
+        "}\n"
+        "\n"
+        "QScrollBar::add-page:horizontal,\n"
+        "QScrollBar::sub-page:horizontal,\n"
+        "QScrollBar::add-page:vertical,\n"
+        "QScrollBar::sub-page:vertical {\n"
+        "    background: none;\n"
+        "}\n"
+        "\n"
+        "QScrollBar::handle:vertical {\n"
+        "    max-height: 10px;\n"
+        "    min-height: 8px;\n"
+        "}")
                 self.database_table.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
                 self.database_table.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+                self.database_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
                 self.database_table.setShowGrid(False)
                 self.database_table.setCornerButtonEnabled(False)
                 self.database_table.setObjectName("database_table")
@@ -778,15 +755,15 @@ class Ui_MainWindow(object):
                 item = QtWidgets.QTableWidgetItem()
                 self.database_table.setHorizontalHeaderItem(4, item)
                 item = QtWidgets.QTableWidgetItem()
-                icon25 = QtGui.QIcon()
-                icon25.addPixmap(QtGui.QPixmap(".\\Assets/trash.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                item.setIcon(icon25)
+                icon23 = QtGui.QIcon()
+                icon23.addPixmap(QtGui.QPixmap(".\\Assets/trash.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                item.setIcon(icon23)
                 self.database_table.setHorizontalHeaderItem(5, item)
                 self.verticalLayout_6.addWidget(self.database_table)
                 self.stackedWidgetPrincipal.addWidget(self.pantallaBaseDeDatos)
                 self.pantallaAnadirArchivo = QtWidgets.QWidget()
                 self.pantallaAnadirArchivo.setStyleSheet("\n"
-                "background-color: rgb(255, 255, 255);")
+        "background-color: rgb(255, 255, 255);")
                 self.pantallaAnadirArchivo.setObjectName("pantallaAnadirArchivo")
                 self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.pantallaAnadirArchivo)
                 self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -870,7 +847,7 @@ class Ui_MainWindow(object):
                 self.frame_24.setMinimumSize(QtCore.QSize(0, 400))
                 self.frame_24.setMaximumSize(QtCore.QSize(16777215, 2000))
                 self.frame_24.setStyleSheet("background-color: #E8C9ED;\n"
-                "border-radius: 15px;")
+        "border-radius: 15px;")
                 self.frame_24.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_24.setObjectName("frame_24")
                 self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.frame_24)
@@ -879,7 +856,7 @@ class Ui_MainWindow(object):
                 self.frame_25.setMinimumSize(QtCore.QSize(10, 0))
                 self.frame_25.setMaximumSize(QtCore.QSize(16777215, 1000))
                 self.frame_25.setStyleSheet("border: 2px dashed #5A639C;\n"
-                "border-radius: 15px;")
+        "border-radius: 15px;")
                 self.frame_25.setFrameShape(QtWidgets.QFrame.NoFrame)
                 self.frame_25.setObjectName("frame_25")
                 self.gridLayout_2 = QtWidgets.QGridLayout(self.frame_25)
@@ -889,9 +866,9 @@ class Ui_MainWindow(object):
                 self.pushButton = QtWidgets.QPushButton(self.frame_25)
                 self.pushButton.setStyleSheet("border: 2px dashed #E8C9ED;")
                 self.pushButton.setText("")
-                icon26 = QtGui.QIcon()
-                icon26.addPixmap(QtGui.QPixmap(":/icons/Assets/icon_documentUpload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.pushButton.setIcon(icon26)
+                icon24 = QtGui.QIcon()
+                icon24.addPixmap(QtGui.QPixmap(":/icons/Assets/icon_documentUpload.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButton.setIcon(icon24)
                 self.pushButton.setIconSize(QtCore.QSize(160, 160))
                 self.pushButton.setObjectName("pushButton")
                 self.gridLayout_2.addWidget(self.pushButton, 1, 0, 1, 1)
@@ -926,8 +903,8 @@ class Ui_MainWindow(object):
                 self.archivoButton_carpeta.setFont(font)
                 self.archivoButton_carpeta.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
                 self.archivoButton_carpeta.setStyleSheet("background-color: rgb(90, 99, 156);\n"
-                "color:#ffffff;\n"
-                "border-radius:15px;")
+        "color:#ffffff;\n"
+        "border-radius:15px;")
                 self.archivoButton_carpeta.setObjectName("archivoButton_carpeta")
                 self.horizontalLayout_4.addWidget(self.archivoButton_carpeta)
                 spacerItem11 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
@@ -938,7 +915,6 @@ class Ui_MainWindow(object):
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
                 self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, viewers, self.ViewersConnection, self.vtkBaseClass)
                 MainWindow.setCentralWidget(self.centralwidget)
-
                 #Listas de botones
                 self.view_buttons = [self.dispositionButton_2x2, 
                                      self.dispositionButton_1x1, 
@@ -947,7 +923,7 @@ class Ui_MainWindow(object):
                                      self.dispositionButton_1x2, 
                                      self.dispositionButton_1u2d, 
                                      self.dispositionButton_1l2r]
-                self.tools_buttons = [self.toolButton_filtros,
+                self.tools_buttons = [
                                       self.toolButton_regla,
                                       self.toolButton_areaCircular,
                                       self.toolButton_flechas,
@@ -958,8 +934,7 @@ class Ui_MainWindow(object):
                                       self.toolButton_areaRectangular,
                                       self.toolButton_escritura,
                                       self.functionButton_brillo,
-                                      self.functionButton_rotacion,
-                                      self.functionButton_desplazamiento,
+                                      self.functionButton_constraste,
                                       self.toolButton_borrador]
                 #Inicializa los botones como inhabilitados hasta que no se seleccione un estudio
                 self.set_enabled_views(False)
@@ -967,8 +942,7 @@ class Ui_MainWindow(object):
 
                 #Cambio de apariencia en los botones cuando son presionados
                 self.set_stylesheet()
-                
-                
+
         def display_one_image(self):
                 self.uncheck_views()
                 self.dispositionButton_1x1.setChecked(True)
@@ -1012,20 +986,17 @@ class Ui_MainWindow(object):
                 self.viewer_actions.display_four_images()
 
         def activate_distance_measurement(self):
-                self.viewer_actions.activate_distance_measurement()
+                self.viewer_actions.activate_distance_measurement(self.measurement_view)
                
         def set_canvas(self):
-                self.viewer_actions.set_canvas()
+                self.viewer_actions.set_canvas(self.canvas)
         
         def set_shape_canvas(self,shape):
                 self.viewer_actions.set_shape_canvas(shape)
-
-        def set_text_canvas(self):
-                self.viewer_actions.set_text_canvas()
-
+                
         def clear_canvas_drawing(self):
                 self.viewer_actions.clear_canvas_drawing()
-                
+
         def uncheck_views(self):
                 for button in self.view_buttons:
                         button.setChecked(False)
@@ -1083,6 +1054,9 @@ class Ui_MainWindow(object):
         def hide_studies(self):
                 self.viewer_actions.hide_studies()
 
+        def set_text_canvas(self):
+                self.viewer_actions.set_text_canvas()
+
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
                 MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -1098,7 +1072,7 @@ class Ui_MainWindow(object):
                 item.setText(_translate("MainWindow", "Valor"))
                 self.label_11.setText(_translate("MainWindow", "Estudio"))
                 self.label_8.setText(_translate("MainWindow", "Herramientas"))
-                self.label_10.setText(_translate("MainWindow", "Funciones"))
+                self.label_10.setText(_translate("MainWindow", "Iluminación"))
                 self.label_14.setText(_translate("MainWindow", "Disposición"))
                 self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" color:#5a639c;\">Base de Datos</span></p></body></html>"))
                 item = self.database_table.horizontalHeaderItem(0)
