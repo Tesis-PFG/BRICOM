@@ -68,6 +68,18 @@ class MyApp(Ui_MainWindow):
 
         # Connect the cellClicked signal to open the patient selection dialog
         self.database_table.cellClicked.connect(self.open_patient_selection_dialog)
+        
+        # Ocultar botones de disposición por defecto
+        disposition_buttons = [
+            self.dispositionButton_1x2,
+            self.dispositionButton_1x3,
+            self.dispositionButton_2x1,
+            self.dispositionButton_1u2d,
+            self.dispositionButton_2x2,
+            self.dispositionButton_1l2r
+        ]
+        for button in disposition_buttons:
+            button.setVisible(False)
 
 
     #Función encargada de desplegar los pacientes en la tabla de base de datos
@@ -330,7 +342,7 @@ class MyApp(Ui_MainWindow):
 
                 # Guardar metadata
                 guardar_metadata(metadata_paciente, carpeta_paciente, "metadata_paciente.json")
-                guardar_metadata(metadata_estudio, carpeta_paciente, f"metadata_{modality.lower()}.json")
+                guardar_metadata(metadata_estudio, carpeta_paciente, f"metadata_{modality.upper()}.json")
 
                 # Mostrar mensaje de éxito
                 QtWidgets.QMessageBox.information(None, 'Éxito', f"Procesados {num_imagenes} archivos DICOM. Guardados en: {carpeta_modalidad}")
@@ -491,7 +503,7 @@ class MyApp(Ui_MainWindow):
             
             # Load study data if a study type is selected
             if study_type:
-                study_metadata_file = os.path.join(patient_folder, f"metadata_{study_type.lower()}.json")
+                study_metadata_file = os.path.join(patient_folder, f"metadata_{study_type.upper()}.json")
                 if os.path.exists(study_metadata_file):
                     with open(study_metadata_file, 'r') as f:
                         study_data = json.load(f)
@@ -513,6 +525,23 @@ class MyApp(Ui_MainWindow):
             print(f"Current patient: {config.current_patient}, Current study: {config.current_study}")
             update_info_tables(config.current_patient, study_type)
             dialog.accept()  # Close the dialog after selection
+
+            # Lista de botones de disposición
+            disposition_buttons = [
+                self.dispositionButton_1x2,
+                self.dispositionButton_1x3,
+                self.dispositionButton_2x1,
+                self.dispositionButton_1u2d,
+                self.dispositionButton_2x2,
+                self.dispositionButton_1l2r
+            ]
+
+            # Controlar la visibilidad de los botones de disposición
+            for button in disposition_buttons:
+                if study_type.lower() == "imagenconjunta":
+                    button.setVisible(True)
+                else:
+                    button.setVisible(False)
 
         def navigate_patient(direction):
             new_row = row + direction
@@ -537,7 +566,7 @@ class MyApp(Ui_MainWindow):
         ui.fechaNacimiento_label.setText(f"Fecha de Nacimiento: {patient_birth_date}")
 
         # Connect buttons to their respective functions
-        ui.IRMButton_paciente.clicked.connect(lambda: set_current_study("MR"))
+        ui.MRButton_paciente.clicked.connect(lambda: set_current_study("MR"))
         ui.CTButton_paciente.clicked.connect(lambda: set_current_study("CT"))
         ui.ImagenConjuntaButton_paciente.clicked.connect(lambda: set_current_study("ImagenConjunta"))
         
