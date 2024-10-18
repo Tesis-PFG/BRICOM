@@ -180,7 +180,6 @@ class DicomViewer(QWidget):
         vtk_image = self.reader.GetOutput()
         ct_dimensions = vtk_image.GetDimensions()
         
-        # Suponiendo que el número de slices está en la dimensión Z
         self.max_slice = ct_dimensions[2] - 1  # Dimensiones son en el orden (X, Y, Z)
         if self.max_slice < 1:
             raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
@@ -235,7 +234,6 @@ class DicomViewer(QWidget):
         # Verificar si la imagen contiene datos de píxeles
         if vtk_image.GetPointData().GetScalars() is None:
             print(f"La imagen en la posición {slice_index} no contiene datos de píxeles, se omitirá.")
-            # Aquí puedes retornar sin hacer nada más, así evitas el popup
             return
 
         # Establecer el slice en el viewer
