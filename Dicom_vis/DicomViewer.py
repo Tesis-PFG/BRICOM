@@ -8,7 +8,6 @@ import numpy as np  # Importa numpy para manejar operaciones numéricas
 from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
-from config import current_patient, all_patients, current_study 
 import SimpleITK as sitk
 from app.interface.Herramientas import *
 import config
@@ -306,23 +305,45 @@ class DicomViewer(QWidget):
 
     def show_patient_metadata(self):
         # Buscar el paciente actual en la lista de todos los pacientes
-        patient = None
-        # print(f'El paciente que se busca es: {current_patient}')
-        # TODO: Hablar con moises, la variable current_patient no se esta almacenando de manera correcta 
-        for p in all_patients:
-            if p[0] == current_patient: 
-                patient = p
-                break
+        patient_metadata = None 
+        print(f"El paciente que se está buscando es {config.current_patient}") 
+
+        if config.current_patient is not None:
+            patient_metadata = config.all_patients.get(config.current_patient)
+            print(f'{patient_metadata}')
 
         # Comprobar si se encontró el paciente
-        if patient is not None:
-            # Crear un QLabel para mostrar el nombre y apellido del paciente
-            #Revisar si la extracciòn de datos es correcta de acuerdo a como se almacenan en datos
-            self.metadata_label = QLabel(f"Paciente: {patient['last_name']} {patient['first_name']}", self)
+        if patient_metadata is not None:
+            patient_id = patient_metadata.get('PatientID', 'Desconocido')
+            full_name = patient_metadata.get('PatientName', 'Desconocido')
+            name_parts = full_name.split()  
+            last_name = " ".join(name_parts[:-1])
+            first_name = name_parts[-1]           
+
+            study_date = ''
+            if patient_metadata.get('modalidades'):
+                for modality, study_info in patient_metadata['modalidades'].items():
+                    study_date = study_info.get('StudyDate', 'Desconocida')
+                    break 
+            
+            # Verificar si ya existe un QLabel y eliminarlo si es necesario
+            if hasattr(self, 'metadata_label'):
+                self.metadata_label.deleteLater()  # Eliminar el QLabel anterior
+
+            # Crear un nuevo QLabel
+            self.metadata_label = QLabel(
+                f"ID Paciente: {patient_id}\n{last_name} {first_name}\nFecha de Realización: {study_date}",
+                self
+            )
         else:
-            self.metadata_label = QLabel(f"No hay informaciòn del paciente {current_patient}", self)
+            # Verificar si ya existe un QLabel y eliminarlo si es necesario
+            if hasattr(self, 'metadata_label'):
+                self.metadata_label.deleteLater()  # Eliminar el QLabel anterior
+
+            self.metadata_label = QLabel(f"No hay información del paciente {config.current_patient}", self)
             print("No se encontró información del paciente.")
 
+        # Configurar propiedades del QLabel
         self.metadata_label.setStyleSheet("""
                 color: white;
                 background-color: rgba(0, 0, 0, 50%);
@@ -330,9 +351,10 @@ class DicomViewer(QWidget):
                 padding: 5px;
             """)
         self.metadata_label.setFixedWidth(250)
-        self.metadata_label.setFixedHeight(30)
+        self.metadata_label.setFixedHeight(60)  # Aumentar la altura para permitir más líneas
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
+
 
     
     def get_pixel_spacing(self):

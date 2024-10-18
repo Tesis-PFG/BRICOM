@@ -33,7 +33,7 @@ class Ui_MainWindow(object):
                 self.ViewersConnection.add_orthogonal_viewer(self.QtAxialOrthoViewer.get_viewer())
                 self.ViewersConnection.add_segmentation_viewer(self.QtSegmentationViewer.get_viewer())
                 # Prueba para el visualizador de dicom
-                self.dcm_viewer = DicomViewer('Coronal')
+                self.dcm_viewer = DicomViewer('Axial')
                 viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
 
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
