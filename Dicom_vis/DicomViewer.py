@@ -42,34 +42,6 @@ class DicomViewer(QWidget):
         self._init_UI()
         self.set_view_orientation(self.view_orientation)
 
-       
-
-    def load_dicom_files(self, folder_path):
-        dicom_files = []
-        if not os.path.exists(folder_path):
-            raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
-        
-        for filename in os.listdir(folder_path):
-            if filename.endswith('.dcm'):
-                dicom_files.append(os.path.join(folder_path, filename))
-        
-        # Saltar la primera imagen (índice 0) y empezar desde la segunda
-        if len(dicom_files) > 1:
-            # TODO: Validar si esto es correcto o existe alguna manera de hacerlo mejor
-            dicom_files = dicom_files[1:]
-        else:
-            raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
-        
-        self.max_slice = len(dicom_files) - 1
-        self.dicom_files = dicom_files
-        self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
-        
-        # Mostrar metadata en la esquina superior izquierda
-        self.show_patient_metadata()
-        # Extraer el Pixel Spacing (tamaño de los píxeles en mm)
-        self.pixel_spacing = self.get_pixel_spacing()
-        self.update_slice(self.current_slice)
-
 
     def _init_UI(self):
         main_layout = QVBoxLayout(self)
@@ -194,15 +166,45 @@ class DicomViewer(QWidget):
 
         self.setLayout(main_layout)
 
+    
+    def load_dicom_files(self, folder_path):
+        dicom_files = []
+        if not os.path.exists(folder_path):
+            raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
+        
+        for filename in os.listdir(folder_path):
+            if filename.endswith('.dcm'):
+                dicom_files.append(os.path.join(folder_path, filename))
+        
+        # Saltar la primera imagen (índice 0) y empezar desde la segunda
+        if len(dicom_files) > 1:
+            # TODO: Validar si esto es correcto o existe alguna manera de hacerlo mejor
+            dicom_files = dicom_files[1:]
+        else:
+            raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
+        
+        self.max_slice = len(dicom_files) - 1
+        self.dicom_files = dicom_files
+        self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
+        
+        # Mostrar metadata en la esquina superior izquierda
+        self.show_patient_metadata()
+        # Extraer el Pixel Spacing (tamaño de los píxeles en mm)
+        self.pixel_spacing = self.get_pixel_spacing()
+        self.update_slice(self.current_slice)
+
+
     def update_brightness(self, value):
         self.brightness = value
         self.brightness_label.setText(f'Brillo: {self.brightness:.2f}')  # Actualizar el QLabel
         self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo brillo
 
+
     def update_contrast(self, value):
         self.contrast = value / 100.0  # Normalizar contraste al rango [0.5, 2.0]
         self.contrast_label.setText(f'Contraste: {self.contrast:.2f}')  # Actualizar el QLabel
         self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo contraste
+
 
     def set_view_orientation(self, view):
         if view == 'Axial':
@@ -215,6 +217,7 @@ class DicomViewer(QWidget):
             raise ValueError("La vista proporcionada no es válida. Usa 'Axial', 'Sagittal' o 'Coronal'.")
         
         self.viewer.Render()
+
 
     def update_slice(self, slice_index):
         if slice_index < self.min_slice:
@@ -256,6 +259,7 @@ class DicomViewer(QWidget):
         adjusted_image = self.contrast * (image - 127.5) + 127.5 + self.brightness
         adjusted_image = np.clip(adjusted_image, 0, 255)
         return adjusted_image
+    
 
     def next_prev_btn(self, slice_index):
         if slice_index < self.slider.minimum():
@@ -265,6 +269,7 @@ class DicomViewer(QWidget):
 
         self.slider.setValue(slice_index)
         self.update_slice(slice_index)
+
 
     def play_slices(self):
         self.thread = QThread()
@@ -285,16 +290,19 @@ class DicomViewer(QWidget):
         self.thread.finished.connect(lambda: self.slider.setHidden(False))
         self.thread.finished.connect(self.pause_slices)
 
+
     def pause_slices(self):
         self.playBtn.setIcon(QIcon("./app/assets/play.ico"))
         self.worker.pause()
         self.status = False
+
 
     def play_pause_btn(self):
         if self.status is False:
             self.play_slices()
         else:
             self.pause_slices()
+
 
     def show_patient_metadata(self):
         # Buscar el paciente actual en la lista de todos los pacientes
@@ -325,6 +333,7 @@ class DicomViewer(QWidget):
         self.metadata_label.setFixedHeight(30)
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
+
     
     def get_pixel_spacing(self):
         """Obtiene el tamaño de los píxeles del archivo DICOM en mm."""
@@ -348,6 +357,7 @@ class DicomViewer(QWidget):
             self.canvas.close()
             self.canvas = None
 
+
     # Método para inicializar DistanceMeasurement
     def set_distance_measurement(self):
         if self.distance_measurement is None:
@@ -358,6 +368,7 @@ class DicomViewer(QWidget):
             # Si ya existe, ocultar DistanceMeasurement
             self.distance_measurement.close()
             self.distance_measurement = None
+
             
     # Método para borrar el contenido del Canvas
     def clear_canvas_drawing(self):
@@ -367,6 +378,7 @@ class DicomViewer(QWidget):
             self.shape_canvas.clear_canvas()
         if self.text_canvas:
             self.text_canvas.clear_canvas()
+
             
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
@@ -379,6 +391,7 @@ class DicomViewer(QWidget):
             # Si ya existe, ocultar el Canvas
             self.shape_canvas.close()
             self.shape_canvas = None
+            
 
     def set_text_canvas(self):
         if self.text_canvas is None:
