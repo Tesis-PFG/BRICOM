@@ -211,13 +211,17 @@ class DicomViewer(QWidget):
     def set_view_orientation(self, view):
         if view == 'Axial':
             self.viewer.SetSliceOrientationToXY()
+            self.viewer.GetRenderer().GetActiveCamera().Roll(180)  # Rueda la cámara 180 grados
+
         elif view == 'Sagittal':
             self.viewer.SetSliceOrientationToYZ()
+            self.viewer.GetRenderer().GetActiveCamera().Roll(180)  # Rueda la cámara 180 grados
         elif view == 'Coronal':
             self.viewer.SetSliceOrientationToXZ()
+            self.viewer.GetRenderer().GetActiveCamera().Roll(180)  # Rueda la cámara 180 grados
+
         else:
             raise ValueError("La vista proporcionada no es válida. Usa 'Axial', 'Sagittal' o 'Coronal'.")
-        
         self.viewer.Render()
 
 
@@ -240,10 +244,11 @@ class DicomViewer(QWidget):
         self.viewer.SetInputData(vtk_image)
         self.viewer.SetSlice(slice_index)
 
+        # Restablecer la cámara para encuadrar la imagen actual
+        self.viewer.GetRenderer().ResetCamera() 
         # Actualizar la visualización
         self.viewer.Render()
-        # Restablecer la cámara para encuadrar la imagen actual
-        self.viewer.GetRenderer().ResetCamera()  # Ajustar la cámara al nuevo slice
+        # Ajustar la cámara al nuevo slice
         self.vtkWidget.GetRenderWindow().Render()  # Renderizar el widget
 
 
