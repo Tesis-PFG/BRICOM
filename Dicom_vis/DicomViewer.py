@@ -35,7 +35,7 @@ class DicomViewer(QWidget):
         self.contrast = 1.0  # Valor de contraste normalizado entre 0 y 2
         
         self.vtkWidget = QVTKRenderWindowInteractor(self)
-        self.viewer = vtk.vtkResliceImageViewer()
+        self.viewer = vtk.vtkImageViewer2()        
         self.viewer.SetRenderWindow(self.vtkWidget.GetRenderWindow())
         self.viewer.SetupInteractor(self.vtkWidget.GetRenderWindow().GetInteractor())
         
@@ -168,30 +168,33 @@ class DicomViewer(QWidget):
 
     
     def load_dicom_files(self, folder_path):
-        dicom_files = []
         if not os.path.exists(folder_path):
             raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
+
+        # Usar VTK DICOM Image Reader
+        self.reader = vtk.vtkDICOMImageReader()
+        self.reader.SetDirectoryName(folder_path)
+        self.reader.Update()
+
+        # Obtener el número de slices
+        vtk_image = self.reader.GetOutput()
+        ct_dimensions = vtk_image.GetDimensions()
         
-        for filename in os.listdir(folder_path):
-            if filename.endswith('.dcm'):
-                dicom_files.append(os.path.join(folder_path, filename))
-        
-        # Saltar la primera imagen (índice 0) y empezar desde la segunda
-        if len(dicom_files) > 1:
-            # TODO: Validar si esto es correcto o existe alguna manera de hacerlo mejor
-            dicom_files = dicom_files[1:]
-        else:
+        # Suponiendo que el número de slices está en la dimensión Z
+        self.max_slice = ct_dimensions[2] - 1  # Dimensiones son en el orden (X, Y, Z)
+        if self.max_slice < 1:
             raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
         
-        self.max_slice = len(dicom_files) - 1
-        self.dicom_files = dicom_files
         self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
         
         # Mostrar metadata en la esquina superior izquierda
         self.show_patient_metadata()
+        
         # Extraer el Pixel Spacing (tamaño de los píxeles en mm)
         self.pixel_spacing = self.get_pixel_spacing()
-        self.update_slice(self.current_slice)
+        
+        # Actualizar el primer slice
+        self.update_slice(0)
 
 
     def update_brightness(self, value):
@@ -220,38 +223,32 @@ class DicomViewer(QWidget):
 
 
     def update_slice(self, slice_index):
-        if slice_index < self.min_slice:
-            slice_index = self.min_slice
+        if slice_index < 0:
+            slice_index = 0
         elif slice_index > self.max_slice:
             slice_index = self.max_slice
         self.current_slice = slice_index
-        
-        # Leer la imagen DICOM con SimpleITK
-        dicom_image = sitk.ReadImage(self.dicom_files[slice_index])
-        
+
+        # Leer la imagen DICOM desde el reader
+        vtk_image = self.reader.GetOutput()
+
         # Verificar si la imagen contiene datos de píxeles
-        if sitk.GetArrayFromImage(dicom_image).size == 0:
+        if vtk_image.GetPointData().GetScalars() is None:
             print(f"La imagen en la posición {slice_index} no contiene datos de píxeles, se omitirá.")
-            return  # Saltar esta imagen
-        
-        # Obtener la matriz de píxeles como un array de NumPy
-        pixel_array = sitk.GetArrayFromImage(dicom_image)
-        
-        # Continuar con el procesamiento normal...
-        pixel_array = self.adjust_brightness_contrast(pixel_array)
-        vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
-        vtk_image = vtk.vtkImageData()
-        
-        # Establecer las dimensiones de la imagen en VTK
-        if pixel_array.ndim == 2:
-            vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
-        elif pixel_array.ndim == 3:
-            vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
-        
-        vtk_image.GetPointData().SetScalars(vtk_data_array)
+            # Aquí puedes retornar sin hacer nada más, así evitas el popup
+            return
+
+        # Establecer el slice en el viewer
         self.viewer.SetInputData(vtk_image)
-        self.viewer.GetRenderer().ResetCamera()
+        self.viewer.SetSlice(slice_index)
+
+        # Actualizar la visualización
         self.viewer.Render()
+        # Restablecer la cámara para encuadrar la imagen actual
+        self.viewer.GetRenderer().ResetCamera()  # Ajustar la cámara al nuevo slice
+        self.vtkWidget.GetRenderWindow().Render()  # Renderizar el widget
+
+
 
 
     def adjust_brightness_contrast(self, image):
