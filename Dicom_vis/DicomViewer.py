@@ -177,20 +177,36 @@ class DicomViewer(QWidget):
 
         # Obtener el número de slices
         vtk_image = self.reader.GetOutput()
+        
+        # Comprobar si vtk_image es None
+        if vtk_image is None:
+            raise ValueError("No se pudo leer la imagen DICOM. vtk_image es None.")
+
         ct_dimensions = vtk_image.GetDimensions()
         
+        # Comprobar si las dimensiones son válidas
+        if ct_dimensions is None or len(ct_dimensions) < 3:
+            raise ValueError("Las dimensiones de la imagen DICOM son inválidas.")
+
         self.max_slice = ct_dimensions[2] - 1  # Dimensiones son en el orden (X, Y, Z)
         if self.max_slice < 1:
             raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
-        
-        self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
-        
+
+        # Verificar que self.slider esté inicializado y sea del tipo adecuado
+        if hasattr(self, 'slider') and isinstance(self.slider, QSlider):
+            try:
+                self.slider.setMaximum(self.max_slice)
+            except Exception as e:
+                print(f"Error actualizando el slider: {e}")
+        else:
+            print("El slider no está inicializado correctamente.")
+
         # Mostrar metadata en la esquina superior izquierda
         self.show_patient_metadata()
-        
+
         # Extraer el Pixel Spacing (tamaño de los píxeles en mm)
         self.pixel_spacing = self.get_pixel_spacing()
-        
+
         # Actualizar el primer slice
         self.update_slice(0)
 
