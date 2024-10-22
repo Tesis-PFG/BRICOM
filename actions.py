@@ -185,7 +185,6 @@ class ViewerActions:
                 self.dcm_viewer.load_dicom_files(base_path)
             except Exception as e:
                 print(e)
-                QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
         else:
             try:
                 registro(file_paths, file_paths_2)

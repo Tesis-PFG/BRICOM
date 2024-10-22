@@ -8,7 +8,6 @@ import numpy as np  # Importa numpy para manejar operaciones numéricas
 from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
-from config import current_patient, all_patients, current_study 
 import SimpleITK as sitk
 from app.interface.Herramientas import *
 import config
@@ -35,40 +34,12 @@ class DicomViewer(QWidget):
         self.contrast = 1.0  # Valor de contraste normalizado entre 0 y 2
         
         self.vtkWidget = QVTKRenderWindowInteractor(self)
-        self.viewer = vtk.vtkResliceImageViewer()
+        self.viewer = vtk.vtkImageViewer2()        
         self.viewer.SetRenderWindow(self.vtkWidget.GetRenderWindow())
         self.viewer.SetupInteractor(self.vtkWidget.GetRenderWindow().GetInteractor())
         
         self._init_UI()
         self.set_view_orientation(self.view_orientation)
-
-       
-
-    def load_dicom_files(self, folder_path):
-        dicom_files = []
-        if not os.path.exists(folder_path):
-            raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
-        
-        for filename in os.listdir(folder_path):
-            if filename.endswith('.dcm'):
-                dicom_files.append(os.path.join(folder_path, filename))
-        
-        # Saltar la primera imagen (índice 0) y empezar desde la segunda
-        if len(dicom_files) > 1:
-            # TODO: Validar si esto es correcto o existe alguna manera de hacerlo mejor
-            dicom_files = dicom_files[1:]
-        else:
-            raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
-        
-        self.max_slice = len(dicom_files) - 1
-        self.dicom_files = dicom_files
-        self.slider.setMaximum(self.max_slice)  # Actualizar el rango máximo del slider
-        
-        # Mostrar metadata en la esquina superior izquierda
-        self.show_patient_metadata()
-        # Extraer el Pixel Spacing (tamaño de los píxeles en mm)
-        self.pixel_spacing = self.get_pixel_spacing()
-        self.update_slice(self.current_slice)
 
 
     def _init_UI(self):
@@ -194,61 +165,108 @@ class DicomViewer(QWidget):
 
         self.setLayout(main_layout)
 
+    
+    def load_dicom_files(self, folder_path):
+        if not os.path.exists(folder_path):
+            raise FileNotFoundError(f"El folder al que se quiere acceder no existe: {folder_path}")
+
+        # Usar VTK DICOM Image Reader
+        self.reader = vtk.vtkDICOMImageReader()
+        self.reader.SetDirectoryName(folder_path)
+        self.reader.Update()
+
+        # Obtener el número de slices
+        vtk_image = self.reader.GetOutput()
+        
+        # Comprobar si vtk_image es None
+        if vtk_image is None:
+            raise ValueError("No se pudo leer la imagen DICOM. vtk_image es None.")
+
+        ct_dimensions = vtk_image.GetDimensions()
+        
+        # Comprobar si las dimensiones son válidas
+        if ct_dimensions is None or len(ct_dimensions) < 3:
+            raise ValueError("Las dimensiones de la imagen DICOM son inválidas.")
+
+        self.max_slice = ct_dimensions[2] - 1  # Dimensiones son en el orden (X, Y, Z)
+        if self.max_slice < 1:
+            raise ValueError("No hay suficientes imágenes DICOM para visualizar.")
+
+        # Verificar que self.slider esté inicializado y sea del tipo adecuado
+        if hasattr(self, 'slider') and isinstance(self.slider, QSlider):
+            try:
+                self.slider.setMaximum(self.max_slice)
+            except Exception as e:
+                print(f"Error actualizando el slider: {e}")
+        else:
+            print("El slider no está inicializado correctamente.")
+
+        # Mostrar metadata en la esquina superior izquierda
+        self.show_patient_metadata()
+
+        # Extraer el Pixel Spacing (tamaño de los píxeles en mm)
+        self.pixel_spacing = self.get_pixel_spacing()
+
+        # Actualizar el primer slice
+        self.update_slice(0)
+
+
     def update_brightness(self, value):
         self.brightness = value
         self.brightness_label.setText(f'Brillo: {self.brightness:.2f}')  # Actualizar el QLabel
         self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo brillo
+
 
     def update_contrast(self, value):
         self.contrast = value / 100.0  # Normalizar contraste al rango [0.5, 2.0]
         self.contrast_label.setText(f'Contraste: {self.contrast:.2f}')  # Actualizar el QLabel
         self.update_slice(self.current_slice)  # Volver a renderizar la imagen con el nuevo contraste
 
+
     def set_view_orientation(self, view):
         if view == 'Axial':
             self.viewer.SetSliceOrientationToXY()
+            self.viewer.GetRenderer().GetActiveCamera().Roll(180)  # Rueda la cámara 180 grados
+
         elif view == 'Sagittal':
             self.viewer.SetSliceOrientationToYZ()
+            self.viewer.GetRenderer().GetActiveCamera().Roll(180)  # Rueda la cámara 180 grados
         elif view == 'Coronal':
             self.viewer.SetSliceOrientationToXZ()
+            self.viewer.GetRenderer().GetActiveCamera().Roll(180)  # Rueda la cámara 180 grados
+
         else:
             raise ValueError("La vista proporcionada no es válida. Usa 'Axial', 'Sagittal' o 'Coronal'.")
-        
         self.viewer.Render()
 
+
     def update_slice(self, slice_index):
-        if slice_index < self.min_slice:
-            slice_index = self.min_slice
+        if slice_index < 0:
+            slice_index = 0
         elif slice_index > self.max_slice:
             slice_index = self.max_slice
         self.current_slice = slice_index
-        
-        # Leer la imagen DICOM con SimpleITK
-        dicom_image = sitk.ReadImage(self.dicom_files[slice_index])
-        
+
+        # Leer la imagen DICOM desde el reader
+        vtk_image = self.reader.GetOutput()
+
         # Verificar si la imagen contiene datos de píxeles
-        if sitk.GetArrayFromImage(dicom_image).size == 0:
+        if vtk_image.GetPointData().GetScalars() is None:
             print(f"La imagen en la posición {slice_index} no contiene datos de píxeles, se omitirá.")
-            return  # Saltar esta imagen
-        
-        # Obtener la matriz de píxeles como un array de NumPy
-        pixel_array = sitk.GetArrayFromImage(dicom_image)
-        
-        # Continuar con el procesamiento normal...
-        pixel_array = self.adjust_brightness_contrast(pixel_array)
-        vtk_data_array = numpy_support.numpy_to_vtk(pixel_array.ravel(), deep=True, array_type=vtk.VTK_FLOAT)
-        vtk_image = vtk.vtkImageData()
-        
-        # Establecer las dimensiones de la imagen en VTK
-        if pixel_array.ndim == 2:
-            vtk_image.SetDimensions(pixel_array.shape[1], pixel_array.shape[0], 1)
-        elif pixel_array.ndim == 3:
-            vtk_image.SetDimensions(pixel_array.shape[2], pixel_array.shape[1], pixel_array.shape[0])
-        
-        vtk_image.GetPointData().SetScalars(vtk_data_array)
+            return
+
+        # Establecer el slice en el viewer
         self.viewer.SetInputData(vtk_image)
-        self.viewer.GetRenderer().ResetCamera()
+        self.viewer.SetSlice(slice_index)
+
+        # Restablecer la cámara para encuadrar la imagen actual
+        self.viewer.GetRenderer().ResetCamera() 
+        # Actualizar la visualización
         self.viewer.Render()
+        # Ajustar la cámara al nuevo slice
+        self.vtkWidget.GetRenderWindow().Render()  # Renderizar el widget
+
+
 
 
     def adjust_brightness_contrast(self, image):
@@ -256,6 +274,7 @@ class DicomViewer(QWidget):
         adjusted_image = self.contrast * (image - 127.5) + 127.5 + self.brightness
         adjusted_image = np.clip(adjusted_image, 0, 255)
         return adjusted_image
+    
 
     def next_prev_btn(self, slice_index):
         if slice_index < self.slider.minimum():
@@ -265,6 +284,7 @@ class DicomViewer(QWidget):
 
         self.slider.setValue(slice_index)
         self.update_slice(slice_index)
+
 
     def play_slices(self):
         self.thread = QThread()
@@ -285,10 +305,12 @@ class DicomViewer(QWidget):
         self.thread.finished.connect(lambda: self.slider.setHidden(False))
         self.thread.finished.connect(self.pause_slices)
 
+
     def pause_slices(self):
         self.playBtn.setIcon(QIcon("./app/assets/play.ico"))
         self.worker.pause()
         self.status = False
+
 
     def play_pause_btn(self):
         if self.status is False:
@@ -296,25 +318,48 @@ class DicomViewer(QWidget):
         else:
             self.pause_slices()
 
+
     def show_patient_metadata(self):
         # Buscar el paciente actual en la lista de todos los pacientes
-        patient = None
-        # print(f'El paciente que se busca es: {current_patient}')
-        # TODO: Hablar con moises, la variable current_patient no se esta almacenando de manera correcta 
-        for p in all_patients:
-            if p[0] == current_patient: 
-                patient = p
-                break
+        patient_metadata = None 
+        print(f"El paciente que se está buscando es {config.current_patient}") 
+
+        if config.current_patient is not None:
+            patient_metadata = config.all_patients.get(config.current_patient)
+            print(f'{patient_metadata}')
 
         # Comprobar si se encontró el paciente
-        if patient is not None:
-            # Crear un QLabel para mostrar el nombre y apellido del paciente
-            #Revisar si la extracciòn de datos es correcta de acuerdo a como se almacenan en datos
-            self.metadata_label = QLabel(f"Paciente: {patient['last_name']} {patient['first_name']}", self)
+        if patient_metadata is not None:
+            patient_id = patient_metadata.get('PatientID', 'Desconocido')
+            full_name = patient_metadata.get('PatientName', 'Desconocido')
+            name_parts = full_name.split()  
+            last_name = " ".join(name_parts[:-1])
+            first_name = name_parts[-1]           
+
+            study_date = ''
+            if patient_metadata.get('modalidades'):
+                for modality, study_info in patient_metadata['modalidades'].items():
+                    study_date = study_info.get('StudyDate', 'Desconocida')
+                    break 
+            
+            # Verificar si ya existe un QLabel y eliminarlo si es necesario
+            if hasattr(self, 'metadata_label'):
+                self.metadata_label.deleteLater()  # Eliminar el QLabel anterior
+
+            # Crear un nuevo QLabel
+            self.metadata_label = QLabel(
+                f"ID Paciente: {patient_id}\n{last_name} {first_name}\nFecha de Realización: {study_date}",
+                self
+            )
         else:
-            self.metadata_label = QLabel(f"No hay informaciòn del paciente {current_patient}", self)
+            # Verificar si ya existe un QLabel y eliminarlo si es necesario
+            if hasattr(self, 'metadata_label'):
+                self.metadata_label.deleteLater()  # Eliminar el QLabel anterior
+
+            self.metadata_label = QLabel(f"No hay información del paciente {config.current_patient}", self)
             print("No se encontró información del paciente.")
 
+        # Configurar propiedades del QLabel
         self.metadata_label.setStyleSheet("""
                 color: white;
                 background-color: rgba(0, 0, 0, 50%);
@@ -322,9 +367,11 @@ class DicomViewer(QWidget):
                 padding: 5px;
             """)
         self.metadata_label.setFixedWidth(250)
-        self.metadata_label.setFixedHeight(30)
+        self.metadata_label.setFixedHeight(60)  # Aumentar la altura para permitir más líneas
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
+
+
     
     def get_pixel_spacing(self):
         """Obtiene el tamaño de los píxeles del archivo DICOM en mm."""
@@ -348,6 +395,7 @@ class DicomViewer(QWidget):
             self.canvas.close()
             self.canvas = None
 
+
     # Método para inicializar DistanceMeasurement
     def set_distance_measurement(self):
         if self.distance_measurement is None:
@@ -358,6 +406,7 @@ class DicomViewer(QWidget):
             # Si ya existe, ocultar DistanceMeasurement
             self.distance_measurement.close()
             self.distance_measurement = None
+
             
     # Método para borrar el contenido del Canvas
     def clear_canvas_drawing(self):
@@ -367,6 +416,7 @@ class DicomViewer(QWidget):
             self.shape_canvas.clear_canvas()
         if self.text_canvas:
             self.text_canvas.clear_canvas()
+
             
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
@@ -379,6 +429,7 @@ class DicomViewer(QWidget):
             # Si ya existe, ocultar el Canvas
             self.shape_canvas.close()
             self.shape_canvas = None
+            
 
     def set_text_canvas(self):
         if self.text_canvas is None:
