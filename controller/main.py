@@ -20,13 +20,16 @@ class MyApp(Ui_MainWindow):
         self.loadData_database()
 
 
-
-    #Función encargarda de inicializar la interfaz, los botones y las pantallas
     def setearInterfaz(self, window):
+        current_dir = os.path.dirname(os.path.abspath(__file__))  # qt-int/controller/main
 
-        #Crear la carpeta de local_database en caso de que no exista
-        if not os.path.exists("../model/local_database"):
-            os.makedirs("../model/local_database")
+        # Definir la ruta del directorio raíz del proyecto
+        project_dir = os.path.join(current_dir, '..')
+        base_path = "model/local_database"
+        path = os.path.join(project_dir, base_path)
+
+        if not os.path.exists(path):
+            os.makedirs(path)
 
         # Funciones anidadas para cambiar pantallas
         def switch_pantallaVisualizacion():
@@ -85,13 +88,17 @@ class MyApp(Ui_MainWindow):
     #Función encargada de desplegar los pacientes en la tabla de base de datos
     def loadData_database(self):
         def leer_metadata_pacientes():
-            base_path = "../model/local_database"
+            current_dir = os.path.dirname(os.path.abspath(__file__))  # qt-int/controller/main        
+            project_dir = os.path.join(current_dir, '..')  # Regresar dos niveles hacia el directorio raíz (qt-int)
+            base_path = "model/local_database"
+            path = os.path.join(project_dir, base_path)  # Combina el directorio del proyecto y la ruta relativa
+
             pacientes_metadata = {}
 
             # Recorrer las carpetas de pacientes
-            for paciente_folder in os.listdir(base_path):
-                paciente_path = os.path.join(base_path, paciente_folder)
-                
+            for paciente_folder in os.listdir(path):  # Usa 'path' en lugar de 'base_path'
+                paciente_path = os.path.join(path, paciente_folder)  # Usa 'path' en lugar de construir de nuevo
+
                 # Asegurarse de que es un directorio
                 if os.path.isdir(paciente_path):
                     metadata_paciente_file = os.path.join(paciente_path, "metadata_paciente.json")
@@ -202,7 +209,11 @@ class MyApp(Ui_MainWindow):
             cargar_datos_en_tabla(filtered_pacientes)
 
         def delete_patient(patient_id):
-            patient_folder = os.path.join("../model/local_database", patient_id)
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            project_dir = os.path.join(current_dir, '..')
+            base_path = "model/local_database"
+            path = os.path.join(project_dir, base_path)
+            patient_folder = os.path.join(path, patient_id)
             reply = QMessageBox.question(None, 'Confirmar Eliminación',
                                         f'¿Está seguro que desea eliminar al paciente {patient_id}?\n'
                                         'Esta acción no se puede deshacer.',
@@ -284,23 +295,46 @@ class MyApp(Ui_MainWindow):
                     dicom_data[tag].value = valor
             dicom_data.save_as(ruta_archivo)
 
-        #Variables Iniciales
-        carpeta_base = "../model/local_database"
-        tags_requeridos_paciente = ["PatientName", "PatientID", "PatientBirthDate", "PatientSex", "PatientAge","PatientWeight"] 
-        tags_requeridos_estudio=["StudyID", "Modality", "StudyDate", "StudyTime", "InstitutionName","StudyDescription"]
-
-        #Dialogo para búsqueda de archivo
-        carpeta_origen = QFileDialog.getExistingDirectory(None, 'Seleccionar carpeta con archivos DICOM')
+         # Obtener el directorio actual donde se encuentra este archivo
+        current_dir = os.path.dirname(os.path.abspath(__file__))  # qt-int/controller/main
         
-        #El usuario no escogió ninguna carpeta
+        # Definir la ruta del directorio raíz del proyecto
+        project_dir = os.path.join(current_dir, '..')  # Regresar dos niveles hacia el directorio raíz (qt-int)
+
+        # Crear la ruta a la carpeta model/local_database
+        base_path = "model/local_database"
+        carpeta_base = os.path.join(project_dir, base_path)  # Combina el directorio del proyecto y la ruta relativa
+
+        # Variables de tags requeridos
+        tags_requeridos_paciente = [
+            "PatientName",
+            "PatientID",
+            "PatientBirthDate",
+            "PatientSex",
+            "PatientAge",
+            "PatientWeight"
+        ] 
+        tags_requeridos_estudio = [
+            "StudyID",
+            "Modality",
+            "StudyDate",
+            "StudyTime",
+            "InstitutionName",
+            "StudyDescription"
+        ]
+
+        # Diálogo para búsqueda de archivo
+        carpeta_origen = QFileDialog.getExistingDirectory(None, 'Seleccionar carpeta con archivos DICOM')
+
+        # Validar selección de carpeta
         if not carpeta_origen:
             QtWidgets.QMessageBox.warning(None, 'Error', 'No se seleccionó ninguna carpeta.')
             return
 
-       #Arreglo de archivos DICOM dentro de la carpeta escogida
+        # Arreglo de archivos DICOM dentro de la carpeta escogida
         dicom_files = [f for f in os.listdir(carpeta_origen) if f.endswith('.dcm')]
 
-        #El arreglo de archivos DICOM está vacío, ya que la carpeta no tenía nada
+        # Validar si se encontraron archivos DICOM
         if not dicom_files:
             QtWidgets.QMessageBox.warning(None, 'Error', 'No se encontraron archivos DICOM en la carpeta seleccionada.')
             return
@@ -323,8 +357,6 @@ class MyApp(Ui_MainWindow):
             metadata_paciente, metadata_estudio, dialogo_exitoso = self.abrir_Pdialogo_tags(metadata_paciente, metadata_estudio, num_imagenes)
 
             if dialogo_exitoso:
-
-
                 print(metadata_paciente)
                 print(metadata_estudio)
 
@@ -489,7 +521,14 @@ class MyApp(Ui_MainWindow):
 
         def update_info_tables(patient_id, study_type=None):
             # Load patient data
-            patient_folder = os.path.join("../model/local_database", patient_id)
+            current_dir = os.path.dirname(os.path.abspath(__file__))  # qt-int/controller/main
+
+            # Definir la ruta del directorio raíz del proyecto
+            project_dir = os.path.join(current_dir, '..')
+            base_path = "model/local_database"
+            path = os.path.join(project_dir, base_path)
+            
+            patient_folder = os.path.join(path, patient_id)
             patient_metadata_file = os.path.join(patient_folder, "metadata_paciente.json")
             if os.path.exists(patient_metadata_file):
                 with open(patient_metadata_file, 'r') as f:

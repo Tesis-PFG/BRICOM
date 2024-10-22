@@ -174,7 +174,11 @@ class ViewerActions:
 
         # Definir los paths dinámicos basados en el paciente y el estudio
         # TODO: Verificar como se puede trabajar lo del "pixel_array de dicomviewer con RM"
-        base_path = f'../model/local_database/{config.current_patient}/{study_paths.get(config.current_study, "CT")}'
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        project_dir = os.path.join(current_dir, '..')
+        base_path = "model/local_database"
+        path = os.path.join(project_dir, base_path)
+        base_path = f'{path}/{config.current_patient}/{study_paths.get(config.current_study, "CT")}'
         
         # Asigna las rutas para los estudios CT y RM basados en el paciente actual
         file_paths = f'../model/local_database/{config.current_patient}/CT'
