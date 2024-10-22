@@ -1,0 +1,592 @@
+from PyQt5.QtWidgets import QHeaderView
+from PyQt5.QtWidgets import QFileDialog,QApplication, QMainWindow, QTableWidget, QTableWidgetItem,QMessageBox
+from view.generatedInterface import *  
+from view.generatedDialogTagsSubida import Ui_Dialog as Ui_DialogTagsSubida
+from view.generatedDialogEscogerEstudio import Ui_Dialog as Ui_DialogEscogerEstudio
+import shutil
+import pydicom
+import json
+import sys, os, re
+import model.config as config
+
+
+class MyApp(Ui_MainWindow):
+
+    def __init__(self, window):
+        self.setupUi(window)
+        
+        #Se encarga de setear los listener de los botones y los índices de los stackedWidgets
+        self.setearInterfaz(window)
+        self.loadData_database()
+
+
+
+    #Función encargarda de inicializar la interfaz, los botones y las pantallas
+    def setearInterfaz(self, window):
+
+        #Crear la carpeta de local_database en caso de que no exista
+        if not os.path.exists("../model/local_database"):
+            os.makedirs("../model/local_database")
+
+        # Funciones anidadas para cambiar pantallas
+        def switch_pantallaVisualizacion():
+            self.stackedWidgetPrincipal.setCurrentIndex(0)
+
+        def switch_pantallaBaseDeDatos():
+            self.loadData_database()
+            self.stackedWidgetPrincipal.setCurrentIndex(1)
+
+        def switch_pantallaAnadirArchivo():
+            self.stackedWidgetPrincipal.setCurrentIndex(2)
+
+        def switch_subMenu_patient():
+            self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
+
+        def switch_subMenu_tools():
+            self.stackedWidget_submenuVisualizacion.setCurrentIndex(1)
+
+        # Seteo de los stackedWidgets al iniciar
+        self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
+        self.stackedWidgetPrincipal.setCurrentIndex(1)
+
+        #Se encarga de hacer la tabla de database bonita y dinámica
+        self.database_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+
+
+        # Setear Botones del menú principal
+        self.mainButton_visualizacion.clicked.connect(switch_pantallaVisualizacion)
+        self.mainButton_DB.clicked.connect(switch_pantallaBaseDeDatos)
+        self.mainButton_anadirArchivo.clicked.connect(switch_pantallaAnadirArchivo)
+
+        # Setear botones del submenu (Pantalla de visualización)
+        self.subMenu_tools.clicked.connect(switch_subMenu_tools)
+        self.subMenu_patient.clicked.connect(switch_subMenu_patient)
+
+        # Setear botones de cargar de archivos (Pantalla de carga)
+        self.archivoButton_carpeta.clicked.connect(self.procesar_dicom_carpeta)
+
+        # Connect the cellClicked signal to open the patient selection dialog
+        self.database_table.cellClicked.connect(self.open_patient_selection_dialog)
+        
+        # Ocultar botones de disposición por defecto
+        disposition_buttons = [
+            self.dispositionButton_1x2,
+            self.dispositionButton_1x3,
+            self.dispositionButton_2x1,
+            self.dispositionButton_1u2d,
+            self.dispositionButton_2x2,
+            self.dispositionButton_1l2r
+        ]
+        for button in disposition_buttons:
+            button.setVisible(False)
+
+
+    #Función encargada de desplegar los pacientes en la tabla de base de datos
+    def loadData_database(self):
+        def leer_metadata_pacientes():
+            base_path = "../model/local_database"
+            pacientes_metadata = {}
+
+            # Recorrer las carpetas de pacientes
+            for paciente_folder in os.listdir(base_path):
+                paciente_path = os.path.join(base_path, paciente_folder)
+                
+                # Asegurarse de que es un directorio
+                if os.path.isdir(paciente_path):
+                    metadata_paciente_file = os.path.join(paciente_path, "metadata_paciente.json")
+                    
+                    # Verificar si existe el archivo de metadata del paciente
+                    if os.path.exists(metadata_paciente_file):
+                        with open(metadata_paciente_file, 'r') as f:
+                            metadata_paciente = json.load(f)
+                        
+                        # Añadir la metadata del paciente al diccionario de pacientes
+                        pacientes_metadata[paciente_folder] = metadata_paciente
+                    
+                    # Recopilar información de las modalidades
+                    modalidades = {}
+                    for file in os.listdir(paciente_path):
+                        if file.startswith("metadata_") and file.endswith(".json") and file != "metadata_paciente.json":
+                            modalidad = file[9:-5]  # Extrae la modalidad del nombre del archivo
+                            modalidad_file = os.path.join(paciente_path, file)
+                            with open(modalidad_file, 'r') as f:
+                                metadata_estudio = json.load(f)
+                            modalidades[modalidad] = metadata_estudio
+                    
+                    # Añadir información de modalidades a la metadata del paciente
+                    if paciente_folder in pacientes_metadata:
+                        pacientes_metadata[paciente_folder]['modalidades'] = modalidades
+                    else:
+                        pacientes_metadata[paciente_folder] = {'modalidades': modalidades}
+
+            print(pacientes_metadata)
+            return pacientes_metadata
+        
+        def cargar_datos_en_tabla(pacientes):
+            # Configurar el número de filas de la tabla de acuerdo a la cantidad de pacientes
+            self.database_table.setRowCount(len(pacientes))
+
+            # Ruta del ícono de la papelera
+            icon_path_trash = "Assets/trash.png"
+            icon = QtGui.QIcon(icon_path_trash)
+
+            # Ajustar el tamaño predeterminado de las filas
+            self.database_table.verticalHeader().setDefaultSectionSize(50)
+
+            # Centramos todo el contenido de las celdas
+            alignment = QtCore.Qt.AlignCenter
+
+            row = 0
+            for paciente_key, paciente_data in pacientes.items():
+                # Extraer y formatear los valores específicos para cada columna
+                nombre = paciente_data.get('PatientName', 'Desconocido').replace('^', ' ')
+                id_paciente = paciente_data.get('PatientID', 'Desconocido')
+                sexo = paciente_data.get('PatientSex', 'Desconocido')
+                fecha_nacimiento = paciente_data.get('PatientBirthDate', 'Desconocido')
+                if fecha_nacimiento != 'Desconocido':
+                    fecha_nacimiento = f"{fecha_nacimiento[:4]}-{fecha_nacimiento[4:6]}-{fecha_nacimiento[6:]}"
+                modalidades = ', '.join(paciente_data.get('modalidades', {}).keys())
+
+                # Crear y centrar cada valor en su respectiva columna
+                item_nombre = QtWidgets.QTableWidgetItem(nombre)
+                item_nombre.setTextAlignment(alignment)
+                self.database_table.setItem(row, 0, item_nombre)  # Columna "Nombre"
+
+                item_id_paciente = QtWidgets.QTableWidgetItem(id_paciente)
+                item_id_paciente.setTextAlignment(alignment)
+                self.database_table.setItem(row, 1, item_id_paciente)  # Columna "ID_Paciente"
+
+                item_sexo = QtWidgets.QTableWidgetItem(sexo)
+                item_sexo.setTextAlignment(alignment)
+                self.database_table.setItem(row, 2, item_sexo)  # Columna "Sexo"
+
+                item_fecha_nacimiento = QtWidgets.QTableWidgetItem(fecha_nacimiento)
+                item_fecha_nacimiento.setTextAlignment(alignment)
+                self.database_table.setItem(row, 3, item_fecha_nacimiento)  # Columna "Fecha_nacimiento"
+
+                item_modalidades = QtWidgets.QTableWidgetItem(modalidades)
+                item_modalidades.setTextAlignment(alignment)
+                self.database_table.setItem(row, 4, item_modalidades)  # Columna "Modalidades"
+
+                # Insertar el botón con ícono de borrar
+                pb = QtWidgets.QPushButton()
+                pb.setIcon(icon)
+                pb.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                pb.setIconSize(QtCore.QSize(48, 48))
+                pb.setStyleSheet("""
+                    QPushButton {
+                        border: none;
+                        background-color: transparent;
+                    }
+                """)
+                pb.clicked.connect(lambda _, pid=id_paciente: delete_patient(pid))
+                self.database_table.setCellWidget(row, 5, pb)  # Colocar el botón en la columna 5 (ícono de borrar)
+
+                row += 1
+
+            # Ajustar el tamaño de las filas para que se vea correctamente
+            self.database_table.resizeRowsToContents()
+
+        def filterData():
+            filter_text = self.filterLiner_db.text().lower()
+            
+            filtered_pacientes = {}
+            for paciente_key, paciente_data in config.all_patients.items():
+                nombre = paciente_data.get('PatientName', '').replace('^', ' ').lower()
+                id_paciente = paciente_data.get('PatientID', '').lower()
+                
+                if filter_text in nombre or filter_text in id_paciente:
+                    filtered_pacientes[paciente_key] = paciente_data
+
+            cargar_datos_en_tabla(filtered_pacientes)
+
+        def delete_patient(patient_id):
+            patient_folder = os.path.join("../model/local_database", patient_id)
+            reply = QMessageBox.question(None, 'Confirmar Eliminación',
+                                        f'¿Está seguro que desea eliminar al paciente {patient_id}?\n'
+                                        'Esta acción no se puede deshacer.',
+                                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            
+            if reply == QMessageBox.Yes:
+                try:
+                    shutil.rmtree(patient_folder)
+                    if patient_id in config.all_patients:
+                        del config.all_patients[patient_id]
+                    self.loadData_database()
+                    QMessageBox.information(None, 'Éxito', f'El paciente {patient_id} ha sido eliminado.')
+                except Exception as e:
+                    QMessageBox.critical(None, 'Error', f'No se pudo eliminar al paciente: {str(e)}')
+            else:
+                print("Eliminación cancelada.")
+        
+        # Cargar todos los pacientes
+        config.all_patients = leer_metadata_pacientes()
+        
+        # Cargar datos iniciales en la tabla
+        cargar_datos_en_tabla(config.all_patients)
+
+        # Conectar el filterLiner_db con la función de filtrado
+        self.filterLiner_db.textChanged.connect(filterData)
+
+    #Función encargada de cargar los archivos a la base de datos local
+    def procesar_dicom_carpeta(self, tags_requeridos):
+        def extraer_tags(dicom_data, tags_requeridos):
+            """Extrae los tags especificados del archivo DICOM basado en sus nombres."""
+            metadata = {}
+            
+            for tag_dicom in tags_requeridos:
+                if tag_dicom in dicom_data:
+                    metadata[tag_dicom] = str(dicom_data.data_element(tag_dicom).value)
+                else:
+                    metadata[tag_dicom] = "No encontrado"
+            
+            return metadata
+
+        def limpiar_nombre(nombre):
+            # Eliminar caracteres no alfanuméricos excepto espacios
+            nombre_limpio = re.sub(r'[^a-zA-Z0-9\s]', '', nombre)
+            # Reemplazar espacios múltiples por un solo espacio
+            nombre_limpio = re.sub(r'\s+', ' ', nombre_limpio)
+            # Limitar la longitud y eliminar espacios al inicio y final
+            return nombre_limpio[:50].strip()
+
+        def crear_carpeta_paciente(carpeta_base, patient_id):
+            
+            id_limpio = re.sub(r'[^a-zA-Z0-9]', '', patient_id)
+            folder_name = f"{id_limpio}"
+            carpeta_paciente = os.path.join(carpeta_base, folder_name)
+            if not os.path.exists(carpeta_paciente):
+                os.makedirs(carpeta_paciente)
+            return carpeta_paciente
+
+        def crear_carpeta_modalidad(carpeta_paciente, modality):
+            modality_limpia = limpiar_nombre(modality)
+            carpeta_modalidad = os.path.join(carpeta_paciente, modality_limpia)
+            if not os.path.exists(carpeta_modalidad):
+                os.makedirs(carpeta_modalidad)
+            return carpeta_modalidad
+
+        def copiar_archivos_dicom(rutas_origen, carpeta_destino):
+            for ruta in rutas_origen:
+                shutil.copy2(ruta, carpeta_destino)
+
+        def guardar_metadata(metadata, ruta_carpeta, nombre_archivo):
+            ruta_metadata = os.path.join(ruta_carpeta, nombre_archivo)
+            with open(ruta_metadata, 'w') as f:
+                json.dump(metadata, f, indent=4)
+
+
+        def modificar_tags_dicom(ruta_archivo, metadata_paciente, metadata_estudio):
+            dicom_data = pydicom.dcmread(ruta_archivo)
+            for tag, valor in {**metadata_paciente, **metadata_estudio}.items():
+                if tag in dicom_data:
+                    dicom_data[tag].value = valor
+            dicom_data.save_as(ruta_archivo)
+
+        #Variables Iniciales
+        carpeta_base = "../model/local_database"
+        tags_requeridos_paciente = ["PatientName", "PatientID", "PatientBirthDate", "PatientSex", "PatientAge","PatientWeight"] 
+        tags_requeridos_estudio=["StudyID", "Modality", "StudyDate", "StudyTime", "InstitutionName","StudyDescription"]
+
+        #Dialogo para búsqueda de archivo
+        carpeta_origen = QFileDialog.getExistingDirectory(None, 'Seleccionar carpeta con archivos DICOM')
+        
+        #El usuario no escogió ninguna carpeta
+        if not carpeta_origen:
+            QtWidgets.QMessageBox.warning(None, 'Error', 'No se seleccionó ninguna carpeta.')
+            return
+
+       #Arreglo de archivos DICOM dentro de la carpeta escogida
+        dicom_files = [f for f in os.listdir(carpeta_origen) if f.endswith('.dcm')]
+
+        #El arreglo de archivos DICOM está vacío, ya que la carpeta no tenía nada
+        if not dicom_files:
+            QtWidgets.QMessageBox.warning(None, 'Error', 'No se encontraron archivos DICOM en la carpeta seleccionada.')
+            return
+
+        try:
+            # Leer el primer archivo para obtener la información del paciente
+            primer_archivo = os.path.join(carpeta_origen, dicom_files[0])
+            dicom_data = pydicom.dcmread(primer_archivo)
+
+            modality = str(dicom_data.Modality)
+
+            # Extraer tags del primer archivo
+            metadata_paciente = extraer_tags(dicom_data, tags_requeridos_paciente)
+            metadata_estudio = extraer_tags(dicom_data, tags_requeridos_estudio)
+
+            # Contar el número de imágenes DICOM
+            num_imagenes = len(dicom_files)
+
+            # Llamar a abrir_Pdialogo_tags con el número de imágenes
+            metadata_paciente, metadata_estudio, dialogo_exitoso = self.abrir_Pdialogo_tags(metadata_paciente, metadata_estudio, num_imagenes)
+
+            if dialogo_exitoso:
+
+
+                print(metadata_paciente)
+                print(metadata_estudio)
+
+                patient_id = metadata_paciente["PatientID"]
+
+                carpeta_paciente = crear_carpeta_paciente(carpeta_base, patient_id)
+                carpeta_modalidad = crear_carpeta_modalidad(carpeta_paciente, modality)
+
+                # Copiar y modificar todos los archivos DICOM
+                for archivo in dicom_files:
+                    ruta_origen = os.path.join(carpeta_origen, archivo)
+                    ruta_destino = os.path.join(carpeta_modalidad, archivo)
+                    shutil.copy2(ruta_origen, ruta_destino)
+                    modificar_tags_dicom(ruta_destino, metadata_paciente, metadata_estudio)
+
+                # Guardar metadata
+                guardar_metadata(metadata_paciente, carpeta_paciente, "metadata_paciente.json")
+                guardar_metadata(metadata_estudio, carpeta_paciente, f"metadata_{modality.upper()}.json")
+
+                # Mostrar mensaje de éxito
+                QtWidgets.QMessageBox.information(None, 'Éxito', f"Procesados {num_imagenes} archivos DICOM. Guardados en: {carpeta_modalidad}")
+            else:
+                # No hacer nada si el diálogo no fue exitoso
+                return
+
+        except Exception as e:
+            # Mostrar mensaje de error
+            QtWidgets.QMessageBox.critical(None, 'Error', f"Ocurrió un error al procesar los archivos: {str(e)}")
+
+        print("Procesamiento completado.")
+        
+
+    def abrir_Pdialogo_tags(self, metadata_paciente, metadata_estudio, num_imagenes):
+
+        def cargar_datos_en_tabla_tags(ui, metadata_paciente, metadata_estudio, tags_requeridos_paciente, tags_requeridos_estudio):
+            # Configurar el número de filas de la tabla
+            total_campos = len(tags_requeridos_paciente) + len(tags_requeridos_estudio)
+            ui.uploadTags_table.setRowCount(total_campos)
+
+            # Ruta del ícono de información
+            icon_path_info = "Assets/trash.png"
+            icon = QtGui.QIcon(icon_path_info)
+
+            # Ajustar el tamaño predeterminado de las filas
+            ui.uploadTags_table.verticalHeader().setDefaultSectionSize(40)
+
+            # Ocultar los encabezados de las filas
+            ui.uploadTags_table.verticalHeader().setVisible(False)
+
+            # Crear una fuente Roboto
+            font = QtGui.QFont("Roboto", 9)
+
+            row = 0
+            for metadata, tags_requeridos in [(metadata_paciente, tags_requeridos_paciente), (metadata_estudio, tags_requeridos_estudio)]:
+                for campo in tags_requeridos:
+                    valor = metadata.get(campo, "No encontrado")
+                    
+                    # Crear y alinear el item del campo
+                    item_campo = QtWidgets.QTableWidgetItem(campo)
+                    item_campo.setTextAlignment(QtCore.Qt.AlignCenter)
+                    item_campo.setFont(font)
+                    ui.uploadTags_table.setItem(row, 0, item_campo)
+
+                    if campo == "Modality":
+                        # Crear un QLabel para el valor no editable de Modality
+                        label = QtWidgets.QLabel(str(valor))
+                        label.setAlignment(QtCore.Qt.AlignCenter)
+                        label.setFont(font)
+                        label.setStyleSheet("""
+                            QLabel {
+                                border: 1px solid #A0A0A0;
+                                border-radius: 5px;
+                                padding: 2px;
+                                background-color: #F0F0F0;
+                            }
+                        """)
+                        ui.uploadTags_table.setCellWidget(row, 1, label)
+                    else:
+                        # Crear un QLineEdit para el valor editable
+                        line_edit = QtWidgets.QLineEdit(str(valor))
+                        line_edit.setAlignment(QtCore.Qt.AlignCenter)
+                        line_edit.setFont(font)
+                        line_edit.setStyleSheet("""
+                            QLineEdit {
+                                border: 1px solid #A0A0A0;
+                                border-radius: 5px;
+                                padding: 2px;
+                                background-color: white;
+                            }
+                        """)
+                        ui.uploadTags_table.setCellWidget(row, 1, line_edit)
+
+                    # Insertar el botón con ícono de información
+                    pb = QtWidgets.QPushButton()
+                    pb.setIcon(icon)
+                    pb.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                    pb.setIconSize(QtCore.QSize(24, 24))
+                    pb.setStyleSheet("""
+                        QPushButton {
+                            border: none;
+                            background-color: transparent;
+                        }
+                    """)
+                    ui.uploadTags_table.setCellWidget(row, 2, pb)
+
+                    row += 1
+
+            # Ajustar el tamaño de las columnas
+            ui.uploadTags_table.setColumnWidth(0, 200)  # Ancho fijo para la columna "Campo"
+            ui.uploadTags_table.setColumnWidth(1, 300)  # Ancho fijo para la columna "Valor"
+            ui.uploadTags_table.setColumnWidth(2, 40)   # Ancho fijo para la columna del ícono
+
+            # Ajustar el tamaño de las columnas
+            ui.uploadTags_table.setColumnWidth(0, 200)  # Ancho fijo para la columna "Campo"
+            ui.uploadTags_table.setColumnWidth(1, 300)  # Ancho fijo para la columna "Valor"
+            ui.uploadTags_table.setColumnWidth(2, 40)   # Ancho fijo para la columna del ícono
+
+        dialog = QtWidgets.QDialog()
+        ui = Ui_DialogTagsSubida()
+        ui.setupUi(dialog)
+
+        # Actualizar el label con el número de imágenes
+        ui.numImagenes.setText(f"Imágenes cargadas: {num_imagenes}")
+
+        tags_requeridos_paciente = ["PatientName", "PatientID", "PatientBirthDate", "PatientSex", "PatientAge", "PatientWeight"]
+        tags_requeridos_estudio = ["StudyID", "Modality", "StudyDate", "StudyTime", "InstitutionName", "StudyDescription"]
+
+        ui.uploadTags_table.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
+        cargar_datos_en_tabla_tags(ui, metadata_paciente, metadata_estudio, tags_requeridos_paciente, tags_requeridos_estudio)
+
+        # Conectar los botones a las funciones correspondientes
+        ui.acceptButton_uploadTags.clicked.connect(dialog.accept)
+        ui.cancelButton_uploadTags.clicked.connect(dialog.reject)
+
+        result = dialog.exec_()
+
+        if result == QtWidgets.QDialog.Accepted:
+            # Si se presionó el botón de aceptar, actualizar los metadatos
+            updated_metadata_paciente = {}
+            updated_metadata_estudio = {}
+            
+            for row in range(ui.uploadTags_table.rowCount()):
+                campo = ui.uploadTags_table.item(row, 0).text()
+                valor = ui.uploadTags_table.cellWidget(row, 1).text()
+                
+                if campo in tags_requeridos_paciente:
+                    updated_metadata_paciente[campo] = valor
+                elif campo in tags_requeridos_estudio:
+                    updated_metadata_estudio[campo] = valor
+
+            return updated_metadata_paciente, updated_metadata_estudio, True
+        else:
+            # Si se presionó el botón de cancelar o se cerró el diálogo
+            return {}, {}, False
+    
+
+    def open_patient_selection_dialog(self, row, column):
+        dialog = QtWidgets.QDialog()
+        ui =  Ui_DialogEscogerEstudio()
+        ui.setupUi(dialog)
+
+        def update_info_tables(patient_id, study_type=None):
+            # Load patient data
+            patient_folder = os.path.join("../model/local_database", patient_id)
+            patient_metadata_file = os.path.join(patient_folder, "metadata_paciente.json")
+            if os.path.exists(patient_metadata_file):
+                with open(patient_metadata_file, 'r') as f:
+                    patient_data = json.load(f)
+                
+                # Update patientInfo_table
+                self.patientInfo_table.setRowCount(len(patient_data))
+                for row, (key, value) in enumerate(patient_data.items()):
+                    self.patientInfo_table.setItem(row, 0, QTableWidgetItem(key))
+                    self.patientInfo_table.setItem(row, 1, QTableWidgetItem(str(value)))
+            
+            # Load study data if a study type is selected
+            if study_type:
+                study_metadata_file = os.path.join(patient_folder, f"metadata_{study_type.upper()}.json")
+                if os.path.exists(study_metadata_file):
+                    with open(study_metadata_file, 'r') as f:
+                        study_data = json.load(f)
+                    
+                    # Update studyInfo_table
+                    self.studyInfo_table.setRowCount(len(study_data))
+                    for row, (key, value) in enumerate(study_data.items()):
+                        self.studyInfo_table.setItem(row, 0, QTableWidgetItem(key))
+                        self.studyInfo_table.setItem(row, 1, QTableWidgetItem(str(value)))
+                else:
+                    # Clear study table if no study data is found
+                    self.studyInfo_table.setRowCount(0)
+            else:
+                # Clear study table if no study type is selected
+                self.studyInfo_table.setRowCount(0)
+
+        def set_current_study(study_type):
+            config.current_study = study_type
+            print(f"Current patient: {config.current_patient}, Current study: {config.current_study}")
+            update_info_tables(config.current_patient, study_type)
+            dialog.accept()  # Close the dialog after selection
+            self.set_enabled_views(True)
+            self.set_enabled_tools(False)
+            #self.hide_studies()
+            #self.clear_layout()            
+
+            # Lista de botones de disposición
+            disposition_buttons = [
+                self.dispositionButton_1x2,
+                self.dispositionButton_1x3,
+                self.dispositionButton_2x1,
+                self.dispositionButton_1u2d,
+                self.dispositionButton_2x2,
+                self.dispositionButton_1l2r
+            ]
+
+            # Controlar la visibilidad de los botones de disposición
+            for button in disposition_buttons:
+                if study_type.lower() == "imagenconjunta":
+                    button.setVisible(True)
+                else:
+                    button.setVisible(False)
+
+        def navigate_patient(direction):
+            new_row = row + direction
+            if 0 <= new_row < self.database_table.rowCount():
+                dialog.accept()  # Close the current dialog
+                self.database_table.selectRow(new_row)
+                self.open_patient_selection_dialog(new_row, 0)
+            else:
+                QMessageBox.information(dialog, "Navegación", "No hay más pacientes en esta dirección.")
+
+    
+        # Get patient data from the selected row
+        patient_name = self.database_table.item(row, 0).text()
+        patient_id = self.database_table.item(row, 1).text()
+        patient_sex = self.database_table.item(row, 2).text()
+        patient_birth_date = self.database_table.item(row, 3).text()
+
+        # Set patient information in the dialog
+        ui.nombre_label.setText(f"Nombre: {patient_name}")
+        ui.idPaciente_label.setText(f"ID: {patient_id}")
+        ui.sexo_label.setText(f"Sexo: {patient_sex}")
+        ui.fechaNacimiento_label.setText(f"Fecha de Nacimiento: {patient_birth_date}")
+
+        # Connect buttons to their respective functions
+        ui.MRButton_paciente.clicked.connect(lambda: set_current_study("MR"))
+        ui.CTButton_paciente.clicked.connect(lambda: set_current_study("CT"))
+        ui.ImagenConjuntaButton_paciente.clicked.connect(lambda: set_current_study("ImagenConjunta"))
+        
+        ui.anteriorButton_paciente.clicked.connect(lambda: navigate_patient(-1))
+        ui.siguienteButton_paciente.clicked.connect(lambda: navigate_patient(1))
+
+        # Set the current patient
+        config.current_patient = patient_id
+        update_info_tables(patient_id)
+
+        dialog.exec_()
+    
+
+#Inicialización de la aplicación y la ventana
+app = QtWidgets.QApplication(sys.argv)
+MainWindow = QtWidgets.QMainWindow()
+ui = MyApp(MainWindow)
+MainWindow.show()
+app.exec_()

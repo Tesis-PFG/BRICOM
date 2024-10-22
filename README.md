@@ -1,4 +1,10 @@
 Comandos:
+
+***Nuevo comando para correr el codigo***
+```
+python -m controller.main
+```
+
 - git clone <link>
 - (iniciar la aplicación de qt y abrir el archivo .ui)
 - *Comando para convertir el archivo .ui a .py:*
