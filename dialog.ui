@@ -148,7 +148,7 @@ QHeaderView::section {
 QTableWidget::item {
     color: black;
     font-weight: regular;
-    background-color: #FFFFFF;
+    background-color: #D9D9D9;
 	font-size: 16px;
     padding: 5px;
     text-align: center;
@@ -251,9 +251,6 @@ border-bottom-right-radius:20px;</string>
             <bold>true</bold>
            </font>
           </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
-          </property>
           <property name="styleSheet">
            <string notr="true">background-color: rgb(90, 99, 156);
 color:#ffffff;
@@ -279,9 +276,6 @@ border-radius:15px;</string>
             <weight>75</weight>
             <bold>true</bold>
            </font>
-          </property>
-          <property name="cursor">
-           <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="styleSheet">
            <string notr="true">background-color: rgb(90, 99, 156);
