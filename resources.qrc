@@ -1,6 +1,5 @@
 <RCC>
   <qresource prefix="icons">
-    <file>Assets/constrast.png</file>
     <file>Assets/subMenu_tools.png</file>
     <file>Assets/subMenu_patient.png</file>
     <file>Assets/icon_documentUpload.png</file>
