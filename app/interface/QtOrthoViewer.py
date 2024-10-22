@@ -2,7 +2,7 @@ from app.interface.OrthoViewer import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
 from app.interface.Herramientas import *
-import config
+import model.config as config
 class QtOrthoViewer(QtViewer):
     # Constructor
     def __init__(self, vtkBaseClass, orientation, label: str = "Orthogonal Viewer"):
