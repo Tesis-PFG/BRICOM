@@ -79,7 +79,8 @@ class MyApp(Ui_MainWindow):
             self.dispositionButton_2x1,
             self.dispositionButton_1u2d,
             self.dispositionButton_2x2,
-            self.dispositionButton_1l2r
+            self.dispositionButton_1l2r,
+            self.dispositionButton_3D
         ]
         for button in disposition_buttons:
             button.setVisible(False)
@@ -576,7 +577,8 @@ class MyApp(Ui_MainWindow):
                 self.dispositionButton_2x1,
                 self.dispositionButton_1u2d,
                 self.dispositionButton_2x2,
-                self.dispositionButton_1l2r
+                self.dispositionButton_1l2r,
+                self.dispositionButton_3D
             ]
 
             # Controlar la visibilidad de los botones de disposición
