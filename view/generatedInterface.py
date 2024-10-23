@@ -912,6 +912,7 @@ class Ui_MainWindow(object):
                 self.stackedWidgetPrincipal.addWidget(self.pantallaAnadirArchivo)
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
                 self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, viewers, self.ViewersConnection, self.vtkBaseClass)
+                self.render3D = Render3DMHD()
 
                 MainWindow.setCentralWidget(self.centralwidget)
 
@@ -993,6 +994,9 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x2.setChecked(True)
                 self.set_enabled_tools(True)
                 self.viewer_actions.display_four_images()
+                
+        def display_view_3D(self):
+                self.render3D.display_3D()
 
         def activate_distance_measurement(self):
                 self.viewer_actions.activate_distance_measurement()
