@@ -9,14 +9,16 @@ from model.Dicom_vis.DicomViewer import *
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QPoint
 import model.config as config
+from view.Render3DMHD import *
 
 class ViewerActions:
-    def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection,vtkBaseClass):
+    def __init__(self, frame_3, dcm_viewer, render_3D, viewers, ViewersConnection,vtkBaseClass):
         self.frame_3 = frame_3
         self.dcm_viewer = dcm_viewer
         self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer = viewers
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
+        self.render_3D = render_3D
 
     def clear_layout(self):
         if self.frame_3.layout() is not None:
@@ -26,6 +28,7 @@ class ViewerActions:
                     self.frame_3.layout().removeWidget(child.widget())
 
     def hide_studies(self):
+        self.render_3D.setFixedSize(0, 0)
         self.dcm_viewer.setFixedSize(0, 0)
         self.QtSagittalOrthoViewer.setFixedSize(0, 0)
         self.QtAxialOrthoViewer.setFixedSize(0, 0)
@@ -160,6 +163,11 @@ class ViewerActions:
         self.frame_3.layout().update()
         self.open_data()
 
+    def display_view_3D(self):
+        self.clear_layout()
+        self.render_3D.setFixedSize(500, 500)
+        self.frame_3.layout().addWidget(self.render_3D)
+        self.frame_3.layout().update()
 
     def open_data(self):
         # Mapeo de estudios

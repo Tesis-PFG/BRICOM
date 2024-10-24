@@ -3,6 +3,7 @@ from app.interface.QtOrthoViewer import *
 from app.interface.QtSegmentationViewer import *
 from app.interface.VtkBase import *
 from app.interface.ViewersConnection import *
+from view.Render3DMHD import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
 from model.Dicom_vis.DicomViewer import *
@@ -33,6 +34,9 @@ class Ui_MainWindow(object):
                 self.ViewersConnection.add_segmentation_viewer(self.QtSegmentationViewer.get_viewer())
                 # Prueba para el visualizador de dicom
                 self.dcm_viewer = DicomViewer('Axial')
+                mhd_file = "./Data/raw/patient.mhd"
+                self.render3D = MHD_3DRenderer(mhd_file,2)
+
                 viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
 
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -584,6 +588,8 @@ class Ui_MainWindow(object):
                 self.dispositionButton_3D.setIcon(icon23)
                 self.dispositionButton_3D.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_3D.setObjectName("dispositionButton_3D")
+                self.dispositionButton_3D.setToolTip("Visualización 3D interactiva")
+                self.dispositionButton_3D.clicked.connect(self.display_view_3D)
                 self.gridLayout_7.addWidget(self.dispositionButton_3D, 1, 3, 1, 1)
                 self.label_14 = QtWidgets.QLabel(self.frameDisposicion)
                 self.label_14.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -911,8 +917,7 @@ class Ui_MainWindow(object):
                 self.horizontalLayout_2.addLayout(self.verticalLayout_5)
                 self.stackedWidgetPrincipal.addWidget(self.pantallaAnadirArchivo)
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
-                self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, viewers, self.ViewersConnection, self.vtkBaseClass)
-                self.render3D = Render3DMHD()
+                self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, self.render3D, viewers, self.ViewersConnection, self.vtkBaseClass)
 
                 MainWindow.setCentralWidget(self.centralwidget)
 
@@ -996,7 +1001,10 @@ class Ui_MainWindow(object):
                 self.viewer_actions.display_four_images()
                 
         def display_view_3D(self):
-                self.render3D.display_3D()
+                self.uncheck_views()
+                self.dispositionButton_3D.setChecked(True)
+                self.set_enabled_tools(False)
+                self.viewer_actions.display_view_3D()
 
         def activate_distance_measurement(self):
                 self.viewer_actions.activate_distance_measurement()
