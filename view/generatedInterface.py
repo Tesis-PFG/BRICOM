@@ -3,7 +3,6 @@ from app.interface.QtOrthoViewer import *
 from app.interface.QtSegmentationViewer import *
 from app.interface.VtkBase import *
 from app.interface.ViewersConnection import *
-from view.Render3DMHD import *
 #Metodo para crear el registro de las imagenes 
 from app.interface.mat_3d import registro
 from model.Dicom_vis.DicomViewer import *
@@ -34,8 +33,6 @@ class Ui_MainWindow(object):
                 self.ViewersConnection.add_segmentation_viewer(self.QtSegmentationViewer.get_viewer())
                 # Prueba para el visualizador de dicom
                 self.dcm_viewer = DicomViewer('Axial')
-                mhd_file = "./Data/raw/patient.mhd"
-                self.render3D = MHD_3DRenderer(mhd_file,2)
 
                 viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
 
@@ -917,7 +914,7 @@ class Ui_MainWindow(object):
                 self.horizontalLayout_2.addLayout(self.verticalLayout_5)
                 self.stackedWidgetPrincipal.addWidget(self.pantallaAnadirArchivo)
                 self.horizontalLayout.addWidget(self.stackedWidgetPrincipal)
-                self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, self.render3D, viewers, self.ViewersConnection, self.vtkBaseClass)
+                self.viewer_actions = ViewerActions(self.frame_3, self.dcm_viewer, viewers, self.ViewersConnection, self.vtkBaseClass)
 
                 MainWindow.setCentralWidget(self.centralwidget)
 

@@ -12,13 +12,12 @@ import model.config as config
 from view.Render3DMHD import *
 
 class ViewerActions:
-    def __init__(self, frame_3, dcm_viewer, render_3D, viewers, ViewersConnection,vtkBaseClass):
+    def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection,vtkBaseClass):
         self.frame_3 = frame_3
         self.dcm_viewer = dcm_viewer
         self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer = viewers
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
-        self.render_3D = render_3D
 
     def clear_layout(self):
         if self.frame_3.layout() is not None:
@@ -165,9 +164,10 @@ class ViewerActions:
 
     def display_view_3D(self):
         self.clear_layout()
-        self.render_3D.setFixedSize(500, 500)
+        self.render_3D = MHD_3DRenderer("./Data/raw/patient.mhd",2)
         self.frame_3.layout().addWidget(self.render_3D)
         self.frame_3.layout().update()
+        self.render_3D.render_mhd_structure(2)
 
     def open_data(self):
         # Mapeo de estudios
