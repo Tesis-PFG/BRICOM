@@ -165,9 +165,7 @@ class ViewerActions:
     def display_view_3D(self):
         self.clear_layout()
         self.render_3D = MHD_3DRenderer("./Data/raw/patient.mhd",2)
-        self.frame_3.layout().addWidget(self.render_3D)
-        self.frame_3.layout().update()
-        self.render_3D.render_mhd_structure(2)
+        self.render_3D.render_mhd_structure(3)
 
     def open_data(self):
         # Mapeo de estudios
