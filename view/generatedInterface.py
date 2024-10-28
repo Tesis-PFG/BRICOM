@@ -388,6 +388,7 @@ class Ui_MainWindow(object):
                 self.toolButton_angulos.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_angulos.setObjectName("toolButton_angulos")
                 self.toolButton_angulos.setToolTip("Encontrar ángulos dentro de los estudios")
+                self.toolButton_angulos.clicked.connect(self.set_angle_canvas)
                 self.gridLayout.addWidget(self.toolButton_angulos, 1, 1, 1, 1)
                 self.toolButton_flechas = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_flechas.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -937,8 +938,7 @@ class Ui_MainWindow(object):
                                       self.toolButton_areaRectangular,
                                       self.toolButton_escritura,
                                       self.functionButton_brillo,
-                                      self.functionButton_constraste,
-                                      ]
+                                      self.functionButton_constraste]
                 #Inicializa los botones como inhabilitados hasta que no se seleccione un estudio
                 self.set_enabled_views(False)
                 self.set_enabled_tools(False)
@@ -1015,6 +1015,9 @@ class Ui_MainWindow(object):
                 
         def set_text_canvas(self):
                 self.viewer_actions.set_text_canvas()
+
+        def set_angle_canvas(self):
+                self.viewer_actions.set_angle_canvas()
                 
         def clear_canvas_drawing(self):
                 self.viewer_actions.clear_canvas_drawing()

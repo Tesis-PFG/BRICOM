@@ -1,7 +1,7 @@
 from app.interface.OrthoViewer import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
-from app.interface.Herramientas import *
+from model.Herramientas import *
 import model.config as config
 class QtOrthoViewer(QtViewer):
     # Constructor
@@ -17,6 +17,7 @@ class QtOrthoViewer(QtViewer):
         self.shape_canvas = None # Inicializar
         self.distance_measurement = None  # Inicializar DistanceMeasurement como None
         self.text_canvas = None  # Inicializar DistanceMeasurement como None
+        self.angle_canvas = None # Inicializar AngleMeasurement como None
 
         # Render Viewer
         self.viewer = OrthoViewer(self.vtkBaseClass, self.orientation, self.label)
@@ -265,6 +266,8 @@ class QtOrthoViewer(QtViewer):
             self.shape_canvas.clear_canvas()
         if self.text_canvas:
             self.text_canvas.clear_canvas()
+        if self.angle_canvas:
+            self.angle_canvas.clear_canvas()
             
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
@@ -287,4 +290,13 @@ class QtOrthoViewer(QtViewer):
             # Si ya existe, ocultar el Canvas
             self.text_canvas.close()
             self.text_canvas = None
+
+    def set_angle_canvas(self):
+        if self.angle_canvas is None:
+            self.angle_canvas = AngleMeasurement(self)
+            self.angle_canvas.show()
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.angle_canvas.close()
+            self.angle_canvas = None
 

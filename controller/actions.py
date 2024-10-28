@@ -257,3 +257,10 @@ class ViewerActions:
         else:
             for view in self.views:
                 view.set_text_canvas()
+
+    def set_angle_canvas(self):
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.set_angle_canvas()
+        else:
+            for view in self.views:
+                view.set_angle_canvas()
