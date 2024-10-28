@@ -55,6 +55,11 @@ class MyApp(Ui_MainWindow):
         #Se encarga de hacer la tabla de database bonita y dinámica
         self.database_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+        #Quita la posibilidad de editar las celdas
+        self.patientInfo_table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.studyInfo_table.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
+
+
 
 
         # Setear Botones del menú principal
@@ -587,6 +592,13 @@ class MyApp(Ui_MainWindow):
                     button.setVisible(True)
                 else:
                     button.setVisible(False)
+
+            #Cambio de pantalla a visualización
+            self.stackedWidgetPrincipal.setCurrentIndex(0)
+            self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
+            self.mainButton_visualizacion.setChecked(True)
+            
+            
 
         def navigate_patient(direction):
             new_row = row + direction
