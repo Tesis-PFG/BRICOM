@@ -3,6 +3,106 @@ from app.interface.OrthoViewer import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
 import math
+
+class AngleMeasurement(QtWidgets.QLabel):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setMouseTracking(True)
+
+        # Configurar el tamaño del canvas
+        self.setFixedSize(parent.size())
+
+        # Habilitar fondo transparente
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
+
+        # Crear un QPixmap transparente para dibujar
+        self.pixmap = QtGui.QPixmap(self.size())
+        self.pixmap.fill(QtCore.Qt.transparent)  # Fondo transparente
+        self.setPixmap(self.pixmap)
+
+        # Variables para almacenar los puntos
+        self.point1 = None  # Punto x1
+        self.point2 = None  # Punto x2
+        self.point3 = None  # Punto y
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter(self)
+        painter.drawPixmap(0, 0, self.pixmap)
+
+        # Dibujar las líneas y el ángulo calculado si los tres puntos están definidos
+        if self.point1 and self.point2 and self.point3:
+            painter.setPen(QtGui.QPen(Qt.blue, 2))
+            # Línea base (x1 -> x2)
+            painter.drawLine(self.point1, self.point2)
+            # Línea de medición (x2 -> y)
+            painter.drawLine(self.point2, self.point3)
+
+            # Calcular el ángulo y dibujarlo cerca del tercer punto
+            angle = self.calculate_angle()
+            painter.setPen(QtGui.QPen(Qt.white))
+            painter.drawText(self.point3, f"Ángulo: {angle:.2f}°")
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            if not self.point1:
+                # Primer clic, establece el punto x1
+                self.point1 = event.pos()
+            elif not self.point2:
+                # Segundo clic, establece el punto x2 (base)
+                self.point2 = event.pos()
+            elif not self.point3:
+                # Tercer clic, establece el punto y y realiza el cálculo del ángulo
+                self.point3 = event.pos()
+                self.update()  # Redibujar para mostrar el ángulo
+            else:
+                # Si ya se tienen los tres puntos, reiniciar la medición
+                self.clear_canvas()
+                self.point1 = event.pos()  # Empezar con el nuevo primer punto
+
+    def calculate_angle(self):
+        """Calcula el ángulo en el rango [0°, 180°] entre la línea x1->x2 y la línea x2->y."""
+        # Vectores de las dos líneas
+        dx1 = self.point2.x() - self.point1.x()
+        dy1 = self.point2.y() - self.point1.y()
+        dx2 = self.point3.x() - self.point2.x()
+        dy2 = self.point3.y() - self.point2.y()
+
+        # Producto punto de los vectores
+        dot_product = dx1 * dx2 + dy1 * dy2
+        # Magnitud de los vectores
+        mag1 = math.sqrt(dx1**2 + dy1**2)
+        mag2 = math.sqrt(dx2**2 + dy2**2)
+
+        # Evitar divisiones por cero
+        if mag1 == 0 or mag2 == 0:
+            return 0.0
+
+        # Calcular el ángulo en radianes y convertirlo a grados
+        angle_rad = math.acos(dot_product / (mag1 * mag2))
+        angle_deg = math.degrees(angle_rad)
+
+        # Determinar el sentido del ángulo usando el producto cruzado
+        cross_product = dx1 * dy2 - dy1 * dx2
+        if cross_product < 0:
+            # Si el producto cruzado es negativo, ajustar el ángulo a su complemento
+            angle_deg = 360 - angle_deg
+
+        # Asegurar que el ángulo esté entre 0 y 180 grados
+        if angle_deg > 180:
+            angle_deg = 360 - angle_deg
+
+        return angle_deg
+
+    def clear_canvas(self):
+        """Limpia los puntos y el ángulo del canvas para una nueva medición."""
+        self.point1 = None
+        self.point2 = None
+        self.point3 = None
+        self.pixmap.fill(QtCore.Qt.transparent)  # Limpiar el pixmap
+        self.update()  # Redibujar el canvas
+
+
 class TextCanvas(QtWidgets.QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)

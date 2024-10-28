@@ -8,6 +8,7 @@ from model.Dicom_vis.DicomViewer import *
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QPoint
 import model.config as config
+from view.Render3DMHD import *
 
 class ViewerActions:
     def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection, vtkBaseClass):
@@ -16,6 +17,16 @@ class ViewerActions:
         self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer = viewers
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
+        self.views = [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]
+
+
+    def hide_studies(self):
+        self.render_3D.setFixedSize(0, 0)
+        self.dcm_viewer.setFixedSize(0, 0)
+        self.QtSagittalOrthoViewer.setFixedSize(0, 0)
+        self.QtAxialOrthoViewer.setFixedSize(0, 0)
+        self.QtCoronalOrthoViewer.setFixedSize(0, 0)
+        self.QtSegmentationViewer.setFixedSize(0, 0)
         self.current_splitter = None
 
     def clear_layout(self):
@@ -30,6 +41,7 @@ class ViewerActions:
         frame.setLayout(frame_layout)
         frame_layout.addWidget(viewer)
         parent_splitter.addWidget(frame)
+
 
     def display_one_image(self):
         self.clear_layout()
@@ -140,6 +152,11 @@ class ViewerActions:
         self.frame_3.layout().update()
         self.open_data()
 
+    def display_view_3D(self):
+        self.clear_layout()
+        self.render_3D = MHD_3DRenderer("./Data/raw/patient.mhd",2)
+        self.render_3D.render_mhd_structure(3)
+
     def open_data(self):
         # Mapeo de estudios
         study_paths = {
@@ -199,28 +216,40 @@ class ViewerActions:
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_distance_measurement()
         else:
-            self.QtSagittalOrthoViewer.set_distance_measurement("./Data/raw/patient.mhd")
+            for view in self.views:
+                view.set_distance_measurement("./Data/raw/patient.mhd")
 
     def set_canvas(self):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_canvas()
         else:
-            self.QtSagittalOrthoViewer.set_canvas()
+            for view in self.views:
+                view.set_canvas()
         
     def clear_canvas_drawing(self):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.clear_canvas_drawing()
         else:
-            self.QtSagittalOrthoViewer.clear_canvas_drawing()
+            for view in self.views:
+                view.clear_canvas_drawing()
         
     def set_shape_canvas(self, shape):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_shape_canvas(shape)
         else:
-            self.QtSagittalOrthoViewer.set_shape_canvas(shape)
+           for view in self.views:
+                view.set_shape_canvas(shape)
 
     def set_text_canvas(self):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_text_canvas()
         else:
-            self.QtSagittalOrthoViewer.set_text_canvas()
+            for view in self.views:
+                view.set_text_canvas()
+
+    def set_angle_canvas(self):
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.set_angle_canvas()
+        else:
+            for view in self.views:
+                view.set_angle_canvas()

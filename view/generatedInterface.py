@@ -33,6 +33,7 @@ class Ui_MainWindow(object):
                 self.ViewersConnection.add_segmentation_viewer(self.QtSegmentationViewer.get_viewer())
                 # Prueba para el visualizador de dicom
                 self.dcm_viewer = DicomViewer('Axial')
+
                 viewers = (self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer)
 
                 self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -387,6 +388,7 @@ class Ui_MainWindow(object):
                 self.toolButton_angulos.setIconSize(QtCore.QSize(40, 40))
                 self.toolButton_angulos.setObjectName("toolButton_angulos")
                 self.toolButton_angulos.setToolTip("Encontrar ángulos dentro de los estudios")
+                self.toolButton_angulos.clicked.connect(self.set_angle_canvas)
                 self.gridLayout.addWidget(self.toolButton_angulos, 1, 1, 1, 1)
                 self.toolButton_flechas = QtWidgets.QPushButton(self.gridLayoutWidget)
                 self.toolButton_flechas.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -584,6 +586,8 @@ class Ui_MainWindow(object):
                 self.dispositionButton_3D.setIcon(icon23)
                 self.dispositionButton_3D.setIconSize(QtCore.QSize(45, 45))
                 self.dispositionButton_3D.setObjectName("dispositionButton_3D")
+                self.dispositionButton_3D.setToolTip("Visualización 3D interactiva")
+                self.dispositionButton_3D.clicked.connect(self.display_view_3D)
                 self.gridLayout_7.addWidget(self.dispositionButton_3D, 1, 3, 1, 1)
                 self.label_14 = QtWidgets.QLabel(self.frameDisposicion)
                 self.label_14.setGeometry(QtCore.QRect(40, 0, 171, 31))
@@ -922,8 +926,7 @@ class Ui_MainWindow(object):
                                      self.dispositionButton_1x3, 
                                      self.dispositionButton_1x2, 
                                      self.dispositionButton_1u2d, 
-                                     self.dispositionButton_1l2r,
-                                     self.dispositionButton_3D]
+                                     self.dispositionButton_1l2r]
                 self.tools_buttons = [
                                       self.toolButton_regla,
                                       self.toolButton_areaCircular,
@@ -935,11 +938,11 @@ class Ui_MainWindow(object):
                                       self.toolButton_areaRectangular,
                                       self.toolButton_escritura,
                                       self.functionButton_brillo,
-                                      self.functionButton_constraste,
-                                      ]
+                                      self.functionButton_constraste]
                 #Inicializa los botones como inhabilitados hasta que no se seleccione un estudio
                 self.set_enabled_views(False)
                 self.set_enabled_tools(False)
+                self.dispositionButton_3D.setEnabled(False)
 
                 #Cambio de apariencia en los botones cuando son presionados
                 self.set_stylesheet()
@@ -993,6 +996,13 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x2.setChecked(True)
                 self.set_enabled_tools(True)
                 self.viewer_actions.display_four_images()
+                self.dispositionButton_3D.setEnabled(True)
+                
+        def display_view_3D(self):
+                self.uncheck_views()
+                self.dispositionButton_3D.setChecked(True)
+                self.set_enabled_tools(False)
+                self.viewer_actions.display_view_3D()
 
         def activate_distance_measurement(self):
                 self.viewer_actions.activate_distance_measurement()
@@ -1005,6 +1015,9 @@ class Ui_MainWindow(object):
                 
         def set_text_canvas(self):
                 self.viewer_actions.set_text_canvas()
+
+        def set_angle_canvas(self):
+                self.viewer_actions.set_angle_canvas()
                 
         def clear_canvas_drawing(self):
                 self.viewer_actions.clear_canvas_drawing()

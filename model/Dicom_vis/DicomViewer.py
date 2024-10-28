@@ -9,7 +9,7 @@ from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
 import SimpleITK as sitk
-from app.interface.Herramientas import *
+from model.Herramientas import *
 import model.config as config
 
 
@@ -27,6 +27,7 @@ class DicomViewer(QWidget):
         self.shape_canvas = None # Inicializar
         self.distance_measurement = None  # Inicializar DistanceMeasurement como None
         self.text_canvas = None # Inicializar TextCanvas como None
+        self.angle_canvas = None # Inicializar AngleMeasurement como None
         self.current_slice = self.min_slice
         
         # Brillo y contraste por defecto
@@ -164,7 +165,6 @@ class DicomViewer(QWidget):
         main_layout.addWidget(self.contrast_slider)
 
         self.setLayout(main_layout)
-
     
     def load_dicom_files(self, folder_path):
         if not os.path.exists(folder_path):
@@ -265,9 +265,6 @@ class DicomViewer(QWidget):
         self.viewer.Render()
         # Ajustar la cámara al nuevo slice
         self.vtkWidget.GetRenderWindow().Render()  # Renderizar el widget
-
-
-
 
     def adjust_brightness_contrast(self, image):
         image = image.astype(np.float32)
@@ -371,8 +368,6 @@ class DicomViewer(QWidget):
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
 
-
-    
     def get_pixel_spacing(self):
         """Obtiene el tamaño de los píxeles del archivo DICOM en mm."""
         if 'PixelSpacing' in self.dicom_files[3]:
@@ -395,18 +390,16 @@ class DicomViewer(QWidget):
             self.canvas.close()
             self.canvas = None
 
-
     # Método para inicializar DistanceMeasurement
     def set_distance_measurement(self):
         if self.distance_measurement is None:
             # Crear e insertar DistanceMeasurement
-            self.distance_measurement = DistanceMeasurementDicom(self.pixel_spacing, self)
+            self.distance_measurement = DistanceMeasurementDicom(1.0, self) #TODO: Fix spacing self.pixel_spacing()
             self.distance_measurement.show()
         else:
             # Si ya existe, ocultar DistanceMeasurement
             self.distance_measurement.close()
             self.distance_measurement = None
-
             
     # Método para borrar el contenido del Canvas
     def clear_canvas_drawing(self):
@@ -416,6 +409,8 @@ class DicomViewer(QWidget):
             self.shape_canvas.clear_canvas()
         if self.text_canvas:
             self.text_canvas.clear_canvas()
+        if self.angle_canvas:
+            self.angle_canvas.clear_canvas()
 
             
     def set_shape_canvas(self, shape):
@@ -424,12 +419,10 @@ class DicomViewer(QWidget):
             self.shape_canvas = ShapeCanvas(self)
             self.shape_canvas.set_shape(shape)
             self.shape_canvas.show()
-
         else:
             # Si ya existe, ocultar el Canvas
             self.shape_canvas.close()
             self.shape_canvas = None
-            
 
     def set_text_canvas(self):
         if self.text_canvas is None:
@@ -439,3 +432,12 @@ class DicomViewer(QWidget):
             # Si ya existe, ocultar el Canvas
             self.text_canvas.close()
             self.text_canvas = None
+
+    def set_angle_canvas(self):
+        if self.angle_canvas is None:
+            self.angle_canvas = AngleMeasurement(self)
+            self.angle_canvas.show()
+        else:
+            # Si ya existe, ocultar el Canvas
+            self.angle_canvas.close()
+            self.angle_canvas = None
