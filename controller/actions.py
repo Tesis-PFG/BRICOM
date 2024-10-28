@@ -14,6 +14,7 @@ class ViewerActions:
     def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection, vtkBaseClass):
         self.frame_3 = frame_3
         self.dcm_viewer = dcm_viewer
+        self. current_splitter = None
         self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer = viewers
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
