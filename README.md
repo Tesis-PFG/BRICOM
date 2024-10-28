@@ -21,4 +21,5 @@ Comandos Generación Código:
 - pyuic5 -x .\ventanaPrincipal.ui -o generatedInterface.py  #Genera la interfaz en python (autogenerado)
 - pyuic5 -x .\dialogoTagsSubida.ui -o generatedDialogTagsSubida.py  #Genera el diálogo de verificación de archivo en python (autogenerado)
 - pyuic5 -x .\dialog_escoger_estudio.ui -o generatedDialogEscogerEstudio.py
-- python main.py #Corre la interfaz con la lógica integrada
+- pyuic5 -x .\dialog_carga.ui -o generatedDialogCarga.py
+- python -m controller.main #Corre la interfaz con la lógica integrada

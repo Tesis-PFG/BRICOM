@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import QFileDialog,QApplication, QMainWindow, QTableWidget, QTableWidgetItem,QMessageBox
+import view.generatedDialogCarga
 from view.generatedInterface import *  
 from view.generatedDialogTagsSubida import Ui_Dialog as Ui_DialogTagsSubida
 from view.generatedDialogEscogerEstudio import Ui_Dialog as Ui_DialogEscogerEstudio
+from view.generatedDialogCarga import Ui_Dialog as Ui_DialogCarga
 import shutil
 import pydicom
 import json
@@ -366,6 +368,20 @@ class MyApp(Ui_MainWindow):
                 print(metadata_paciente)
                 print(metadata_estudio)
 
+                # Abrir diálogo de carga
+                dialog, ui = self.abrir_dialogo_carga()
+                # Hacer el diálogo modal
+                dialog.setModal(True)
+                # Quitar el botón de cerrar
+                dialog.setWindowFlags(QtCore.Qt.Window | 
+                                    QtCore.Qt.WindowTitleHint | 
+                                    QtCore.Qt.CustomizeWindowHint)
+                
+                # Mostrar el diálogo
+                dialog.show()
+                # Forzar la actualización de la interfaz
+                QtWidgets.QApplication.processEvents()
+
                 patient_id = metadata_paciente["PatientID"]
 
                 carpeta_paciente = crear_carpeta_paciente(carpeta_base, patient_id)
@@ -378,9 +394,13 @@ class MyApp(Ui_MainWindow):
                     shutil.copy2(ruta_origen, ruta_destino)
                     modificar_tags_dicom(ruta_destino, metadata_paciente, metadata_estudio)
 
+
                 # Guardar metadata
                 guardar_metadata(metadata_paciente, carpeta_paciente, "metadata_paciente.json")
                 guardar_metadata(metadata_estudio, carpeta_paciente, f"metadata_{modality.upper()}.json")
+
+                #Cerrar diálogo de carga
+                dialog.close()
 
                 # Mostrar mensaje de éxito
                 QtWidgets.QMessageBox.information(None, 'Éxito', f"Procesados {num_imagenes} archivos DICOM. Guardados en: {carpeta_modalidad}")
@@ -635,6 +655,43 @@ class MyApp(Ui_MainWindow):
         update_info_tables(patient_id)
 
         dialog.exec_()
+    
+    def abrir_dialogo_carga(self):
+        dialog = QtWidgets.QDialog()
+        ui = Ui_DialogCarga()
+        ui.setupUi(dialog)
+        
+        # Obtener el directorio actual donde se encuentra este archivo
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Construir la ruta al GIF está una carpeta arriba y luego en 'assets'
+        gif_path = os.path.join(current_dir, "..", "assets", "carga_gif.gif")
+        
+        # Verificar si el archivo existe
+        if os.path.exists(gif_path):
+            # Crear y configurar el QMovie
+            movie = QtGui.QMovie(gif_path)
+            
+            # Opcional: ajustar el tamaño del GIF
+            movie.setScaledSize(QtCore.QSize(100, 100))  # Ajusta estos números según necesites
+            
+            # Asignar el QMovie al QLabel
+            ui.label_3.setMovie(movie)
+
+            # Opcional: centrar el GIF en el label
+            ui.label_3.setAlignment(QtCore.Qt.AlignCenter)
+            
+            # Iniciar la animación
+            movie.start()
+        else:
+            print(f"No se encontró el archivo GIF en: {gif_path}")
+        
+        dialog.setModal(True)
+        dialog.setWindowFlags(QtCore.Qt.Window | 
+                            QtCore.Qt.WindowTitleHint | 
+                            QtCore.Qt.CustomizeWindowHint)
+        
+        return dialog, ui
     
 
 #Inicialización de la aplicación y la ventana

@@ -10,6 +10,8 @@ from PyQt5.QtCore import Qt, QPoint
 import model.config as config
 from view.Render3DMHD import *
 
+from view.generatedDialogCarga import Ui_Dialog as Ui_DialogCarga
+from PyQt5 import QtGui
 
 class ViewerActions:
     def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection, vtkBaseClass):
@@ -189,11 +191,29 @@ class ViewerActions:
                 print(e)
         else:
             try:
+                # Abrir diálogo de carga
+                dialog, ui = self.abrir_dialogo_carga()
+                # Hacer el diálogo modal
+                dialog.setModal(True)
+                # Quitar el botón de cerrar
+                dialog.setWindowFlags(QtCore.Qt.Window | 
+                                    QtCore.Qt.WindowTitleHint | 
+                                    QtCore.Qt.CustomizeWindowHint)
+                
+                # Mostrar el diálogo
+                dialog.show()
+                # Forzar la actualización de la interfaz
+                QtWidgets.QApplication.processEvents()
+
                 registro(file_paths, file_paths_2)
                 # Ruta de la imagen principal (ajusta si cambia según el paciente)
                 myFile = f'./Data/raw/patient.mhd'
                 # Carga y renderiza los datos
                 self.load_data(myFile)
+                
+                #Cerrar diálogo de carga
+                dialog.close()
+                
                 self.render_data()
             except Exception as e:
                 print(e)
@@ -256,3 +276,42 @@ class ViewerActions:
         else:
             for view in self.views:
                 view.set_angle_canvas()
+
+
+    def abrir_dialogo_carga(self):
+        dialog = QtWidgets.QDialog()
+        ui = Ui_DialogCarga()
+        ui.setupUi(dialog)
+        
+        # Obtener el directorio actual donde se encuentra este archivo
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Construir la ruta al GIF está una carpeta arriba y luego en 'assets'
+        gif_path = os.path.join(current_dir, "..", "assets", "carga_gif.gif")
+        
+        # Verificar si el archivo existe
+        if os.path.exists(gif_path):
+            # Crear y configurar el QMovie
+            movie = QtGui.QMovie(gif_path)
+            
+            # Opcional: ajustar el tamaño del GIF
+            movie.setScaledSize(QtCore.QSize(100, 100))  # Ajusta estos números según necesites
+            
+            # Asignar el QMovie al QLabel
+            ui.label_3.setMovie(movie)
+
+            # Opcional: centrar el GIF en el label
+            ui.label_3.setAlignment(QtCore.Qt.AlignCenter)
+            
+            # Iniciar la animación
+            movie.start()
+        else:
+            print(f"No se encontró el archivo GIF en: {gif_path}")
+        
+        dialog.setModal(True)
+        dialog.setWindowFlags(QtCore.Qt.Window | 
+                            QtCore.Qt.WindowTitleHint | 
+                            QtCore.Qt.CustomizeWindowHint)
+        
+        return dialog, ui
+        
