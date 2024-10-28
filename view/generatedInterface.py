@@ -942,6 +942,7 @@ class Ui_MainWindow(object):
                 #Inicializa los botones como inhabilitados hasta que no se seleccione un estudio
                 self.set_enabled_views(False)
                 self.set_enabled_tools(False)
+                self.dispositionButton_3D.setEnabled(False)
 
                 #Cambio de apariencia en los botones cuando son presionados
                 self.set_stylesheet()
