@@ -925,8 +925,7 @@ class Ui_MainWindow(object):
                                      self.dispositionButton_1x3, 
                                      self.dispositionButton_1x2, 
                                      self.dispositionButton_1u2d, 
-                                     self.dispositionButton_1l2r,
-                                     self.dispositionButton_3D]
+                                     self.dispositionButton_1l2r]
                 self.tools_buttons = [
                                       self.toolButton_regla,
                                       self.toolButton_areaCircular,
@@ -996,6 +995,7 @@ class Ui_MainWindow(object):
                 self.dispositionButton_2x2.setChecked(True)
                 self.set_enabled_tools(True)
                 self.viewer_actions.display_four_images()
+                self.dispositionButton_3D.setEnabled(True)
                 
         def display_view_3D(self):
                 self.uncheck_views()
