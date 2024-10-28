@@ -18,6 +18,7 @@ class ViewerActions:
         self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer = viewers
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
+        self.views = [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]
 
     def clear_layout(self):
         if self.frame_3.layout() is not None:
@@ -226,28 +227,33 @@ class ViewerActions:
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_distance_measurement()
         else:
-            self.QtSagittalOrthoViewer.set_distance_measurement("./Data/raw/patient.mhd")
+            for view in self.views:
+                view.set_distance_measurement("./Data/raw/patient.mhd")
 
     def set_canvas(self):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_canvas()
         else:
-            self.QtSagittalOrthoViewer.set_canvas()
+            for view in self.views:
+                view.set_canvas()
         
     def clear_canvas_drawing(self):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.clear_canvas_drawing()
         else:
-            self.QtSagittalOrthoViewer.clear_canvas_drawing()
+            for view in self.views:
+                view.clear_canvas_drawing()
         
     def set_shape_canvas(self, shape):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_shape_canvas(shape)
         else:
-            self.QtSagittalOrthoViewer.set_shape_canvas(shape)
+           for view in self.views:
+                view.set_shape_canvas(shape)
 
     def set_text_canvas(self):
         if config.current_study == "CT" or config.current_study == "MR":
             self.dcm_viewer.set_text_canvas()
         else:
-            self.QtSagittalOrthoViewer.set_text_canvas()
+            for view in self.views:
+                view.set_text_canvas()
