@@ -19,12 +19,9 @@ class ViewerActions:
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
         self.frames = {}  # Diccionario para almacenar frames de cada visualizador
-
-        # Crear frames para cada visualizador y agregarlos al diccionario
         self.create_frames()
 
     def create_frames(self):
-        """Crea frames para cada visualizador y los agrega al frame_3 inicialmente ocultos."""
         visualizadores = [self.dcm_viewer, self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer,
                           self.QtCoronalOrthoViewer, self.QtSegmentationViewer]
         nombres = ["dcm_viewer", "QtSagittalOrthoViewer", "QtAxialOrthoViewer",
@@ -39,12 +36,10 @@ class ViewerActions:
             self.frames[nombre] = frame
 
     def clear_layout(self):
-        """Oculta todos los frames en lugar de eliminarlos del layout."""
         for frame in self.frames.values():
             frame.setVisible(False)
 
     def display_one_image(self):
-        """Muestra solo el visualizador DICOM en un frame."""
         self.clear_layout()
         if config.current_study in ['CT', 'MR']:
             self.frames["dcm_viewer"].setVisible(True)
@@ -58,7 +53,6 @@ class ViewerActions:
         self.open_data()
 
     def display_two_images_vertical(self):
-        """Muestra dos visualizadores en un QSplitter vertical."""
         self.clear_layout()
         vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         
@@ -73,7 +67,6 @@ class ViewerActions:
         self.open_data()
 
     def display_two_images_horizontal(self):
-        """Muestra dos visualizadores en un QSplitter horizontal."""
         self.clear_layout()
         horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
 
@@ -88,7 +81,6 @@ class ViewerActions:
         self.open_data()
 
     def display_three_images_horizontal(self):
-        """Muestra tres visualizadores en un QSplitter horizontal."""
         self.clear_layout()
         horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
 
@@ -105,7 +97,6 @@ class ViewerActions:
         self.open_data()
 
     def display_three_images_t(self):
-        """Muestra tres visualizadores en una disposición en forma de 'T'."""
         self.clear_layout()
         vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
@@ -124,7 +115,6 @@ class ViewerActions:
         self.open_data()
 
     def display_three_images_inverted_t(self):
-        """Muestra tres visualizadores en una disposición en forma de 'T' invertida."""
         self.clear_layout()
         vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
