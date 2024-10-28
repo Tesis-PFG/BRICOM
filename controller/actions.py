@@ -10,146 +10,158 @@ from PyQt5.QtCore import Qt, QPoint
 import model.config as config
 from view.Render3DMHD import *
 
+
 class ViewerActions:
     def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection, vtkBaseClass):
         self.frame_3 = frame_3
         self.dcm_viewer = dcm_viewer
-        self. current_splitter = None
         self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer = viewers
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
-        self.views = [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]
+        self.frames = {}  # Diccionario para almacenar frames de cada visualizador
 
+        # Crear frames para cada visualizador y agregarlos al diccionario
+        self.create_frames()
 
-    def hide_studies(self):
-        self.render_3D.setFixedSize(0, 0)
-        self.dcm_viewer.setFixedSize(0, 0)
-        self.QtSagittalOrthoViewer.setFixedSize(0, 0)
-        self.QtAxialOrthoViewer.setFixedSize(0, 0)
-        self.QtCoronalOrthoViewer.setFixedSize(0, 0)
-        self.QtSegmentationViewer.setFixedSize(0, 0)
-        self.current_splitter = None
+    def create_frames(self):
+        """Crea frames para cada visualizador y los agrega al frame_3 inicialmente ocultos."""
+        visualizadores = [self.dcm_viewer, self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer,
+                          self.QtCoronalOrthoViewer, self.QtSegmentationViewer]
+        nombres = ["dcm_viewer", "QtSagittalOrthoViewer", "QtAxialOrthoViewer",
+                   "QtCoronalOrthoViewer", "QtSegmentationViewer"]
+
+        # Crear un QFrame para cada visualizador y ocultarlo por defecto
+        for visualizador, nombre in zip(visualizadores, nombres):
+            frame = QtWidgets.QFrame(self.frame_3)
+            layout = QtWidgets.QVBoxLayout(frame)
+            layout.addWidget(visualizador)
+            frame.setVisible(False)
+            self.frames[nombre] = frame
 
     def clear_layout(self):
-        if self.current_splitter:
-            self.frame_3.layout().removeWidget(self.current_splitter)
-            self.current_splitter.deleteLater()
-            self.current_splitter = None
-
-    def add_viewer_to_frame(self, parent_splitter, viewer):
-        frame = QtWidgets.QFrame()
-        frame_layout = QtWidgets.QVBoxLayout()
-        frame.setLayout(frame_layout)
-        frame_layout.addWidget(viewer)
-        parent_splitter.addWidget(frame)
-
+        """Oculta todos los frames en lugar de eliminarlos del layout."""
+        for frame in self.frames.values():
+            frame.setVisible(False)
 
     def display_one_image(self):
+        """Muestra solo el visualizador DICOM en un frame."""
         self.clear_layout()
-        self.current_splitter = QtWidgets.QSplitter(Qt.Vertical)
-        
-        frame = QtWidgets.QFrame()
-        frame_layout = QtWidgets.QVBoxLayout()
-        frame.setLayout(frame_layout)
-        
-        if config.current_study == 'CT' or config.current_study == 'MR':
-            self.dcm_viewer.setFixedSize(500, 500)
-            frame_layout.addWidget(self.dcm_viewer)
+        if config.current_study in ['CT', 'MR']:
+            self.frames["dcm_viewer"].setVisible(True)
+            self.frame_3.layout().addWidget(self.frames["dcm_viewer"])
         elif config.current_study == 'ImagenConjunta':
-            self.QtSagittalOrthoViewer.setFixedSize(300, 300)
-            frame_layout.addWidget(self.QtSagittalOrthoViewer)
+            self.frames["QtSagittalOrthoViewer"].setVisible(True)
+            self.frame_3.layout().addWidget(self.frames["QtSagittalOrthoViewer"])
 
-        self.current_splitter.addWidget(frame)
-        self.frame_3.layout().addWidget(self.current_splitter)
         self.frame_3.layout().update()
+        self.frame_3.update()
         self.open_data()
 
     def display_two_images_vertical(self):
+        """Muestra dos visualizadores en un QSplitter vertical."""
         self.clear_layout()
-        self.current_splitter = QtWidgets.QSplitter(Qt.Vertical)
+        vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        
+        self.frames["QtSagittalOrthoViewer"].setVisible(True)
+        self.frames["QtAxialOrthoViewer"].setVisible(True)
+        
+        vertical_splitter.addWidget(self.frames["QtSagittalOrthoViewer"])
+        vertical_splitter.addWidget(self.frames["QtAxialOrthoViewer"])
+        self.frame_3.layout().addWidget(vertical_splitter)
 
-        for viewer in [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer]:
-            viewer.setFixedSize(300, 300)
-            self.add_viewer_to_frame(self.current_splitter, viewer)
-
-        self.frame_3.layout().addWidget(self.current_splitter)
         self.frame_3.layout().update()
         self.open_data()
 
     def display_two_images_horizontal(self):
+        """Muestra dos visualizadores en un QSplitter horizontal."""
         self.clear_layout()
-        self.current_splitter = QtWidgets.QSplitter(Qt.Horizontal)
+        horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
 
-        for viewer in [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer]:
-            viewer.setFixedSize(300, 300)
-            self.add_viewer_to_frame(self.current_splitter, viewer)
+        self.frames["QtSagittalOrthoViewer"].setVisible(True)
+        self.frames["QtAxialOrthoViewer"].setVisible(True)
+        
+        horizontal_splitter.addWidget(self.frames["QtSagittalOrthoViewer"])
+        horizontal_splitter.addWidget(self.frames["QtAxialOrthoViewer"])
+        self.frame_3.layout().addWidget(horizontal_splitter)
 
-        self.frame_3.layout().addWidget(self.current_splitter)
         self.frame_3.layout().update()
         self.open_data()
 
     def display_three_images_horizontal(self):
+        """Muestra tres visualizadores en un QSplitter horizontal."""
         self.clear_layout()
-        self.current_splitter = QtWidgets.QSplitter(Qt.Horizontal)
+        horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
 
-        for viewer in [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]:
-            viewer.setFixedSize(300, 300)
-            self.add_viewer_to_frame(self.current_splitter, viewer)
+        self.frames["QtSagittalOrthoViewer"].setVisible(True)
+        self.frames["QtAxialOrthoViewer"].setVisible(True)
+        self.frames["QtCoronalOrthoViewer"].setVisible(True)
 
-        self.frame_3.layout().addWidget(self.current_splitter)
+        horizontal_splitter.addWidget(self.frames["QtSagittalOrthoViewer"])
+        horizontal_splitter.addWidget(self.frames["QtAxialOrthoViewer"])
+        horizontal_splitter.addWidget(self.frames["QtCoronalOrthoViewer"])
+        self.frame_3.layout().addWidget(horizontal_splitter)
+
         self.frame_3.layout().update()
         self.open_data()
 
     def display_three_images_t(self):
+        """Muestra tres visualizadores en una disposición en forma de 'T'."""
         self.clear_layout()
-        vertical_splitter = QtWidgets.QSplitter(Qt.Vertical)
-        self.current_splitter = QtWidgets.QSplitter(Qt.Horizontal)
+        vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
 
-        for viewer in [self.QtSagittalOrthoViewer, self.QtCoronalOrthoViewer]:
-            viewer.setFixedSize(300, 300)
-            self.add_viewer_to_frame(vertical_splitter, viewer)
+        self.frames["QtSagittalOrthoViewer"].setVisible(True)
+        self.frames["QtAxialOrthoViewer"].setVisible(True)
+        self.frames["QtCoronalOrthoViewer"].setVisible(True)
 
-        self.current_splitter.addWidget(vertical_splitter)
-        self.add_viewer_to_frame(self.current_splitter, self.QtAxialOrthoViewer)
+        vertical_splitter.addWidget(self.frames["QtSagittalOrthoViewer"])
+        vertical_splitter.addWidget(self.frames["QtCoronalOrthoViewer"])
+        horizontal_splitter.addWidget(vertical_splitter)
+        horizontal_splitter.addWidget(self.frames["QtAxialOrthoViewer"])
 
-        self.frame_3.layout().addWidget(self.current_splitter)
+        self.frame_3.layout().addWidget(horizontal_splitter)
         self.frame_3.layout().update()
         self.open_data()
 
     def display_three_images_inverted_t(self):
+        """Muestra tres visualizadores en una disposición en forma de 'T' invertida."""
         self.clear_layout()
-        vertical_splitter = QtWidgets.QSplitter(Qt.Vertical)
-        self.current_splitter = QtWidgets.QSplitter(Qt.Horizontal)
+        vertical_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        horizontal_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
 
-        for viewer in [self.QtSagittalOrthoViewer, self.QtCoronalOrthoViewer]:
-            viewer.setFixedSize(300, 300)
-            self.add_viewer_to_frame(vertical_splitter, viewer)
+        self.frames["QtSagittalOrthoViewer"].setVisible(True)
+        self.frames["QtAxialOrthoViewer"].setVisible(True)
+        self.frames["QtCoronalOrthoViewer"].setVisible(True)
 
-        self.current_splitter.addWidget(self.QtAxialOrthoViewer)
-        self.current_splitter.addWidget(vertical_splitter)
+        vertical_splitter.addWidget(self.frames["QtSagittalOrthoViewer"])
+        vertical_splitter.addWidget(self.frames["QtCoronalOrthoViewer"])
+        horizontal_splitter.addWidget(self.frames["QtAxialOrthoViewer"])
+        horizontal_splitter.addWidget(vertical_splitter)
 
-        self.frame_3.layout().addWidget(self.current_splitter)
+        self.frame_3.layout().addWidget(horizontal_splitter)
         self.frame_3.layout().update()
         self.open_data()
 
     def display_four_images(self):
+        """Muestra cuatro visualizadores en una disposición de 2x2."""
         self.clear_layout()
-        left_splitter = QtWidgets.QSplitter(Qt.Vertical)
-        right_splitter = QtWidgets.QSplitter(Qt.Vertical)
-        self.current_splitter = QtWidgets.QSplitter(Qt.Horizontal)
+        left_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        right_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        main_splitter = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
 
-        for viewer in [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer]:
-            viewer.setFixedSize(300, 300)
-            self.add_viewer_to_frame(left_splitter, viewer)
+        self.frames["QtSagittalOrthoViewer"].setVisible(True)
+        self.frames["QtAxialOrthoViewer"].setVisible(True)
+        self.frames["QtCoronalOrthoViewer"].setVisible(True)
+        self.frames["QtSegmentationViewer"].setVisible(True)
 
-        for viewer in [self.QtCoronalOrthoViewer, self.QtSegmentationViewer]:
-            viewer.setFixedSize(300, 300)
-            self.add_viewer_to_frame(right_splitter, viewer)
+        left_splitter.addWidget(self.frames["QtSagittalOrthoViewer"])
+        left_splitter.addWidget(self.frames["QtAxialOrthoViewer"])
+        right_splitter.addWidget(self.frames["QtCoronalOrthoViewer"])
+        right_splitter.addWidget(self.frames["QtSegmentationViewer"])
+        main_splitter.addWidget(left_splitter)
+        main_splitter.addWidget(right_splitter)
 
-        self.current_splitter.addWidget(left_splitter)
-        self.current_splitter.addWidget(right_splitter)
-
-        self.frame_3.layout().addWidget(self.current_splitter)
+        self.frame_3.layout().addWidget(main_splitter)
         self.frame_3.layout().update()
         self.open_data()
 
