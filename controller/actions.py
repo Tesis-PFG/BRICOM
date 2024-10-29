@@ -21,6 +21,12 @@ class ViewerActions:
         self.frames = {}  # Diccionario para almacenar frames de cada visualizador
         self.create_frames()
 
+        # Verifica si frame_3 ya tiene un layout; si no, crea uno nuevo.
+        if not self.frame_3.layout():
+            layout = QtWidgets.QHBoxLayout(self.frame_3)  # Usa un QHBoxLayout para alinear a la izquierda
+            layout.setAlignment(Qt.AlignLeft)  # Alineación a la izquierda
+            self.frame_3.setLayout(layout)
+
     def create_frames(self):
         visualizadores = [self.dcm_viewer, self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer,
                           self.QtCoronalOrthoViewer, self.QtSegmentationViewer]
@@ -36,6 +42,11 @@ class ViewerActions:
             self.frames[nombre] = frame
 
     def clear_layout(self):
+        if self.frame_3.layout() is not None:
+            while self.frame_3.layout().count():
+                child = self.frame_3.layout().takeAt(0)
+                if child.widget() and type(child.widget()) == 'QSplitter':
+                    self.frame_3.layout().removeWidget(child.widget())
         for frame in self.frames.values():
             frame.setVisible(False)
 
@@ -154,6 +165,8 @@ class ViewerActions:
         self.frame_3.layout().addWidget(main_splitter)
         self.frame_3.layout().update()
         self.open_data()
+
+
 
     def display_view_3D(self):
         self.clear_layout()
