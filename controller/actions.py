@@ -20,6 +20,7 @@ class ViewerActions:
         self.vtkBaseClass = vtkBaseClass
         self.frames = {}  # Diccionario para almacenar frames de cada visualizador
         self.create_frames()
+        self.views = [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]
 
     def create_frames(self):
         visualizadores = [self.dcm_viewer, self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer,
