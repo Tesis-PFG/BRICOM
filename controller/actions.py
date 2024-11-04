@@ -9,9 +9,31 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QPoint
 import model.config as config
 from view.Render3DMHD import *
+from PyQt5.QtCore import QThread, pyqtSignal
+import os
 
 from view.generatedDialogCarga import Ui_Dialog as Ui_DialogCarga
 from PyQt5 import QtGui
+
+
+class ImageProcessingThread(QThread):
+    finished = pyqtSignal(str)  # Emite el path del archivo procesado
+    error = pyqtSignal(str)
+    
+    def __init__(self, file_paths, file_paths_2):
+        super().__init__()
+        self.file_paths = file_paths
+        self.file_paths_2 = file_paths_2
+        
+    def run(self):
+        try:
+            # Ejecutar el registro (asumiendo que es una función importada)
+            registro(self.file_paths, self.file_paths_2)
+            # Emitir la señal con el path del archivo resultante
+            self.finished.emit('./Data/raw/patient.mhd')
+        except Exception as e:
+            self.error.emit(str(e))
+
 
 class ViewerActions:
     def __init__(self, frame_3, dcm_viewer, viewers, ViewersConnection, vtkBaseClass):
@@ -205,19 +227,44 @@ class ViewerActions:
                 # Forzar la actualización de la interfaz
                 QtWidgets.QApplication.processEvents()
 
-                registro(file_paths, file_paths_2)
-                # Ruta de la imagen principal (ajusta si cambia según el paciente)
-                myFile = f'./Data/raw/patient.mhd'
-                # Carga y renderiza los datos
-                self.load_data(myFile)
+                # Crear y configurar el hilo de procesamiento
+                self.processing_thread = ImageProcessingThread(file_paths, file_paths_2)
                 
-                #Cerrar diálogo de carga
-                dialog.close()
+                # Conectar las señales
+                self.processing_thread.finished.connect(
+                    lambda file_path: self.processing_finished(file_path, dialog)
+                )
+                self.processing_thread.error.connect(
+                    lambda error: self.processing_error(error, dialog)
+                )
                 
-                self.render_data()
+                # Iniciar el procesamiento
+                self.processing_thread.start()
+
             except Exception as e:
+                if dialog:
+                    dialog.close()
                 print(e)
-                QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+                QtWidgets.QMessageBox.critical(self.frame_3, "Error", 
+                    f"Se generó una excepción cargando las imágenes \n {e}")
+                
+
+    def processing_finished(self, file_path, dialog):
+        """Maneja la finalización exitosa del procesamiento"""
+        try:
+            self.load_data(file_path)
+            dialog.close()
+            self.render_data()
+        except Exception as e:
+            self.processing_error(str(e), dialog)
+
+    def processing_error(self, error_message, dialog):
+        """Maneja los errores durante el procesamiento"""
+        if dialog:
+            dialog.close()
+        print(error_message)
+        QtWidgets.QMessageBox.critical(self.frame_3, "Error", 
+            f"Se generó una excepción cargando las imágenes \n {error_message}")
 
     def load_data(self, filename):
         self.vtkBaseClass.connect_on_data(filename)
