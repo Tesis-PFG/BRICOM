@@ -1,13 +1,60 @@
 from PyQt5.QtWidgets import QHeaderView
 from PyQt5.QtWidgets import QFileDialog,QApplication, QMainWindow, QTableWidget, QTableWidgetItem,QMessageBox
+import view.generatedDialogCarga
 from view.generatedInterface import *  
 from view.generatedDialogTagsSubida import Ui_Dialog as Ui_DialogTagsSubida
 from view.generatedDialogEscogerEstudio import Ui_Dialog as Ui_DialogEscogerEstudio
+from view.generatedDialogCarga import Ui_Dialog as Ui_DialogCarga
 import shutil
 import pydicom
 import json
 import sys, os, re
 import model.config as config
+
+
+class DicomProcessingThread(QThread):
+    finished = pyqtSignal()
+    error = pyqtSignal(str)
+    
+    def __init__(self, dicom_files, carpeta_origen, carpeta_modalidad, metadata_paciente, metadata_estudio, carpeta_paciente, modality):
+        super().__init__()
+        self.dicom_files = dicom_files
+        self.carpeta_origen = carpeta_origen
+        self.carpeta_modalidad = carpeta_modalidad
+        self.metadata_paciente = metadata_paciente
+        self.metadata_estudio = metadata_estudio
+        self.carpeta_paciente = carpeta_paciente
+        self.modality = modality
+        
+    def run(self):
+        try:
+            # Copiar y modificar todos los archivos DICOM
+            for archivo in self.dicom_files:
+                ruta_origen = os.path.join(self.carpeta_origen, archivo)
+                ruta_destino = os.path.join(self.carpeta_modalidad, archivo)
+                shutil.copy2(ruta_origen, ruta_destino)
+                self.modificar_tags_dicom(ruta_destino, self.metadata_paciente, self.metadata_estudio)
+
+            # Guardar metadata
+            self.guardar_metadata(self.metadata_paciente, self.carpeta_paciente, "metadata_paciente.json")
+            self.guardar_metadata(self.metadata_estudio, self.carpeta_paciente, f"metadata_{self.modality.upper()}.json")
+            
+            self.finished.emit()
+        except Exception as e:
+            self.error.emit(str(e))
+
+    def modificar_tags_dicom(self, ruta_archivo, metadata_paciente, metadata_estudio):
+        dicom_data = pydicom.dcmread(ruta_archivo)
+        for tag, valor in {**metadata_paciente, **metadata_estudio}.items():
+            if tag in dicom_data:
+                dicom_data[tag].value = valor
+        dicom_data.save_as(ruta_archivo)
+    
+    def guardar_metadata(self, metadata, ruta_carpeta, nombre_archivo):
+        ruta_metadata = os.path.join(ruta_carpeta, nombre_archivo)
+        with open(ruta_metadata, 'w') as f:
+            json.dump(metadata, f, indent=4)
+
 
 
 class MyApp(Ui_MainWindow):
@@ -288,18 +335,6 @@ class MyApp(Ui_MainWindow):
             for ruta in rutas_origen:
                 shutil.copy2(ruta, carpeta_destino)
 
-        def guardar_metadata(metadata, ruta_carpeta, nombre_archivo):
-            ruta_metadata = os.path.join(ruta_carpeta, nombre_archivo)
-            with open(ruta_metadata, 'w') as f:
-                json.dump(metadata, f, indent=4)
-
-
-        def modificar_tags_dicom(ruta_archivo, metadata_paciente, metadata_estudio):
-            dicom_data = pydicom.dcmread(ruta_archivo)
-            for tag, valor in {**metadata_paciente, **metadata_estudio}.items():
-                if tag in dicom_data:
-                    dicom_data[tag].value = valor
-            dicom_data.save_as(ruta_archivo)
 
          # Obtener el directorio actual donde se encuentra este archivo
         current_dir = os.path.dirname(os.path.abspath(__file__))  # qt-int/controller/main
@@ -363,30 +398,47 @@ class MyApp(Ui_MainWindow):
             metadata_paciente, metadata_estudio, dialogo_exitoso = self.abrir_Pdialogo_tags(metadata_paciente, metadata_estudio, num_imagenes)
 
             if dialogo_exitoso:
-                print(metadata_paciente)
-                print(metadata_estudio)
+                    try:
+                        # Abrir diálogo de carga
+                        dialog, ui = self.abrir_dialogo_carga()
+                        dialog.setModal(True)
+                        dialog.setWindowFlags(QtCore.Qt.Window | 
+                                            QtCore.Qt.WindowTitleHint | 
+                                            QtCore.Qt.CustomizeWindowHint)
+                        
+                        dialog.show()
+                        QtWidgets.QApplication.processEvents()
 
-                patient_id = metadata_paciente["PatientID"]
+                        patient_id = metadata_paciente["PatientID"]
+                        carpeta_paciente = crear_carpeta_paciente(carpeta_base, patient_id)
+                        carpeta_modalidad = crear_carpeta_modalidad(carpeta_paciente, modality)
 
-                carpeta_paciente = crear_carpeta_paciente(carpeta_base, patient_id)
-                carpeta_modalidad = crear_carpeta_modalidad(carpeta_paciente, modality)
+                        # Crear y configurar el hilo de procesamiento
+                        self.processing_thread = DicomProcessingThread(
+                            dicom_files,
+                            carpeta_origen,
+                            carpeta_modalidad,
+                            metadata_paciente,
+                            metadata_estudio,
+                            carpeta_paciente,
+                            modality
+                        )
+                        
+                        # Conectar señales
+                        self.processing_thread.finished.connect(
+                            lambda: self.dicom_processing_finished(dialog, num_imagenes, carpeta_modalidad)
+                        )
+                        self.processing_thread.error.connect(
+                            lambda error: self.dicom_processing_error(error, dialog)
+                        )
+                        
+                        # Iniciar el procesamiento
+                        self.processing_thread.start()
 
-                # Copiar y modificar todos los archivos DICOM
-                for archivo in dicom_files:
-                    ruta_origen = os.path.join(carpeta_origen, archivo)
-                    ruta_destino = os.path.join(carpeta_modalidad, archivo)
-                    shutil.copy2(ruta_origen, ruta_destino)
-                    modificar_tags_dicom(ruta_destino, metadata_paciente, metadata_estudio)
-
-                # Guardar metadata
-                guardar_metadata(metadata_paciente, carpeta_paciente, "metadata_paciente.json")
-                guardar_metadata(metadata_estudio, carpeta_paciente, f"metadata_{modality.upper()}.json")
-
-                # Mostrar mensaje de éxito
-                QtWidgets.QMessageBox.information(None, 'Éxito', f"Procesados {num_imagenes} archivos DICOM. Guardados en: {carpeta_modalidad}")
-            else:
-                # No hacer nada si el diálogo no fue exitoso
-                return
+                    except Exception as e:
+                        if dialog:
+                            dialog.close()
+                        QtWidgets.QMessageBox.critical(None, 'Error', f"Ocurrió un error al procesar los archivos: {str(e)}")
 
         except Exception as e:
             # Mostrar mensaje de error
@@ -394,6 +446,21 @@ class MyApp(Ui_MainWindow):
 
         print("Procesamiento completado.")
         
+
+
+    def dicom_processing_finished(self, dialog, num_imagenes, carpeta_modalidad):
+        """Maneja la finalización exitosa del procesamiento"""
+        dialog.close()
+        QtWidgets.QMessageBox.information(None, 'Éxito', 
+            f"Procesados {num_imagenes} archivos DICOM. Guardados en: {carpeta_modalidad}")
+        print("Procesamiento completado.")
+
+    def dicom_processing_error(self, error_message, dialog):
+        """Maneja los errores durante el procesamiento"""
+        dialog.close()
+        QtWidgets.QMessageBox.critical(None, 'Error', 
+            f"Ocurrió un error al procesar los archivos: {error_message}")
+
 
     def abrir_Pdialogo_tags(self, metadata_paciente, metadata_estudio, num_imagenes):
 
@@ -525,6 +592,23 @@ class MyApp(Ui_MainWindow):
         ui =  Ui_DialogEscogerEstudio()
         ui.setupUi(dialog)
 
+        def update_study_buttons(patient_id):
+            # Obtener rutas
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            project_dir = os.path.join(current_dir, '..')
+            base_path = "model/local_database"
+            path = os.path.join(project_dir, base_path)
+            patient_folder = os.path.join(path, patient_id)
+            
+            # Verificar existencia de estudios
+            has_ct = os.path.exists(os.path.join(patient_folder, "metadata_CT.json"))
+            has_mr = os.path.exists(os.path.join(patient_folder, "metadata_MR.json"))
+            
+            # Mostrar/ocultar botones según disponibilidad de estudios
+            ui.CTButton_paciente.setVisible(has_ct)
+            ui.MRButton_paciente.setVisible(has_mr)
+            ui.ImagenConjuntaButton_paciente.setVisible(has_ct and has_mr)
+
         def update_info_tables(patient_id, study_type=None):
             # Load patient data
             current_dir = os.path.dirname(os.path.abspath(__file__))  # qt-int/controller/main
@@ -536,6 +620,8 @@ class MyApp(Ui_MainWindow):
             
             patient_folder = os.path.join(path, patient_id)
             patient_metadata_file = os.path.join(patient_folder, "metadata_paciente.json")
+
+
             if os.path.exists(patient_metadata_file):
                 with open(patient_metadata_file, 'r') as f:
                     patient_data = json.load(f)
@@ -565,9 +651,13 @@ class MyApp(Ui_MainWindow):
                 # Clear study table if no study type is selected
                 self.studyInfo_table.setRowCount(0)
 
-        def set_current_study(study_type):
+        def set_current_study(study_type, patien_id):
+
+            # Set the current patient and study
             config.current_study = study_type
+            config.current_patient = patient_id
             print(f"Current patient: {config.current_patient}, Current study: {config.current_study}")
+
             update_info_tables(config.current_patient, study_type)
             dialog.accept()  # Close the dialog after selection
             self.set_enabled_views(True)
@@ -590,13 +680,19 @@ class MyApp(Ui_MainWindow):
             for button in disposition_buttons:
                 if study_type.lower() == "imagenconjunta":
                     button.setVisible(True)
+                    #Esconde la información del estudio
+                    self.frame_19.setVisible(False)
                 else:
                     button.setVisible(False)
+                    #Muestra la información del estudio
+                    self.frame_19.setVisible(True)
 
             #Cambio de pantalla a visualización
             self.stackedWidgetPrincipal.setCurrentIndex(0)
             self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)
             self.mainButton_visualizacion.setChecked(True)
+            self.subMenu_patient.setChecked(True)
+            
             
             
 
@@ -622,19 +718,54 @@ class MyApp(Ui_MainWindow):
         ui.sexo_label.setText(f"Sexo: {patient_sex}")
         ui.fechaNacimiento_label.setText(f"Fecha de Nacimiento: {patient_birth_date}")
 
+        update_study_buttons(patient_id)
+
         # Connect buttons to their respective functions
-        ui.MRButton_paciente.clicked.connect(lambda: set_current_study("MR"))
-        ui.CTButton_paciente.clicked.connect(lambda: set_current_study("CT"))
-        ui.ImagenConjuntaButton_paciente.clicked.connect(lambda: set_current_study("ImagenConjunta"))
+        ui.MRButton_paciente.clicked.connect(lambda: set_current_study("MR", patient_id))
+        ui.CTButton_paciente.clicked.connect(lambda: set_current_study("CT", patient_id))
+        ui.ImagenConjuntaButton_paciente.clicked.connect(lambda: set_current_study("ImagenConjunta", patient_id))
         
         ui.anteriorButton_paciente.clicked.connect(lambda: navigate_patient(-1))
         ui.siguienteButton_paciente.clicked.connect(lambda: navigate_patient(1))
 
-        # Set the current patient
-        config.current_patient = patient_id
-        update_info_tables(patient_id)
-
         dialog.exec_()
+    
+    def abrir_dialogo_carga(self):
+        dialog = QtWidgets.QDialog()
+        ui = Ui_DialogCarga()
+        ui.setupUi(dialog)
+        
+        # Obtener el directorio actual donde se encuentra este archivo
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Construir la ruta al GIF está una carpeta arriba y luego en 'assets'
+        gif_path = os.path.join(current_dir, "..", "assets", "carga_gif.gif")
+        
+        # Verificar si el archivo existe
+        if os.path.exists(gif_path):
+            # Crear y configurar el QMovie
+            movie = QtGui.QMovie(gif_path)
+            
+            # Opcional: ajustar el tamaño del GIF
+            movie.setScaledSize(QtCore.QSize(100, 100))  # Ajusta estos números según necesites
+            
+            # Asignar el QMovie al QLabel
+            ui.label_3.setMovie(movie)
+
+            # Opcional: centrar el GIF en el label
+            ui.label_3.setAlignment(QtCore.Qt.AlignCenter)
+            
+            # Iniciar la animación
+            movie.start()
+        else:
+            print(f"No se encontró el archivo GIF en: {gif_path}")
+        
+        dialog.setModal(True)
+        dialog.setWindowFlags(QtCore.Qt.Window | 
+                            QtCore.Qt.WindowTitleHint | 
+                            QtCore.Qt.CustomizeWindowHint)
+        
+        return dialog, ui
     
 
 #Inicialización de la aplicación y la ventana

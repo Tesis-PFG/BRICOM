@@ -40,19 +40,6 @@ class Ui_Dialog(object):
         self.horizontalLayout_5.addWidget(self.label)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem1)
-        self.anonymizeButton_uploadTags = QtWidgets.QPushButton(self.widget)
-        self.anonymizeButton_uploadTags.setMaximumSize(QtCore.QSize(80, 70))
-        self.anonymizeButton_uploadTags.setStyleSheet("border-radius:10px;\n"
-"background-color:#E2BBE9;\n"
-"\n"
-"")
-        self.anonymizeButton_uploadTags.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(".\\Assets/button_anonimizar.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.anonymizeButton_uploadTags.setIcon(icon)
-        self.anonymizeButton_uploadTags.setIconSize(QtCore.QSize(45, 40))
-        self.anonymizeButton_uploadTags.setObjectName("anonymizeButton_uploadTags")
-        self.horizontalLayout_5.addWidget(self.anonymizeButton_uploadTags)
         self.verticalLayout.addWidget(self.widget)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setSpacing(0)

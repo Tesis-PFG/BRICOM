@@ -87,35 +87,6 @@ border-top-right-radius:20px;</string>
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QPushButton" name="anonymizeButton_uploadTags">
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>70</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">border-radius:10px;
-background-color:#E2BBE9;
-
-</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>Assets/button_anonimizar.png</normaloff>Assets/button_anonimizar.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>45</width>
-          <height>40</height>
-         </size>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

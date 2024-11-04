@@ -9,6 +9,30 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import Qt, QPoint
 import model.config as config
 from view.Render3DMHD import *
+from PyQt5.QtCore import QThread, pyqtSignal
+import os
+
+from view.generatedDialogCarga import Ui_Dialog as Ui_DialogCarga
+from PyQt5 import QtGui
+
+
+class ImageProcessingThread(QThread):
+    finished = pyqtSignal(str)  # Emite el path del archivo procesado
+    error = pyqtSignal(str)
+    
+    def __init__(self, file_paths, file_paths_2):
+        super().__init__()
+        self.file_paths = file_paths
+        self.file_paths_2 = file_paths_2
+        
+    def run(self):
+        try:
+            # Ejecutar el registro (asumiendo que es una función importada)
+            registro(self.file_paths, self.file_paths_2)
+            # Emitir la señal con el path del archivo resultante
+            self.finished.emit('./Data/raw/patient.mhd')
+        except Exception as e:
+            self.error.emit(str(e))
 
 
 class ViewerActions:
@@ -204,15 +228,58 @@ class ViewerActions:
                 print(e)
         else:
             try:
-                registro(file_paths, file_paths_2)
-                # Ruta de la imagen principal (ajusta si cambia según el paciente)
-                myFile = f'./Data/raw/patient.mhd'
-                # Carga y renderiza los datos
-                self.load_data(myFile)
-                self.render_data()
+                # Abrir diálogo de carga
+                dialog, ui = self.abrir_dialogo_carga()
+                # Hacer el diálogo modal
+                dialog.setModal(True)
+                # Quitar el botón de cerrar
+                dialog.setWindowFlags(QtCore.Qt.Window | 
+                                    QtCore.Qt.WindowTitleHint | 
+                                    QtCore.Qt.CustomizeWindowHint)
+                
+                # Mostrar el diálogo
+                dialog.show()
+                # Forzar la actualización de la interfaz
+                QtWidgets.QApplication.processEvents()
+
+                # Crear y configurar el hilo de procesamiento
+                self.processing_thread = ImageProcessingThread(file_paths, file_paths_2)
+                
+                # Conectar las señales
+                self.processing_thread.finished.connect(
+                    lambda file_path: self.processing_finished(file_path, dialog)
+                )
+                self.processing_thread.error.connect(
+                    lambda error: self.processing_error(error, dialog)
+                )
+                
+                # Iniciar el procesamiento
+                self.processing_thread.start()
+
             except Exception as e:
+                if dialog:
+                    dialog.close()
                 print(e)
-                QtWidgets.QMessageBox.critical(self.frame_3, "Error", f"Se generó una excepción cargando las imágenes \n {e}")
+                QtWidgets.QMessageBox.critical(self.frame_3, "Error", 
+                    f"Se generó una excepción cargando las imágenes \n {e}")
+                
+
+    def processing_finished(self, file_path, dialog):
+        """Maneja la finalización exitosa del procesamiento"""
+        try:
+            self.load_data(file_path)
+            dialog.close()
+            self.render_data()
+        except Exception as e:
+            self.processing_error(str(e), dialog)
+
+    def processing_error(self, error_message, dialog):
+        """Maneja los errores durante el procesamiento"""
+        if dialog:
+            dialog.close()
+        print(error_message)
+        QtWidgets.QMessageBox.critical(self.frame_3, "Error", 
+            f"Se generó una excepción cargando las imágenes \n {error_message}")
 
     def load_data(self, filename):
         self.vtkBaseClass.connect_on_data(filename)
@@ -271,3 +338,42 @@ class ViewerActions:
         else:
             for view in self.views:
                 view.set_angle_canvas()
+
+
+    def abrir_dialogo_carga(self):
+        dialog = QtWidgets.QDialog()
+        ui = Ui_DialogCarga()
+        ui.setupUi(dialog)
+        
+        # Obtener el directorio actual donde se encuentra este archivo
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Construir la ruta al GIF está una carpeta arriba y luego en 'assets'
+        gif_path = os.path.join(current_dir, "..", "assets", "carga_gif.gif")
+        
+        # Verificar si el archivo existe
+        if os.path.exists(gif_path):
+            # Crear y configurar el QMovie
+            movie = QtGui.QMovie(gif_path)
+            
+            # Opcional: ajustar el tamaño del GIF
+            movie.setScaledSize(QtCore.QSize(100, 100))  # Ajusta estos números según necesites
+            
+            # Asignar el QMovie al QLabel
+            ui.label_3.setMovie(movie)
+
+            # Opcional: centrar el GIF en el label
+            ui.label_3.setAlignment(QtCore.Qt.AlignCenter)
+            
+            # Iniciar la animación
+            movie.start()
+        else:
+            print(f"No se encontró el archivo GIF en: {gif_path}")
+        
+        dialog.setModal(True)
+        dialog.setWindowFlags(QtCore.Qt.Window | 
+                            QtCore.Qt.WindowTitleHint | 
+                            QtCore.Qt.CustomizeWindowHint)
+        
+        return dialog, ui
+        
