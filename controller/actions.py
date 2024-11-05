@@ -45,7 +45,6 @@ class ViewerActions:
         self.views = [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]
         self.frames = {}  # Diccionario para almacenar frames de cada visualizador
         self.create_frames()
-        self.views = [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]
 
         # Verifica si frame_3 ya tiene un layout; si no, crea uno nuevo.
         if not self.frame_3.layout():
