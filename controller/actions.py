@@ -338,6 +338,12 @@ class ViewerActions:
             for view in self.views:
                 view.set_angle_canvas()
 
+    def clear_tools(self):
+        if config.current_study == "CT" or config.current_study == "MR":
+            self.dcm_viewer.clear_tools()
+        else:
+            for view in self.views:
+                view.clear_tools()
 
     def abrir_dialogo_carga(self):
         dialog = QtWidgets.QDialog()

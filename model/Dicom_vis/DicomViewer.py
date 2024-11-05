@@ -319,18 +319,14 @@ class DicomViewer(QWidget):
             # Valor por defecto si no existe el campo PixelSpacing
             return 1.0
 
-    
     # Método para inicializar Canvas
     def set_canvas(self):
         if self.canvas is None:
             # Crear e insertar el Canvas sobre el viewer
             self.canvas = Canvas(self)
             self.canvas.show()
-
         else:
-            # Si ya existe, ocultar el Canvas
-            self.canvas.close()
-            self.canvas = None
+           self.clear_tools()
 
     # Método para inicializar DistanceMeasurement
     def set_distance_measurement(self):
@@ -339,10 +335,31 @@ class DicomViewer(QWidget):
             self.distance_measurement = DistanceMeasurementDicom(1.0, self) #TODO: Fix spacing self.pixel_spacing()
             self.distance_measurement.show()
         else:
-            # Si ya existe, ocultar DistanceMeasurement
-            self.distance_measurement.close()
-            self.distance_measurement = None
-            
+            self.clear_tools()
+        
+    def set_shape_canvas(self, shape):
+        if self.shape_canvas is None:
+            # Crear e insertar el Canvas sobre el viewer
+            self.shape_canvas = ShapeCanvas(self)
+            self.shape_canvas.set_shape(shape)
+            self.shape_canvas.show()
+        else:
+            self.clear_tools()
+
+    def set_text_canvas(self):
+        if self.text_canvas is None:
+            self.text_canvas = TextCanvas(self)
+            self.text_canvas.show()
+        else:
+            self.clear_tools()
+
+    def set_angle_canvas(self):
+        if self.angle_canvas is None:
+            self.angle_canvas = AngleMeasurement(self)
+            self.angle_canvas.show()
+        else:
+            self.clear_tools()
+
     # Método para borrar el contenido del Canvas
     def clear_canvas_drawing(self):
         if self.canvas:
@@ -354,32 +371,23 @@ class DicomViewer(QWidget):
         if self.angle_canvas:
             self.angle_canvas.clear_canvas()
 
-            
-    def set_shape_canvas(self, shape):
-        if self.shape_canvas is None:
-            # Crear e insertar el Canvas sobre el viewer
-            self.shape_canvas = ShapeCanvas(self)
-            self.shape_canvas.set_shape(shape)
-            self.shape_canvas.show()
-        else:
-            # Si ya existe, ocultar el Canvas
+    def clear_tools(self):
+        if self.canvas is not None:
+            self.canvas.close()
+            self.canvas = None
+
+        if self.distance_measurement is not None:
+            self.distance_measurement.close()
+            self.distance_measurement = None
+
+        if self.shape_canvas is not None:
             self.shape_canvas.close()
             self.shape_canvas = None
 
-    def set_text_canvas(self):
-        if self.text_canvas is None:
-            self.text_canvas = TextCanvas(self)
-            self.text_canvas.show()
-        else:
-            # Si ya existe, ocultar el Canvas
+        if self.text_canvas is not None:
             self.text_canvas.close()
             self.text_canvas = None
 
-    def set_angle_canvas(self):
-        if self.angle_canvas is None:
-            self.angle_canvas = AngleMeasurement(self)
-            self.angle_canvas.show()
-        else:
-            # Si ya existe, ocultar el Canvas
+        if self.angle_canvas is not None:
             self.angle_canvas.close()
             self.angle_canvas = None

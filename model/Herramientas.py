@@ -468,3 +468,4 @@ class DistanceMeasurementDicom(QWidget):
     def calculate_distance(self, point1, point2):
         # Calcula la distancia euclidiana entre dos puntos
         return ((point2.x() - point1.x())**2 + (point2.y() - point1.y())**2)**0.5
+    
