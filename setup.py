@@ -1,9 +1,14 @@
 from cx_Freeze import setup, Executable
+import os
 
 # Configuración de opciones de compilación
 build_options = {
     'packages': ['pydicom', 'vtk', 'gdcm'],  # Incluye 'gdcm' y otros módulos necesarios
     'includes': ['pydicom.pixel_data_handlers.gdcm_handler'],
+    'include_files': [
+        ('Assets', 'Assets'),  # Copia la carpeta Assets de la raíz
+        ('app/assets', 'app/assets')  # Copia la carpeta assets dentro de app
+    ]
 }
 
 # Definir el archivo principal
