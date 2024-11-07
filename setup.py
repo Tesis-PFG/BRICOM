@@ -1,18 +1,17 @@
 from cx_Freeze import setup, Executable
 import os
 
-# Configuración de opciones de compilación
 build_options = {
-    'packages': ['pydicom', 'vtk', 'gdcm'],  # Incluye 'gdcm' y otros módulos necesarios
+    'packages': ['pydicom', 'vtk', 'gdcm'], 
     'includes': ['pydicom.pixel_data_handlers.gdcm_handler'],
     'include_files': [
-        ('Assets', 'Assets'),  # Copia la carpeta Assets de la raíz
-        ('app/assets', 'app/assets')  # Copia la carpeta assets dentro de app
+        ('Assets', 'Assets'),  
+        ('app/assets', 'app/assets')  
     ]
 }
 
-# Definir el archivo principal
-base = 'Win32GUI'  # Cambia a '' si es una aplicación sin consola
+
+base = 'Win32GUI'
 setup(
     name="TuAplicacion",
     version="0.1",
