@@ -189,9 +189,9 @@ class ShapeCanvas(QtWidgets.QLabel):
         # Configurar el tamaño del canvas
         self.setFixedSize(parent.size())
 
-        # Habilitar el fondo transparente
+        # Habilitar el fondo transparente y evitar que el canvas bloquee la imagen subyacente
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
+        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
 
         # Crear un QPixmap transparente para dibujar
         self.pixmap = QtGui.QPixmap(self.size())
@@ -205,7 +205,7 @@ class ShapeCanvas(QtWidgets.QLabel):
     def paintEvent(self, event):
         # Dibujar el contenido del pixmap actual
         painter = QtGui.QPainter(self)
-        painter.eraseRect(self.rect())
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         painter.drawPixmap(0, 0, self.pixmap)
 
     def mousePressEvent(self, event):
@@ -225,9 +225,6 @@ class ShapeCanvas(QtWidgets.QLabel):
                 self.update()
 
     def draw_shape(self, end_x, end_y):
-        # Limpiar el pixmap antes de dibujar la nueva figura
-        self.pixmap.fill(QtCore.Qt.transparent)  # Limpiar el pixmap
-
         # Crear un nuevo painter para dibujar la figura
         painter = QtGui.QPainter(self.pixmap)
 
@@ -252,7 +249,7 @@ class ShapeCanvas(QtWidgets.QLabel):
 
         # Actualizar el widget para mostrar el nuevo dibujo
         self.update()  # Redibujar el canvas
-        
+
     def draw_arrow_head(self, painter, end_x, end_y):
         """Dibuja la cabeza de la flecha en el extremo de la línea."""
         arrow_size = 10  # Tamaño de la cabeza de la flecha
@@ -269,11 +266,9 @@ class ShapeCanvas(QtWidgets.QLabel):
 
         # Dibujar las puntas de la flecha
         painter.setBrush(QtGui.QBrush(Qt.green))  # Color de la cabeza de la flecha
-        painter.drawPolygon(QtGui.QPolygon([
-            QtCore.QPoint(int(end_x), int(end_y)),      # Convertir a int
-            QtCore.QPoint(int(point1_x), int(point1_y)),  # Convertir a int
-            QtCore.QPoint(int(point2_x), int(point2_y))   # Convertir a int
-        ]))
+        painter.drawPolygon(QtGui.QPolygon([QtCore.QPoint(int(end_x), int(end_y)),
+                                           QtCore.QPoint(int(point1_x), int(point1_y)),
+                                           QtCore.QPoint(int(point2_x), int(point2_y))]))
 
     def clear_canvas(self):
         print("Borrando el canvas...")  # Mensaje de depuración

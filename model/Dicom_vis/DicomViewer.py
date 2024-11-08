@@ -359,6 +359,7 @@ class DicomViewer(QWidget):
     def set_distance_measurement(self):
         if self.distance_measurement is None:
             # Crear e insertar DistanceMeasurement
+            self.capture_vtk_image()
             self.distance_measurement = DistanceMeasurementDicom(1.0, self) #TODO: Fix spacing self.pixel_spacing()
             self.distance_measurement.show()
         else:
@@ -367,6 +368,7 @@ class DicomViewer(QWidget):
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
             # Crear e insertar el Canvas sobre el viewer
+            self.capture_vtk_image()
             self.shape_canvas = ShapeCanvas(self)
             self.shape_canvas.set_shape(shape)
             self.shape_canvas.show()
@@ -375,6 +377,7 @@ class DicomViewer(QWidget):
 
     def set_text_canvas(self):
         if self.text_canvas is None:
+            self.capture_vtk_image()
             self.text_canvas = TextCanvas(self)
             self.text_canvas.show()
         else:
@@ -382,6 +385,7 @@ class DicomViewer(QWidget):
 
     def set_angle_canvas(self):
         if self.angle_canvas is None:
+            self.capture_vtk_image()
             self.angle_canvas = AngleMeasurement(self)
             self.angle_canvas.show()
         else:
@@ -408,15 +412,25 @@ class DicomViewer(QWidget):
         if self.distance_measurement is not None:
             self.distance_measurement.close()
             self.distance_measurement = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.shape_canvas is not None:
             self.shape_canvas.close()
             self.shape_canvas = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.text_canvas is not None:
             self.text_canvas.close()
             self.text_canvas = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.angle_canvas is not None:
             self.angle_canvas.close()
             self.angle_canvas = None
+            self.image_label.close()
+            self.image_label = None
+
+        
