@@ -953,6 +953,12 @@ class Ui_MainWindow(object):
         def set_shape_canvas(self,shape):
                 if self.tools_are_checked():
                         self.uncheck_tools()
+                        if shape == "circle":
+                                self.toolButton_areaCircular.setChecked(True)
+                        if shape == "square":
+                                self.toolButton_areaRectangular.setChecked(True)
+                        if shape == "arrow":
+                                self.toolButton_flechas.setChecked(True)
                 self.viewer_actions.set_shape_canvas(shape)
                 
         def set_text_canvas(self):
