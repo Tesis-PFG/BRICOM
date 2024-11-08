@@ -372,7 +372,7 @@ class DistanceMeasurement(QWidget):
         return 1.0  # Valor predeterminado si no se encuentra ElementSpacing
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             if not self.is_measuring:
                 # Primer clic, marca el punto de inicio
                 self.start_point = event.pos()
@@ -386,10 +386,9 @@ class DistanceMeasurement(QWidget):
                 self.update()  # Solicita una actualización de la pantalla para dibujar la línea final
 
     def paintEvent(self, event):
-        # Limpia la pantalla antes de realizar una nueva medición
         painter = QPainter(self)
-        painter.eraseRect(self.rect())  # Borra el contenido anterior
         
+        # Aquí nos aseguramos de no borrar la imagen de fondo
         if self.start_point and self.end_point:
             painter.setRenderHint(QPainter.Antialiasing)
             pen = QPen(Qt.red, 2)
@@ -423,7 +422,7 @@ class DistanceMeasurementDicom(QWidget):
         self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             if not self.is_measuring:
                 # Primer clic, marca el punto de inicio
                 self.start_point = event.pos()
@@ -437,10 +436,9 @@ class DistanceMeasurementDicom(QWidget):
                 self.update()  # Solicita una actualización de la pantalla para dibujar la línea final
 
     def paintEvent(self, event):
-        # Limpia la pantalla antes de realizar una nueva medición
         painter = QPainter(self)
-        painter.eraseRect(self.rect())  # Borra el contenido anterior
         
+        # No borramos el fondo, solo dibujamos sobre él
         if self.start_point and self.end_point:
             painter.setRenderHint(QPainter.Antialiasing)
             pen = QPen(Qt.red, 2)
@@ -457,4 +455,4 @@ class DistanceMeasurementDicom(QWidget):
     def calculate_distance(self, point1, point2):
         # Calcula la distancia euclidiana entre dos puntos
         return ((point2.x() - point1.x())**2 + (point2.y() - point1.y())**2)**0.5
-    
+
