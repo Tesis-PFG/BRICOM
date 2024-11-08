@@ -18,6 +18,7 @@ class QtOrthoViewer(QtViewer):
         self.distance_measurement = None  # Inicializar DistanceMeasurement como None
         self.text_canvas = None  # Inicializar DistanceMeasurement como None
         self.angle_canvas = None # Inicializar AngleMeasurement como None
+        self.image_label = None
 
         # Render Viewer
         self.viewer = OrthoViewer(self.vtkBaseClass, self.orientation, self.label)
@@ -232,11 +233,33 @@ class QtOrthoViewer(QtViewer):
         self.metadata_label.move(10, 10)  # Posicionar el QLabel en la esquina superior izquierda
         self.metadata_label.show()
 
+    def capture_vtk_image(self):
+        """Captura el renderizado actual de VTK como QPixmap."""
+        # Configurar el filtro para capturar la ventana de VTK
+        window_to_image_filter = vtk.vtkWindowToImageFilter()
+        window_to_image_filter.SetInput(self.viewer.GetRenderWindow())
+        window_to_image_filter.Update()
+
+        # Guardar la imagen en PNG usando vtkPNGWriter
+        png_writer = vtk.vtkPNGWriter()
+        png_writer.SetFileName("./temp/image1.png")
+        png_writer.SetInputConnection(window_to_image_filter.GetOutputPort())
+        png_writer.Write()
+
+        # Cargar la imagen guardada como QPixmap
+        pixmap = QPixmap("./temp/image1.png")
+
+        # Crear un QLabel para mostrar la imagen
+        self.image_label = QLabel(self)
+        self.image_label.setPixmap(pixmap.scaled(self.width(), self.height(), aspectRatioMode=Qt.KeepAspectRatio))
+        self.image_label.setGeometry(0, 0, self.width(), self.height())
+        self.image_label.show()
 
     # Método para inicializar Canvas
     def set_canvas(self):
         if self.canvas is None:
             # Crear e insertar el Canvas sobre el viewer
+            self.capture_vtk_image()
             self.canvas = Canvas(self)
             self.canvas.show()
 
@@ -247,6 +270,7 @@ class QtOrthoViewer(QtViewer):
     def set_distance_measurement(self, mhd_file):
         if self.distance_measurement is None:
             # Crear e insertar DistanceMeasurement
+            self.capture_vtk_image()
             self.distance_measurement = DistanceMeasurement(mhd_file, self)
             self.distance_measurement.show()
         else:
@@ -255,6 +279,7 @@ class QtOrthoViewer(QtViewer):
     def set_shape_canvas(self, shape):
         if self.shape_canvas is None:
             # Crear e insertar el Canvas sobre el viewer
+            self.capture_vtk_image()
             self.shape_canvas = ShapeCanvas(self)
             self.shape_canvas.set_shape(shape)
             self.shape_canvas.show()
@@ -264,6 +289,7 @@ class QtOrthoViewer(QtViewer):
 
     def set_text_canvas(self):
         if self.text_canvas is None:
+            self.capture_vtk_image()
             self.text_canvas = TextCanvas(self)
             self.text_canvas.show()
         else:
@@ -271,6 +297,7 @@ class QtOrthoViewer(QtViewer):
 
     def set_angle_canvas(self):
         if self.angle_canvas is None:
+            self.capture_vtk_image()
             self.angle_canvas = AngleMeasurement(self)
             self.angle_canvas.show()
         else:
@@ -291,20 +318,30 @@ class QtOrthoViewer(QtViewer):
         if self.canvas is not None:
             self.canvas.close()
             self.canvas = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.distance_measurement is not None:
             self.distance_measurement.close()
             self.distance_measurement = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.shape_canvas is not None:
             self.shape_canvas.close()
             self.shape_canvas = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.text_canvas is not None:
             self.text_canvas.close()
             self.text_canvas = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.angle_canvas is not None:
             self.angle_canvas.close()
             self.angle_canvas = None
+            self.image_label.close()
+            self.image_label = None
 
