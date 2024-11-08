@@ -11,7 +11,10 @@ from app.interface.Worker import *
 import SimpleITK as sitk
 from model.Herramientas import *
 import model.config as config
-
+from PyQt5.QtGui import QImage
+from PyQt5.QtWidgets import QLabel
+import PIL
+from PIL import Image, ImageQt
 
 class DicomViewer(QWidget):
 
@@ -29,6 +32,7 @@ class DicomViewer(QWidget):
         self.text_canvas = None # Inicializar TextCanvas como None
         self.angle_canvas = None # Inicializar AngleMeasurement como None
         self.current_slice = self.min_slice
+        self.image_label = None
         
         # Brillo y contraste por defecto
         self.brightness = 0  # Valor de brillo
@@ -319,10 +323,33 @@ class DicomViewer(QWidget):
             # Valor por defecto si no existe el campo PixelSpacing
             return 1.0
 
+    def capture_vtk_image(self):
+        """Captura el renderizado actual de VTK como QPixmap."""
+        # Configurar el filtro para capturar la ventana de VTK
+        window_to_image_filter = vtk.vtkWindowToImageFilter()
+        window_to_image_filter.SetInput(self.vtkWidget.GetRenderWindow())
+        window_to_image_filter.Update()
+
+        # Guardar la imagen en PNG usando vtkPNGWriter
+        png_writer = vtk.vtkPNGWriter()
+        png_writer.SetFileName("./temp/image1.png")
+        png_writer.SetInputConnection(window_to_image_filter.GetOutputPort())
+        png_writer.Write()
+
+        # Cargar la imagen guardada como QPixmap
+        pixmap = QPixmap("./temp/image1.png")
+
+        # Crear un QLabel para mostrar la imagen
+        self.image_label = QLabel(self)
+        self.image_label.setPixmap(pixmap.scaled(self.width(), self.height(), aspectRatioMode=Qt.KeepAspectRatio))
+        self.image_label.setGeometry(0, 0, self.width(), self.height())
+        self.image_label.show()
+
     # Método para inicializar Canvas
     def set_canvas(self):
         if self.canvas is None:
             # Crear e insertar el Canvas sobre el viewer
+            self.capture_vtk_image()
             self.canvas = Canvas(self)
             self.canvas.show()
         else:
@@ -375,6 +402,8 @@ class DicomViewer(QWidget):
         if self.canvas is not None:
             self.canvas.close()
             self.canvas = None
+            self.image_label.close()
+            self.image_label = None
 
         if self.distance_measurement is not None:
             self.distance_measurement.close()

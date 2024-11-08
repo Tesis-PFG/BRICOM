@@ -296,38 +296,37 @@ class Canvas(QtWidgets.QLabel):
         # Configurar el tamaño del canvas
         self.setFixedSize(parent.size())
 
-        # Habilitar el fondo transparente
+        # Habilitar el fondo transparente y evitar que el canvas bloquee la imagen subyacente
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
+        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
 
         # Crear un QPixmap transparente para dibujar
         self.pixmap = QtGui.QPixmap(self.size())
-        self.pixmap.fill(QtCore.Qt.transparent)  # Fondo transparente
+        self.pixmap.fill(QtCore.Qt.transparent)
         self.setPixmap(self.pixmap)
 
         self.last_x, self.last_y = None, None
         self.pen_color = QtGui.QColor('#ff0000')
 
     def paintEvent(self, event):
-        # Dibujar el contenido del pixmap actual
+        # Dibujar el contenido del pixmap actual sin redibujar el fondo
         painter = QtGui.QPainter(self)
-        painter.eraseRect(self.rect())
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         painter.drawPixmap(0, 0, self.pixmap)
 
     def mouseMoveEvent(self, e):
-        if self.last_x is None:  # Primer evento
+        if self.last_x is None:
             self.last_x = e.x()
             self.last_y = e.y()
             return
 
         if e.buttons() == QtCore.Qt.LeftButton:
-            # Dibujar línea en el QPixmap
             painter = QtGui.QPainter(self.pixmap)
             pen = QtGui.QPen(self.pen_color, 4, QtCore.Qt.SolidLine, QtCore.Qt.RoundCap, QtCore.Qt.RoundJoin)
             painter.setPen(pen)
             painter.drawLine(self.last_x, self.last_y, e.x(), e.y())
             painter.end()
-            self.update()  # Redibujar el canvas
+            self.update()
 
         self.last_x = e.x()
         self.last_y = e.y()
@@ -343,15 +342,10 @@ class Canvas(QtWidgets.QLabel):
             self.last_x = None
             self.last_y = None
 
-    # Método para borrar el canvas
     def clear_canvas(self):
-        print("Borrando el canvas...")  # Mensaje de depuración
-        # Reinicializar el pixmap
-        self.pixmap = QtGui.QPixmap(self.size())
-        self.pixmap.fill(QtCore.Qt.transparent)  # Fondo transparente
-        self.setPixmap(self.pixmap)  # Asegurarse de que el pixmap actualizado se configure en el QLabel
-        self.update()  # Redibujar el canvas para mostrar el estado limpio
-        print("Canvas borrado.")  # Mensaje de depuración
+        self.pixmap.fill(QtCore.Qt.transparent)
+        self.setPixmap(self.pixmap)
+        self.update()
 
 class DistanceMeasurement(QWidget):
     def __init__(self, mhd_file, parent=None):
