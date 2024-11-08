@@ -42,6 +42,7 @@ class ViewerActions:
         self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer, self.QtSegmentationViewer = viewers
         self.ViewersConnection = ViewersConnection
         self.vtkBaseClass = vtkBaseClass
+        self.structure = 0
         self.views = [self.QtSagittalOrthoViewer, self.QtAxialOrthoViewer, self.QtCoronalOrthoViewer]
         self.frames = {}  # Diccionario para almacenar frames de cada visualizador
         self.create_frames()
@@ -195,8 +196,11 @@ class ViewerActions:
 
     def display_view_3D(self):
         self.clear_layout()
-        self.render_3D = MHD_3DRenderer("./Data/raw/patient.mhd",2)
-        self.render_3D.render_mhd_structure(3)
+        self.structure = self.structure + 1
+        if self.structure > 4:
+            self.structure = 1
+        self.render_3D = MHD_3DRenderer("./Data/raw/patient.mhd",self.structure)
+        self.render_3D.render_mhd_structure(self.structure)
 
     def open_data(self):
         # Mapeo de estudios
