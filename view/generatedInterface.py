@@ -890,10 +890,10 @@ class Ui_MainWindow(object):
                 QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         def display_one_image(self):
-                        self.uncheck_views()
-                        self.dispositionButton_1x1.setChecked(True)
-                        self.set_enabled_tools(True)
-                        self.viewer_actions.display_one_image()
+                self.uncheck_views()
+                self.dispositionButton_1x1.setChecked(True)
+                self.set_enabled_tools(True)
+                self.viewer_actions.display_one_image()
 
         def display_two_images_vertical(self):
                 self.uncheck_views()
@@ -1023,19 +1023,25 @@ class Ui_MainWindow(object):
                                         }
                                         """)
                 for button in self.tools_buttons:
-                        button.setStyleSheet("""
-                                        QPushButton:checked {
-                                                background-color: #a0a0a0; /* Color de fondo al presionar */
-                                                border: 2px solid #808080; /* Bordes al presionar */
-                                        }
-                                        QPushButton:pressed {
-                                                background-color: #a0a0a0; /* Color de fondo al presionar */
-                                                border: 2px solid #808080; /* Bordes al presionar */
-                                        }
-                                        QPushButton:hover {
-                                                background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
-                                        }
-                                        """)
+                        if button is not self.toolButton_borrador:
+                                button.setStyleSheet("""
+                                                QPushButton:checked {
+                                                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                                                        border: 2px solid #808080; /* Bordes al presionar */
+                                                }
+                                                QPushButton:hover {
+                                                        background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
+                                                }
+                                                """)
+                        self.toolButton_borrador.setStyleSheet("""
+                                                QPushButton:pressed {
+                                                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                                                        border: 2px solid #808080; /* Bordes al presionar */
+                                                }
+                                                QPushButton:hover {
+                                                        background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
+                                                }
+                                                """)
 
         def clear_layout(self):
                 self.viewer_actions.clear_layout()
