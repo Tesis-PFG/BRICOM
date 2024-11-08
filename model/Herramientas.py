@@ -32,7 +32,7 @@ class AngleMeasurement(QtWidgets.QLabel):
 
         # Dibujar las líneas y el ángulo calculado si los tres puntos están definidos
         if self.point1 and self.point2 and self.point3:
-            painter.setPen(QtGui.QPen(Qt.blue, 2))
+            painter.setPen(QtGui.QPen(Qt.red, 2))
             # Línea base (x1 -> x2)
             painter.drawLine(self.point1, self.point2)
             # Línea de medición (x2 -> y)
@@ -40,7 +40,7 @@ class AngleMeasurement(QtWidgets.QLabel):
 
             # Calcular el ángulo y dibujarlo cerca del tercer punto
             angle = self.calculate_angle()
-            painter.setPen(QtGui.QPen(Qt.white))
+            painter.setPen(QtGui.QPen(Qt.red))
             painter.drawText(self.point3, f"Ángulo: {angle:.2f}°")
 
     def mousePressEvent(self, event):
@@ -133,7 +133,7 @@ class TextCanvas(QtWidgets.QLabel):
 
         # Dibujar el texto temporalmente mientras se escribe
         if self.text_position is not None:
-            painter.setPen(QtGui.QPen(Qt.white))  # Color del texto
+            painter.setPen(QtGui.QPen(Qt.red))  # Color del texto
             painter.drawText(self.text_position, self.current_text)  # Dibuja el texto en la posición
         painter.end()
 
@@ -230,7 +230,7 @@ class ShapeCanvas(QtWidgets.QLabel):
 
         if self.current_shape == "circle":
             radius = int(math.hypot(end_x - self.start_x, end_y - self.start_y))  # Distancia
-            painter.setPen(QtGui.QPen(Qt.blue, 2))  # Color y grosor del borde
+            painter.setPen(QtGui.QPen(Qt.red, 2))  # Color y grosor del borde
             painter.setBrush(QtGui.QBrush(Qt.transparent))  # Relleno transparente
             painter.drawEllipse(self.start_x - radius, self.start_y - radius, 2 * radius, 2 * radius)
 
@@ -241,7 +241,7 @@ class ShapeCanvas(QtWidgets.QLabel):
             painter.drawRect(self.start_x, self.start_y, size, size)
         elif self.current_shape == "arrow":
             # Dibujar la línea de la flecha
-            painter.setPen(QtGui.QPen(Qt.green, 2))  # Color y grosor del borde
+            painter.setPen(QtGui.QPen(Qt.red, 2))  # Color y grosor del borde
             painter.drawLine(self.start_x, self.start_y, end_x, end_y)  # Línea principal
             self.draw_arrow_head(painter, end_x, end_y)  # Dibujar la cabeza de la flecha
 
@@ -265,7 +265,7 @@ class ShapeCanvas(QtWidgets.QLabel):
         point2_y = end_y - arrow_size * math.sin(angle + math.pi / 6)
 
         # Dibujar las puntas de la flecha
-        painter.setBrush(QtGui.QBrush(Qt.green))  # Color de la cabeza de la flecha
+        painter.setBrush(QtGui.QBrush(Qt.red))  # Color de la cabeza de la flecha
         painter.drawPolygon(QtGui.QPolygon([QtCore.QPoint(int(end_x), int(end_y)),
                                            QtCore.QPoint(int(point1_x), int(point1_y)),
                                            QtCore.QPoint(int(point2_x), int(point2_y))]))

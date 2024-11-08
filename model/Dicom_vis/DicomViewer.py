@@ -406,30 +406,24 @@ class DicomViewer(QWidget):
         if self.canvas is not None:
             self.canvas.close()
             self.canvas = None
-            self.image_label.close()
-            self.image_label = None
 
         if self.distance_measurement is not None:
             self.distance_measurement.close()
             self.distance_measurement = None
-            self.image_label.close()
-            self.image_label = None
 
         if self.shape_canvas is not None:
             self.shape_canvas.close()
             self.shape_canvas = None
-            self.image_label.close()
-            self.image_label = None
 
         if self.text_canvas is not None:
             self.text_canvas.close()
             self.text_canvas = None
-            self.image_label.close()
-            self.image_label = None
 
         if self.angle_canvas is not None:
             self.angle_canvas.close()
             self.angle_canvas = None
+        
+        if self.image_label is not None:
             self.image_label.close()
             self.image_label = None
 
