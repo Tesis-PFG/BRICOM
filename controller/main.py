@@ -5,6 +5,8 @@ from view.generatedInterface import *
 from view.generatedDialogTagsSubida import Ui_Dialog as Ui_DialogTagsSubida
 from view.generatedDialogEscogerEstudio import Ui_Dialog as Ui_DialogEscogerEstudio
 from view.generatedDialogCarga import Ui_Dialog as Ui_DialogCarga
+from view.generatedDialogInicio import Ui_Dialog as Ui_DialogInicio
+
 import shutil
 import pydicom
 import json
@@ -58,13 +60,49 @@ class DicomProcessingThread(QThread):
 
 
 class MyApp(Ui_MainWindow):
-
     def __init__(self, window):
-        self.setupUi(window)
+        # Guardar referencia a la ventana principal
+        self.window = window
+        # Ocultar la ventana principal hasta que esté lista
+        self.window.hide()
         
-        #Se encarga de setear los listener de los botones y los índices de los stackedWidgets
-        self.setearInterfaz(window)
+        # Guardar el tiempo de inicio
+        self.start_time = QtCore.QTime.currentTime()
+        
+        # Crear y mostrar el diálogo de inicio
+        self.dialogInicio = QtWidgets.QDialog(None)  # Establecemos parent a None para que sea ventana independiente
+        self.dialogInicio.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # Mantener siempre visible
+        ui = Ui_DialogInicio()
+        ui.setupUi(self.dialogInicio)
+        self.dialogInicio.show()
+        
+        # Iniciar el proceso de carga
+        QtCore.QTimer.singleShot(100, self.start_loading)
+
+    def start_loading(self):
+        # Inicializar la interfaz principal
+        self.setupUi(self.window)
+        self.setearInterfaz(self.window)
+        
+        # Iniciar la carga de datos
+        QtCore.QTimer.singleShot(0, self.load_data)
+
+    def load_data(self):
+        # Cargar los datos
         self.loadData_database()
+        
+        # Calcular tiempo transcurrido
+        elapsed = self.start_time.msecsTo(QtCore.QTime.currentTime())
+        
+        # Asegurar tiempo mínimo de 5 segundos
+        remaining_time = max(5000 - elapsed, 0)
+        QtCore.QTimer.singleShot(remaining_time, self.complete_loading)
+
+    def complete_loading(self):
+        # Cerrar el diálogo
+        self.dialogInicio.close()
+        # Mostrar la ventana principal
+        self.window.show()
 
 
     def setearInterfaz(self, window):
