@@ -17,7 +17,7 @@ base = 'Win32GUI'
 setup(
     name="AppRegistro",
     version="0.1",
-    description="Interfaz gráfica de registro de imagenes TAC y RM",
+    description="Interfaz gráfica de registro de imágenes TAC y RM",
     options={'build_exe': build_options},
-    executables=[Executable('controller/main.py', base=base)],
+    executables=[Executable('controller/main.py', base=base, icon='Assets/BRICOM_logo.ico')],
 )
