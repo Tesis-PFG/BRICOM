@@ -68,13 +68,15 @@ class ViewerActions:
             self.frames[nombre] = frame
 
     def clear_layout(self):
+        self.create_frames()
+        for frame in self.frames.values():
+            frame.setVisible(False)
         if self.frame_3.layout() is not None:
             while self.frame_3.layout().count():
                 child = self.frame_3.layout().takeAt(0)
-                if child.widget() and type(child.widget()) == 'QSplitter':
+                if isinstance(child.widget(), QtWidgets.QSplitter):
                     self.frame_3.layout().removeWidget(child.widget())
-        for frame in self.frames.values():
-            frame.setVisible(False)
+        self.frame_3.repaint()
 
     def display_one_image(self):
         self.clear_layout()

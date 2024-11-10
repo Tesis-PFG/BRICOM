@@ -885,10 +885,11 @@ class Ui_MainWindow(object):
                 QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         def display_one_image(self):
-                        self.uncheck_views()
-                        self.dispositionButton_1x1.setChecked(True)
-                        self.set_enabled_tools(True)
-                        self.viewer_actions.display_one_image()
+                self.uncheck_views()
+                self.clear_layout()
+                self.dispositionButton_1x1.setChecked(True)
+                self.set_enabled_tools(True)
+                self.viewer_actions.display_one_image()
 
         def display_two_images_vertical(self):
                 self.uncheck_views()
@@ -934,22 +935,48 @@ class Ui_MainWindow(object):
                 self.viewer_actions.display_view_3D()
 
         def activate_distance_measurement(self):
+                if self.tools_are_checked():
+                        self.uncheck_tools()
+                        self.toolButton_regla.setChecked(True)
                 self.viewer_actions.activate_distance_measurement()
 
         def set_canvas(self):
+                if self.tools_are_checked():
+                        self.uncheck_tools()
+                        self.toolButton_dibujoLibre.setChecked(True)
                 self.viewer_actions.set_canvas()
 
         def set_shape_canvas(self,shape):
+                if self.tools_are_checked():
+                        self.uncheck_tools()
+                        if shape == "circle":
+                                self.toolButton_areaCircular.setChecked(True)
+                        if shape == "square":
+                                self.toolButton_areaRectangular.setChecked(True)
+                        if shape == "arrow":
+                                self.toolButton_flechas.setChecked(True)
                 self.viewer_actions.set_shape_canvas(shape)
                 
         def set_text_canvas(self):
+                if self.tools_are_checked():
+                        self.uncheck_tools()
+                        self.toolButton_escritura.setChecked(True)
                 self.viewer_actions.set_text_canvas()
 
         def set_angle_canvas(self):
+                if self.tools_are_checked():
+                        self.uncheck_tools()
+                        self.toolButton_angulos.setChecked(True)
                 self.viewer_actions.set_angle_canvas()
                 
         def clear_canvas_drawing(self):
                 self.viewer_actions.clear_canvas_drawing()
+
+        def tools_are_checked(self):
+                for button in self.tools_buttons:
+                        if button.isChecked():
+                                return True
+                return False
 
         def uncheck_views(self):
                 for button in self.view_buttons:
@@ -965,10 +992,8 @@ class Ui_MainWindow(object):
                 for button in self.tools_buttons:
                         button.setChecked(False)
 
-        #TODO: implement
-        def reset_tools(self):
-                if self.canvas is not None:
-                        self.viewer_actions.set_canvas()
+        def clear_tools(self):
+                self.viewer_actions.clear_tools()
                 
         def set_enabled_views(self, enabled: bool):
                 for button in self.view_buttons:
@@ -994,25 +1019,28 @@ class Ui_MainWindow(object):
                                         }
                                         """)
                 for button in self.tools_buttons:
-                        button.setStyleSheet("""
-                                        QPushButton:checked {
-                                                background-color: #a0a0a0; /* Color de fondo al presionar */
-                                                border: 2px solid #808080; /* Bordes al presionar */
-                                        }
-                                        QPushButton:pressed {
-                                                background-color: #a0a0a0; /* Color de fondo al presionar */
-                                                border: 2px solid #808080; /* Bordes al presionar */
-                                        }
-                                        QPushButton:hover {
-                                                background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
-                                        }
-                                        """)
+                        if button is not self.toolButton_borrador:
+                                button.setStyleSheet("""
+                                                QPushButton:checked {
+                                                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                                                        border: 2px solid #808080; /* Bordes al presionar */
+                                                }
+                                                QPushButton:hover {
+                                                        background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
+                                                }
+                                                """)
+                        self.toolButton_borrador.setStyleSheet("""
+                                                QPushButton:pressed {
+                                                        background-color: #a0a0a0; /* Color de fondo al presionar */
+                                                        border: 2px solid #808080; /* Bordes al presionar */
+                                                }
+                                                QPushButton:hover {
+                                                        background-color: #e599f7;  /* Fondo más oscuro al pasar el mouse */
+                                                }
+                                                """)
 
         def clear_layout(self):
                 self.viewer_actions.clear_layout()
-
-        def hide_studies(self):
-                self.viewer_actions.hide_studies()
 
         def retranslateUi(self, MainWindow):
                 _translate = QtCore.QCoreApplication.translate
