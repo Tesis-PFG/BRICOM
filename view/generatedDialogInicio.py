@@ -9,7 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import QGraphicsDropShadowEffect
+from PyQt5.QtGui import QColor
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -23,31 +24,46 @@ class Ui_Dialog(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
-        self.label_2 = QtWidgets.QLabel(Dialog)
+        self.label_BRICOM = QtWidgets.QLabel(Dialog)
         font = QtGui.QFont()
         font.setFamily("Roboto")
         font.setPointSize(60)
         font.setBold(True)
         font.setWeight(75)
-        self.label_2.setFont(font)
-        self.label_2.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label_2.setStyleSheet("\n"
+        self.label_BRICOM.setFont(font)
+        self.label_BRICOM.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.label_BRICOM.setStyleSheet("text-shadow: 3px 3px 5px #E6B8F1;\n"
 "color: rgb(90, 99, 156);")
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout.addWidget(self.label_2)
+        self.label_BRICOM.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_BRICOM.setObjectName("label_BRICOM")
+        self.horizontalLayout.addWidget(self.label_BRICOM)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
-        self.label = QtWidgets.QLabel(Dialog)
-        self.label.setMaximumSize(QtCore.QSize(250, 250))
-        self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap(".\\../Assets/BRICOM_logo.png"))
-        self.label.setScaledContents(True)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.horizontalLayout.addWidget(self.label)
+        self.logo_BRICOM = QtWidgets.QLabel(Dialog)
+        self.logo_BRICOM.setMaximumSize(QtCore.QSize(250, 250))
+        self.logo_BRICOM.setText("")
+        self.logo_BRICOM.setPixmap(QtGui.QPixmap(".\\Assets/BRICOM_logo.png"))
+        self.logo_BRICOM.setScaledContents(True)
+        self.logo_BRICOM.setAlignment(QtCore.Qt.AlignCenter)
+        self.logo_BRICOM.setObjectName("logo_BRICOM")
+        self.horizontalLayout.addWidget(self.logo_BRICOM)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
+
+
+        # Primero asegurarnos que el label es transparente
+        self.label_BRICOM.setAutoFillBackground(False)
+        self.label_BRICOM.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        
+        # Crear el efecto de sombra específicamente para el texto
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(0)        # Aumentado de 10 a 20 para más difuminado
+        shadow.setXOffset(8)           # Aumentado de 3 a 8 para más separación horizontal
+        shadow.setYOffset(8)           # Aumentado de 3 a 8 para más separación vertical
+        shadow.setColor(QColor('#E2BBE9'))  # Mantenemos el mismo color
+        
+        # Aplicar el efecto
+        self.label_BRICOM.setGraphicsEffect(shadow)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -55,7 +71,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label_2.setText(_translate("Dialog", "BRICOM"))
+        self.label_BRICOM.setText(_translate("Dialog", "BRICOM"))
 
 
 if __name__ == "__main__":

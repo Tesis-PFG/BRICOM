@@ -6,7 +6,7 @@ from view.generatedDialogTagsSubida import Ui_Dialog as Ui_DialogTagsSubida
 from view.generatedDialogEscogerEstudio import Ui_Dialog as Ui_DialogEscogerEstudio
 from view.generatedDialogCarga import Ui_Dialog as Ui_DialogCarga
 from view.generatedDialogInicio import Ui_Dialog as Ui_DialogInicio
-
+import ctypes
 import shutil
 import pydicom
 import json
@@ -57,21 +57,25 @@ class DicomProcessingThread(QThread):
         with open(ruta_metadata, 'w') as f:
             json.dump(metadata, f, indent=4)
 
-
-
 class MyApp(Ui_MainWindow):
     def __init__(self, window):
+
         # Guardar referencia a la ventana principal
         self.window = window
-        # Ocultar la ventana principal hasta que esté lista
+        
+        # Hacer la ventana principal invisible y guardar su estado de ventana
+        self.window_state = self.window.windowState()
         self.window.hide()
         
         # Guardar el tiempo de inicio
         self.start_time = QtCore.QTime.currentTime()
         
         # Crear y mostrar el diálogo de inicio
-        self.dialogInicio = QtWidgets.QDialog(None)  # Establecemos parent a None para que sea ventana independiente
-        self.dialogInicio.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # Mantener siempre visible
+        self.dialogInicio = QtWidgets.QDialog(None)
+        self.dialogInicio.setWindowFlags(
+            QtCore.Qt.WindowStaysOnTopHint | 
+            QtCore.Qt.FramelessWindowHint
+        )
         ui = Ui_DialogInicio()
         ui.setupUi(self.dialogInicio)
         self.dialogInicio.show()
@@ -80,9 +84,10 @@ class MyApp(Ui_MainWindow):
         QtCore.QTimer.singleShot(100, self.start_loading)
 
     def start_loading(self):
-        # Inicializar la interfaz principal
+        # Configurar la interfaz principal manteniendo la ventana oculta
         self.setupUi(self.window)
         self.setearInterfaz(self.window)
+        self.window.hide()
         
         # Iniciar la carga de datos
         QtCore.QTimer.singleShot(0, self.load_data)
@@ -99,10 +104,13 @@ class MyApp(Ui_MainWindow):
         QtCore.QTimer.singleShot(remaining_time, self.complete_loading)
 
     def complete_loading(self):
-        # Cerrar el diálogo
+        # Cerrar el diálogo de inicio
         self.dialogInicio.close()
-        # Mostrar la ventana principal
+        
+        # Restaurar el estado original de la ventana y mostrarla
+        self.window.setWindowState(self.window_state)
         self.window.show()
+        self.window.activateWindow()
 
 
     def setearInterfaz(self, window):
@@ -586,6 +594,7 @@ class MyApp(Ui_MainWindow):
             ui.uploadTags_table.setColumnWidth(2, 40)   # Ancho fijo para la columna del ícono
 
         dialog = QtWidgets.QDialog()
+        dialog.setWindowFlags(dialog.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
         ui = Ui_DialogTagsSubida()
         ui.setupUi(dialog)
 
@@ -627,6 +636,7 @@ class MyApp(Ui_MainWindow):
 
     def open_patient_selection_dialog(self, row, column):
         dialog = QtWidgets.QDialog()
+        dialog.setWindowFlags(dialog.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
         ui =  Ui_DialogEscogerEstudio()
         ui.setupUi(dialog)
 
@@ -770,6 +780,7 @@ class MyApp(Ui_MainWindow):
     
     def abrir_dialogo_carga(self):
         dialog = QtWidgets.QDialog()
+        dialog.setWindowFlags(Qt.FramelessWindowHint)
         ui = Ui_DialogCarga()
         ui.setupUi(dialog)
         
@@ -807,8 +818,18 @@ class MyApp(Ui_MainWindow):
     
 
 #Inicialización de la aplicación y la ventana
+# Configurar el ID de la aplicación en Windows
+if sys.platform == 'win32':
+    myappid = u'javeriana.bricom.v1'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
 app = QtWidgets.QApplication(sys.argv)
+app.setApplicationName('BRICOM')
+app.setWindowIcon(QIcon(".\\Assets/BRICOM_logo.ico"))
+
 MainWindow = QtWidgets.QMainWindow()
+MainWindow.setWindowTitle("BRICOM")  
+MainWindow.setWindowIcon(QIcon(".\\Assets/BRICOM_logo.ico"))  
+
 ui = MyApp(MainWindow)
-MainWindow.show()
 app.exec_()
