@@ -172,7 +172,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        Dialog.setWindowTitle(_translate("Dialog", "Carga de Estudio"))
         self.label.setText(_translate("Dialog", "Estudio por cargar (TAC)"))
         item = self.uploadTags_table.horizontalHeaderItem(0)
         item.setText(_translate("Dialog", "Campo"))

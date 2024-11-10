@@ -351,6 +351,7 @@ class ViewerActions:
 
     def abrir_dialogo_carga(self):
         dialog = QtWidgets.QDialog()
+        dialog.setWindowFlags(Qt.FramelessWindowHint)
         ui = Ui_DialogCarga()
         ui.setupUi(dialog)
         

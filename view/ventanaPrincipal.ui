@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1021</width>
+    <width>993</width>
     <height>600</height>
    </rect>
   </property>
@@ -26,7 +26,7 @@
    <cursorShape>ArrowCursor</cursorShape>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>BRICOM</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -249,7 +249,7 @@ background-color:#E2BBE9;
     <item>
      <widget class="QStackedWidget" name="stackedWidgetPrincipal">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pantallaVisualizacion">
        <property name="styleSheet">
@@ -313,8 +313,6 @@ background-color: rgb(0, 0, 0);</string>
              <property name="styleSheet">
               <string notr="true">background-color: #5A639C;
 border-radius: 30px;
-
-
 </string>
              </property>
              <property name="frameShape">
@@ -402,7 +400,7 @@ border-radius: 20px
            <item>
             <widget class="QStackedWidget" name="stackedWidget_submenuVisualizacion">
              <property name="currentIndex">
-              <number>1</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="submenuPatient">
               <property name="enabled">
@@ -702,7 +700,7 @@ border-radius: 15px;</string>
                  <property name="minimumSize">
                   <size>
                    <width>200</width>
-                   <height>190</height>
+                   <height>160</height>
                   </size>
                  </property>
                  <property name="maximumSize">
@@ -725,7 +723,7 @@ border-radius: 15px;</string>
                     <x>0</x>
                     <y>20</y>
                     <width>250</width>
-                    <height>161</height>
+                    <height>131</height>
                    </rect>
                   </property>
                   <property name="minimumSize">
@@ -753,7 +751,7 @@ border-radius: 15px;</string>
                      <x>0</x>
                      <y>10</y>
                      <width>251</width>
-                     <height>154</height>
+                     <height>111</height>
                     </rect>
                    </property>
                    <layout class="QGridLayout" name="gridLayout">
@@ -780,23 +778,6 @@ border-radius: 15px;</string>
                       <property name="icon">
                        <iconset>
                         <normaloff>:/icons/Assets/ruler.png</normaloff>:/icons/Assets/ruler.png</iconset>
-                      </property>
-                      <property name="iconSize">
-                       <size>
-                        <width>40</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QPushButton" name="toolButton_dibujoLibre">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="icon">
-                       <iconset>
-                        <normaloff>Assets/freeDraw.png</normaloff>Assets/freeDraw.png</iconset>
                       </property>
                       <property name="iconSize">
                        <size>
@@ -840,31 +821,14 @@ border-radius: 15px;</string>
                       </property>
                      </widget>
                     </item>
-                    <item row="1" column="0">
-                     <widget class="QPushButton" name="toolButton_areaRectangular">
+                    <item row="0" column="1">
+                     <widget class="QPushButton" name="toolButton_dibujoLibre">
                       <property name="cursor">
                        <cursorShape>PointingHandCursor</cursorShape>
                       </property>
                       <property name="icon">
                        <iconset>
-                        <normaloff>Assets/Rectangle 20.png</normaloff>Assets/Rectangle 20.png</iconset>
-                      </property>
-                      <property name="iconSize">
-                       <size>
-                        <width>40</width>
-                        <height>40</height>
-                       </size>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QPushButton" name="toolButton_angulos">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="icon">
-                       <iconset>
-                        <normaloff>Assets/Angle.png</normaloff>Assets/Angle.png</iconset>
+                        <normaloff>Assets/freeDraw.png</normaloff>Assets/freeDraw.png</iconset>
                       </property>
                       <property name="iconSize">
                        <size>
@@ -891,6 +855,40 @@ border-radius: 15px;</string>
                       </property>
                      </widget>
                     </item>
+                    <item row="1" column="1">
+                     <widget class="QPushButton" name="toolButton_angulos">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/Angle.png</normaloff>Assets/Angle.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QPushButton" name="toolButton_areaRectangular">
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>Assets/Rectangle 20.png</normaloff>Assets/Rectangle 20.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>40</width>
+                        <height>40</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
                     <item row="1" column="3">
                      <widget class="QPushButton" name="toolButton_borrador">
                       <property name="cursor">
@@ -904,23 +902,6 @@ border-radius: 15px;</string>
                        <size>
                         <width>45</width>
                         <height>45</height>
-                       </size>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QPushButton" name="toolButton_descargaImagen">
-                      <property name="cursor">
-                       <cursorShape>PointingHandCursor</cursorShape>
-                      </property>
-                      <property name="icon">
-                       <iconset>
-                        <normaloff>Assets/gallery-import.png</normaloff>Assets/gallery-import.png</iconset>
-                      </property>
-                      <property name="iconSize">
-                       <size>
-                        <width>45</width>
-                        <height>40</height>
                        </size>
                       </property>
                      </widget>
@@ -1236,28 +1217,12 @@ border-radius: 15px;</string>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QLineEdit" name="filterLiner_db">
-            <property name="maximumSize">
-             <size>
-              <width>300</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid #A0A0A0;
-border-radius: 5px;
-padding: 2px;
-background-color: white;</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Minimum</enum>
+             <enum>QSizePolicy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1306,6 +1271,32 @@ background-color: white;</string>
              </size>
             </property>
            </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLineEdit" name="filterLiner_db">
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid #A0A0A0;
+border-radius: 5px;
+padding: 2px;
+background-color: white;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
