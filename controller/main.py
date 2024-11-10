@@ -737,7 +737,7 @@ class MyApp(Ui_MainWindow):
 
             # Se resetea la vista de los estudios
             self.uncheck_tools()
-            self.clear_tools()
+            #self.clear_tools()
             self.uncheck_views()
             self.clear_layout()
 
