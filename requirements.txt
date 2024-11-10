@@ -4,3 +4,5 @@ itk
 SimpleITK
 pydicom
 pillow
+cx-Freeze
+
