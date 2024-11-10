@@ -13,9 +13,9 @@ build_options = {
 
 base = 'Win32GUI'
 setup(
-    name="TuAplicacion",
+    name="AppRegistro",
     version="0.1",
-    description="Descripción de tu aplicación",
+    description="Interfaz gráfica de registro de imagenes TAC y RM",
     options={'build_exe': build_options},
     executables=[Executable('controller/main.py', base=base)],
 )
