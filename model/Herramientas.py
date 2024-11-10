@@ -32,7 +32,7 @@ class AngleMeasurement(QtWidgets.QLabel):
 
         # Dibujar las líneas y el ángulo calculado si los tres puntos están definidos
         if self.point1 and self.point2 and self.point3:
-            painter.setPen(QtGui.QPen(Qt.blue, 2))
+            painter.setPen(QtGui.QPen(Qt.red, 2))
             # Línea base (x1 -> x2)
             painter.drawLine(self.point1, self.point2)
             # Línea de medición (x2 -> y)
@@ -40,7 +40,7 @@ class AngleMeasurement(QtWidgets.QLabel):
 
             # Calcular el ángulo y dibujarlo cerca del tercer punto
             angle = self.calculate_angle()
-            painter.setPen(QtGui.QPen(Qt.white))
+            painter.setPen(QtGui.QPen(Qt.red))
             painter.drawText(self.point3, f"Ángulo: {angle:.2f}°")
 
     def mousePressEvent(self, event):
@@ -133,7 +133,7 @@ class TextCanvas(QtWidgets.QLabel):
 
         # Dibujar el texto temporalmente mientras se escribe
         if self.text_position is not None:
-            painter.setPen(QtGui.QPen(Qt.white))  # Color del texto
+            painter.setPen(QtGui.QPen(Qt.red))  # Color del texto
             painter.drawText(self.text_position, self.current_text)  # Dibuja el texto en la posición
         painter.end()
 
@@ -189,9 +189,9 @@ class ShapeCanvas(QtWidgets.QLabel):
         # Configurar el tamaño del canvas
         self.setFixedSize(parent.size())
 
-        # Habilitar el fondo transparente
+        # Habilitar el fondo transparente y evitar que el canvas bloquee la imagen subyacente
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
+        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
 
         # Crear un QPixmap transparente para dibujar
         self.pixmap = QtGui.QPixmap(self.size())
@@ -205,7 +205,7 @@ class ShapeCanvas(QtWidgets.QLabel):
     def paintEvent(self, event):
         # Dibujar el contenido del pixmap actual
         painter = QtGui.QPainter(self)
-        painter.eraseRect(self.rect())
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         painter.drawPixmap(0, 0, self.pixmap)
 
     def mousePressEvent(self, event):
@@ -225,15 +225,12 @@ class ShapeCanvas(QtWidgets.QLabel):
                 self.update()
 
     def draw_shape(self, end_x, end_y):
-        # Limpiar el pixmap antes de dibujar la nueva figura
-        self.pixmap.fill(QtCore.Qt.transparent)  # Limpiar el pixmap
-
         # Crear un nuevo painter para dibujar la figura
         painter = QtGui.QPainter(self.pixmap)
 
         if self.current_shape == "circle":
             radius = int(math.hypot(end_x - self.start_x, end_y - self.start_y))  # Distancia
-            painter.setPen(QtGui.QPen(Qt.blue, 2))  # Color y grosor del borde
+            painter.setPen(QtGui.QPen(Qt.red, 2))  # Color y grosor del borde
             painter.setBrush(QtGui.QBrush(Qt.transparent))  # Relleno transparente
             painter.drawEllipse(self.start_x - radius, self.start_y - radius, 2 * radius, 2 * radius)
 
@@ -244,7 +241,7 @@ class ShapeCanvas(QtWidgets.QLabel):
             painter.drawRect(self.start_x, self.start_y, size, size)
         elif self.current_shape == "arrow":
             # Dibujar la línea de la flecha
-            painter.setPen(QtGui.QPen(Qt.green, 2))  # Color y grosor del borde
+            painter.setPen(QtGui.QPen(Qt.red, 2))  # Color y grosor del borde
             painter.drawLine(self.start_x, self.start_y, end_x, end_y)  # Línea principal
             self.draw_arrow_head(painter, end_x, end_y)  # Dibujar la cabeza de la flecha
 
@@ -252,7 +249,7 @@ class ShapeCanvas(QtWidgets.QLabel):
 
         # Actualizar el widget para mostrar el nuevo dibujo
         self.update()  # Redibujar el canvas
-        
+
     def draw_arrow_head(self, painter, end_x, end_y):
         """Dibuja la cabeza de la flecha en el extremo de la línea."""
         arrow_size = 10  # Tamaño de la cabeza de la flecha
@@ -268,12 +265,10 @@ class ShapeCanvas(QtWidgets.QLabel):
         point2_y = end_y - arrow_size * math.sin(angle + math.pi / 6)
 
         # Dibujar las puntas de la flecha
-        painter.setBrush(QtGui.QBrush(Qt.green))  # Color de la cabeza de la flecha
-        painter.drawPolygon(QtGui.QPolygon([
-            QtCore.QPoint(int(end_x), int(end_y)),      # Convertir a int
-            QtCore.QPoint(int(point1_x), int(point1_y)),  # Convertir a int
-            QtCore.QPoint(int(point2_x), int(point2_y))   # Convertir a int
-        ]))
+        painter.setBrush(QtGui.QBrush(Qt.red))  # Color de la cabeza de la flecha
+        painter.drawPolygon(QtGui.QPolygon([QtCore.QPoint(int(end_x), int(end_y)),
+                                           QtCore.QPoint(int(point1_x), int(point1_y)),
+                                           QtCore.QPoint(int(point2_x), int(point2_y))]))
 
     def clear_canvas(self):
         print("Borrando el canvas...")  # Mensaje de depuración
@@ -296,38 +291,37 @@ class Canvas(QtWidgets.QLabel):
         # Configurar el tamaño del canvas
         self.setFixedSize(parent.size())
 
-        # Habilitar el fondo transparente
+        # Habilitar el fondo transparente y evitar que el canvas bloquee la imagen subyacente
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
+        self.setAttribute(QtCore.Qt.WA_TransparentForMouseEvents)
 
         # Crear un QPixmap transparente para dibujar
         self.pixmap = QtGui.QPixmap(self.size())
-        self.pixmap.fill(QtCore.Qt.transparent)  # Fondo transparente
+        self.pixmap.fill(QtCore.Qt.transparent)
         self.setPixmap(self.pixmap)
 
         self.last_x, self.last_y = None, None
         self.pen_color = QtGui.QColor('#ff0000')
 
     def paintEvent(self, event):
-        # Dibujar el contenido del pixmap actual
+        # Dibujar el contenido del pixmap actual sin redibujar el fondo
         painter = QtGui.QPainter(self)
-        painter.eraseRect(self.rect())
+        painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
         painter.drawPixmap(0, 0, self.pixmap)
 
     def mouseMoveEvent(self, e):
-        if self.last_x is None:  # Primer evento
+        if self.last_x is None:
             self.last_x = e.x()
             self.last_y = e.y()
             return
 
         if e.buttons() == QtCore.Qt.LeftButton:
-            # Dibujar línea en el QPixmap
             painter = QtGui.QPainter(self.pixmap)
             pen = QtGui.QPen(self.pen_color, 4, QtCore.Qt.SolidLine, QtCore.Qt.RoundCap, QtCore.Qt.RoundJoin)
             painter.setPen(pen)
             painter.drawLine(self.last_x, self.last_y, e.x(), e.y())
             painter.end()
-            self.update()  # Redibujar el canvas
+            self.update()
 
         self.last_x = e.x()
         self.last_y = e.y()
@@ -343,15 +337,10 @@ class Canvas(QtWidgets.QLabel):
             self.last_x = None
             self.last_y = None
 
-    # Método para borrar el canvas
     def clear_canvas(self):
-        print("Borrando el canvas...")  # Mensaje de depuración
-        # Reinicializar el pixmap
-        self.pixmap = QtGui.QPixmap(self.size())
-        self.pixmap.fill(QtCore.Qt.transparent)  # Fondo transparente
-        self.setPixmap(self.pixmap)  # Asegurarse de que el pixmap actualizado se configure en el QLabel
-        self.update()  # Redibujar el canvas para mostrar el estado limpio
-        print("Canvas borrado.")  # Mensaje de depuración
+        self.pixmap.fill(QtCore.Qt.transparent)
+        self.setPixmap(self.pixmap)
+        self.update()
 
 class DistanceMeasurement(QWidget):
     def __init__(self, mhd_file, parent=None):
@@ -383,7 +372,7 @@ class DistanceMeasurement(QWidget):
         return 1.0  # Valor predeterminado si no se encuentra ElementSpacing
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             if not self.is_measuring:
                 # Primer clic, marca el punto de inicio
                 self.start_point = event.pos()
@@ -397,10 +386,9 @@ class DistanceMeasurement(QWidget):
                 self.update()  # Solicita una actualización de la pantalla para dibujar la línea final
 
     def paintEvent(self, event):
-        # Limpia la pantalla antes de realizar una nueva medición
         painter = QPainter(self)
-        painter.eraseRect(self.rect())  # Borra el contenido anterior
         
+        # Aquí nos aseguramos de no borrar la imagen de fondo
         if self.start_point and self.end_point:
             painter.setRenderHint(QPainter.Antialiasing)
             pen = QPen(Qt.red, 2)
@@ -434,7 +422,7 @@ class DistanceMeasurementDicom(QWidget):
         self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == QtCore.Qt.LeftButton:
             if not self.is_measuring:
                 # Primer clic, marca el punto de inicio
                 self.start_point = event.pos()
@@ -448,10 +436,9 @@ class DistanceMeasurementDicom(QWidget):
                 self.update()  # Solicita una actualización de la pantalla para dibujar la línea final
 
     def paintEvent(self, event):
-        # Limpia la pantalla antes de realizar una nueva medición
         painter = QPainter(self)
-        painter.eraseRect(self.rect())  # Borra el contenido anterior
         
+        # No borramos el fondo, solo dibujamos sobre él
         if self.start_point and self.end_point:
             painter.setRenderHint(QPainter.Antialiasing)
             pen = QPen(Qt.red, 2)
@@ -468,3 +455,4 @@ class DistanceMeasurementDicom(QWidget):
     def calculate_distance(self, point1, point2):
         # Calcula la distancia euclidiana entre dos puntos
         return ((point2.x() - point1.x())**2 + (point2.y() - point1.y())**2)**0.5
+
