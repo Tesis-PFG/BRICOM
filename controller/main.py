@@ -735,6 +735,12 @@ class MyApp(Ui_MainWindow):
                     #Muestra la información del estudio
                     self.frame_19.setVisible(True)
 
+            # Se resetea la vista de los estudios
+            self.uncheck_tools()
+            self.clear_tools()
+            self.uncheck_views()
+            self.clear_layout()
+
             #Cambio de pantalla a visualización
             self.stackedWidgetPrincipal.setCurrentIndex(0)
             self.stackedWidget_submenuVisualizacion.setCurrentIndex(0)

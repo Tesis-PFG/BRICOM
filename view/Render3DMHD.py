@@ -154,6 +154,10 @@ class MHD_3DRenderer:
         render_window = vtk.vtkRenderWindow()
         render_window.AddRenderer(renderer)
 
+        # Configurar la ventana al tamaño de la pantalla
+        screen_size = render_window.GetScreenSize()
+        render_window.SetSize(screen_size[0], screen_size[1])
+
         interactor = vtk.vtkRenderWindowInteractor()
         interactor.SetRenderWindow(render_window)
 
@@ -162,6 +166,7 @@ class MHD_3DRenderer:
         interactor.SetInteractorStyle(style)
 
         return render_window, interactor
+
 
     def render_mhd_structure(self, structure):
         volume_mapper = vtk.vtkGPUVolumeRayCastMapper()

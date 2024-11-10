@@ -5,6 +5,14 @@ Comandos:
 python -m controller.main
 ```
 
+***código para generar ejecutable (estar en carpeta raíz)***
+```
+python setup.py build
+```
+
+~nota: es importante tener instalado cx-Freeze (ya agregado a requirements)~
+
+
 - git clone <link>
 - (iniciar la aplicación de qt y abrir el archivo .ui)
 - *Comando para convertir el archivo .ui a .py:*
