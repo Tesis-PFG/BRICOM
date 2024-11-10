@@ -6,7 +6,9 @@ build_options = {
     'includes': ['pydicom.pixel_data_handlers.gdcm_handler'],
     'include_files': [
         ('Assets', 'Assets'),  
-        ('app/assets', 'app/assets')  
+        ('app/assets', 'app/assets'),
+        ('Data', 'Data'),
+        ('temp', 'temp') 
     ]
 }
 
