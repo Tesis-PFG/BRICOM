@@ -9,7 +9,7 @@ from vtkmodules.util import numpy_support
 from vtkmodules.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 from app.interface.Worker import *
 import SimpleITK as sitk
-from model.Herramientas import *
+from controller.Herramientas import *
 import model.config as config
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QLabel

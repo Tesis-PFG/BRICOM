@@ -1,7 +1,7 @@
 from app.interface.OrthoViewer import *
 from app.interface.Worker import *
 from app.interface.QtViewer import *
-from model.Herramientas import *
+from controller.Herramientas import *
 import model.config as config
 class QtOrthoViewer(QtViewer):
     # Constructor
