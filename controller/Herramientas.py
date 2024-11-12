@@ -39,7 +39,7 @@ class AngleMeasurement(QtWidgets.QLabel):
             painter.drawLine(self.point2, self.point3)
 
             # Calcular el ángulo y dibujarlo cerca del tercer punto
-            angle = self.calculate_angle()
+            angle = 180 - self.calculate_angle()
             painter.setPen(QtGui.QPen(Qt.red))
             painter.drawText(self.point3, f"Ángulo: {angle:.2f}°")
 
